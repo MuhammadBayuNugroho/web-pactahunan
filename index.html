@@ -67,18 +67,16 @@
                     class="nav-link hover:text-brand-purple transition duration-200 py-2">Administrasi</a>
                 <a href="#repository"
                     class="nav-link hover:text-brand-purple transition duration-200 py-2">Repository</a>
-                <a href="#admin"
-                    class="nav-link hover:text-brand-purple transition duration-200 py-2 flex items-center gap-1"><i class="fas fa-lock text-[9px] text-brand-purple"></i> Admin</a>
             </div>
 
-            <!-- Action Button / Settings Admin -->
+            <!-- Action Button: Admin Panel -->
             <div class="flex items-center gap-2">
-                <button onclick="openSettingsModal()"
+                <a href="#admin"
                     class="p-2 sm:p-2.5 rounded-xl bg-violet-50 hover:bg-violet-100 text-brand-purple transition border border-violet-100 text-sm flex items-center gap-2 font-bold"
-                    title="Set HP Sekretaris">
-                    <i class="fas fa-cog text-sm"></i>
-                    <span class="hidden md:inline">Sekretaris Utama</span>
-                </button>
+                    title="Admin Panel">
+                    <i class="fas fa-shield-alt text-sm"></i>
+                    <span class="hidden md:inline">Admin Panel</span>
+                </a>
 
                 <!-- Mobile Navigation Toggle -->
                 <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-slate-100 text-slate-700">
@@ -99,7 +97,7 @@
             <a href="#repository" onclick="toggleMobileMenu()"
                 class="block py-2 text-slate-600 hover:text-brand-purple">Repository</a>
             <a href="#admin" onclick="toggleMobileMenu()"
-                class="block py-2 text-brand-purple hover:text-brand-purpleDark flex items-center gap-1"><i class="fas fa-lock text-[9px]"></i> Admin Panel</a>
+                class="block py-2 text-brand-purple hover:text-brand-purpleDark flex items-center gap-1"><i class="fas fa-shield-alt text-[9px]"></i> Admin Panel</a>
         </div>
     </nav>
 
@@ -904,6 +902,10 @@
                         class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50">
                         <i class="fas fa-book-open mr-1.5"></i> Repositori Dok.
                     </button>
+                    <button onclick="switchAdminTab('pengaturan')" id="adm-tab-pengaturan"
+                        class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50">
+                        <i class="fas fa-cog mr-1.5"></i> Pengaturan
+                    </button>
                 </div>
 
                 <!-- ============================================================ -->
@@ -921,6 +923,7 @@
                                         <th class="pb-3">Tipe</th>
                                         <th class="pb-3">Nomor SP</th>
                                         <th class="pb-3">Masa Berlaku</th>
+                                        <th class="pb-3 text-center">Edit</th>
                                         <th class="pb-3 text-center">Hapus</th>
                                     </tr>
                                 </thead>
@@ -977,6 +980,7 @@
                                         <th class="pb-3">Tipe</th>
                                         <th class="pb-3">Nomor SP</th>
                                         <th class="pb-3">Masa Berlaku</th>
+                                        <th class="pb-3 text-center">Edit</th>
                                         <th class="pb-3 text-center">Hapus</th>
                                     </tr>
                                 </thead>
@@ -1032,6 +1036,7 @@
                                         <th class="pb-3">Tanggal</th>
                                         <th class="pb-3">Tempat</th>
                                         <th class="pb-3 text-right">Peserta</th>
+                                        <th class="pb-3 text-center">Edit</th>
                                         <th class="pb-3 text-center">Hapus</th>
                                     </tr>
                                 </thead>
@@ -1084,6 +1089,7 @@
                                         <th class="pb-3">Judul Dokumen</th>
                                         <th class="pb-3">Kategori</th>
                                         <th class="pb-3">Google Drive ID</th>
+                                        <th class="pb-3 text-center">Edit</th>
                                         <th class="pb-3 text-center">Hapus</th>
                                     </tr>
                                 </thead>
@@ -1131,8 +1137,88 @@
                     </div>
                 </div>
 
+                <!-- ============================================================ -->
+                <!-- TAB 5: PENGATURAN -->
+                <!-- ============================================================ -->
+                <div id="adm-panel-pengaturan" class="space-y-6 hidden">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-5">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fas fa-address-card text-brand-purple"></i> Kontak Sekretaris Umum
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Sekretaris Umum</label>
+                                <input type="text" id="cfg-sec-name"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nomor WhatsApp (Awalan '62')</label>
+                                <input type="text" id="cfg-sec-wa" placeholder="cth: 628123456789"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1 sm:col-span-2">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">URL Google Apps Script Web App</label>
+                                <input type="url" id="cfg-apps-script-url" placeholder="https://script.google.com/macros/s/.../exec"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-5">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fab fa-google text-brand-purple"></i> Tautan Google Form
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Google Form SP IPNU</label>
+                                <input type="url" id="cfg-form-sp-ipnu-url" placeholder="https://docs.google.com/forms/..."
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Google Form SP IPPNU</label>
+                                <input type="url" id="cfg-form-sp-ippnu-url" placeholder="https://docs.google.com/forms/..."
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Google Form Undangan Kegiatan</label>
+                                <input type="url" id="cfg-form-undangan-url" placeholder="https://docs.google.com/forms/..."
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Google Form Kaderisasi</label>
+                                <input type="url" id="cfg-form-kaderisasi-url" placeholder="https://docs.google.com/forms/..."
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                        </div>
+                        <button onclick="saveSecretariatContacts()"
+                            class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-purple hover:bg-brand-purpleDark text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
+                            <i class="fas fa-save"></i> Simpan Semua Pengaturan
+                        </button>
+                    </div>
+                </div>
+
             </div><!-- end admin-dashboard-screen -->
         </section><!-- end view-admin -->
+
+        <!-- EDIT MODAL: Universal edit modal for SP / Makesta / Repo -->
+        <div id="admin-edit-modal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center hidden p-4">
+            <div class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-xl space-y-5">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h4 id="edit-modal-title" class="font-extrabold text-xs uppercase tracking-wider text-brand-textDark flex items-center gap-2">
+                        <i class="fas fa-pencil-alt text-brand-purple"></i> Edit Data
+                    </h4>
+                    <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600 transition"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="edit-modal-body" class="space-y-4 max-h-[55vh] overflow-y-auto pr-1">
+                    <!-- Dynamic edit form loaded here by JS -->
+                </div>
+                <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                    <button onclick="closeEditModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-500 text-xs hover:text-slate-800 transition font-bold">Batal</button>
+                    <button id="edit-modal-save-btn" onclick=""
+                        class="px-5 py-2 rounded-xl bg-brand-purple hover:bg-brand-purpleDark text-white text-xs font-extrabold transition">Simpan Perubahan</button>
+                </div>
+            </div>
+        </div>
 
     </main>
 

@@ -951,25 +951,34 @@ function adminLogout() {
 
 function switchAdminTab(tab) {
     adminCurrentTab = tab;
-    const tabs = ['sp-ipnu', 'sp-ippnu', 'makesta', 'repository'];
+    const tabs = ['sp-ipnu', 'sp-ippnu', 'makesta', 'repository', 'pengaturan'];
     tabs.forEach(t => {
         const btn = document.getElementById(`adm-tab-${t}`);
         const panel = document.getElementById(`adm-panel-${t}`);
         if (t === tab) {
             panel.classList.remove('hidden');
             btn.className = 'admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-extrabold transition duration-200 bg-brand-purple text-white shadow-sm';
-            // Restore icon
-            const icons = { 'sp-ipnu': 'fa-mars', 'sp-ippnu': 'fa-venus', 'makesta': 'fa-graduation-cap', 'repository': 'fa-book-open' };
-            const labels = { 'sp-ipnu': 'SP IPNU', 'sp-ippnu': 'SP IPPNU', 'makesta': 'Rekap Makesta', 'repository': 'Repositori Dok.' };
+            const icons = { 'sp-ipnu': 'fa-mars', 'sp-ippnu': 'fa-venus', 'makesta': 'fa-graduation-cap', 'repository': 'fa-book-open', 'pengaturan': 'fa-cog' };
+            const labels = { 'sp-ipnu': 'SP IPNU', 'sp-ippnu': 'SP IPPNU', 'makesta': 'Rekap Makesta', 'repository': 'Repositori Dok.', 'pengaturan': 'Pengaturan' };
             btn.innerHTML = `<i class="fas ${icons[t]} mr-1.5"></i> ${labels[t]}`;
         } else {
             panel.classList.add('hidden');
             btn.className = 'admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50';
-            const icons = { 'sp-ipnu': 'fa-mars', 'sp-ippnu': 'fa-venus', 'makesta': 'fa-graduation-cap', 'repository': 'fa-book-open' };
-            const labels = { 'sp-ipnu': 'SP IPNU', 'sp-ippnu': 'SP IPPNU', 'makesta': 'Rekap Makesta', 'repository': 'Repositori Dok.' };
+            const icons = { 'sp-ipnu': 'fa-mars', 'sp-ippnu': 'fa-venus', 'makesta': 'fa-graduation-cap', 'repository': 'fa-book-open', 'pengaturan': 'fa-cog' };
+            const labels = { 'sp-ipnu': 'SP IPNU', 'sp-ippnu': 'SP IPPNU', 'makesta': 'Rekap Makesta', 'repository': 'Repositori Dok.', 'pengaturan': 'Pengaturan' };
             btn.innerHTML = `<i class="fas ${icons[t]} mr-1.5"></i> ${labels[t]}`;
         }
     });
+    // Pre-fill settings tab when opened
+    if (tab === 'pengaturan') {
+        document.getElementById('cfg-sec-name').value = currentSecName;
+        document.getElementById('cfg-sec-wa').value = currentSecWa;
+        document.getElementById('cfg-apps-script-url').value = appsScriptUrl;
+        document.getElementById('cfg-form-sp-ipnu-url').value = formSpIpnuUrl === '#' ? '' : formSpIpnuUrl;
+        document.getElementById('cfg-form-sp-ippnu-url').value = formSpIppnuUrl === '#' ? '' : formSpIppnuUrl;
+        document.getElementById('cfg-form-undangan-url').value = formUndanganUrl === '#' ? '' : formUndanganUrl;
+        document.getElementById('cfg-form-kaderisasi-url').value = formKaderisasiUrl === '#' ? '' : formKaderisasiUrl;
+    }
 }
 
 // ---- Render Admin Tables ----
@@ -993,6 +1002,11 @@ function renderAdminSpTable(banom) {
                 <td class="py-3 text-slate-500 capitalize">${item.type}</td>
                 <td class="py-3 text-slate-500 font-mono text-[11px]">${item.spNumber}</td>
                 <td class="py-3 text-slate-500">${expiryFormatted}</td>
+                <td class="py-3 text-center">
+                    <button onclick="openEditSpModal('${banom}', ${idx})" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 transition flex items-center justify-center mx-auto" title="Edit">
+                        <i class="fas fa-pencil-alt text-xs"></i>
+                    </button>
+                </td>
                 <td class="py-3 text-center">
                     <button onclick="adminDeleteSp('${banom}', ${idx})" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition flex items-center justify-center mx-auto" title="Hapus">
                         <i class="fas fa-trash-alt text-xs"></i>
@@ -1019,6 +1033,11 @@ function renderAdminMakestaTable() {
                 <td class="py-3 text-slate-500">${item.tanggal}</td>
                 <td class="py-3 text-slate-500">${item.tempat}</td>
                 <td class="py-3 text-right font-bold text-brand-purple">${item.peserta} Org</td>
+                <td class="py-3 text-center">
+                    <button onclick="openEditMakestaModal(${idx})" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 transition flex items-center justify-center mx-auto" title="Edit">
+                        <i class="fas fa-pencil-alt text-xs"></i>
+                    </button>
+                </td>
                 <td class="py-3 text-center">
                     <button onclick="adminDeleteMakesta(${idx})" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition flex items-center justify-center mx-auto" title="Hapus">
                         <i class="fas fa-trash-alt text-xs"></i>
@@ -1047,6 +1066,11 @@ function renderAdminRepoTable() {
                     <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-purple bg-violet-50 px-2 py-0.5 rounded">${catLabels[doc.category] || doc.category}</span>
                 </td>
                 <td class="py-3 font-mono text-[11px] text-slate-400 max-w-[120px] truncate" title="${doc.driveId}">${doc.driveId}</td>
+                <td class="py-3 text-center">
+                    <button onclick="openEditRepoModal(${idx})" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 transition flex items-center justify-center mx-auto" title="Edit">
+                        <i class="fas fa-pencil-alt text-xs"></i>
+                    </button>
+                </td>
                 <td class="py-3 text-center">
                     <button onclick="adminDeleteRepo(${idx})" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition flex items-center justify-center mx-auto" title="Hapus">
                         <i class="fas fa-trash-alt text-xs"></i>
@@ -1207,6 +1231,191 @@ async function adminDeleteRepo(index) {
     renderAdminRepoTable();
     renderRepository();
     showToast('Dokumen Dihapus', `"${title}" berhasil dihapus dari repositori.`);
+}
+
+// =========================================================================
+// EDIT MODAL CONTROLLER
+// =========================================================================
+
+let editModalContext = null; // stores { type, index, banom }
+
+function openEditModal() {
+    document.getElementById('admin-edit-modal').classList.remove('hidden');
+}
+
+function closeEditModal() {
+    document.getElementById('admin-edit-modal').classList.add('hidden');
+    editModalContext = null;
+}
+
+function openEditSpModal(banom, index) {
+    const item = rawDatabase[banom][index];
+    if (!item) return;
+    editModalContext = { type: 'sp', banom, index };
+    document.getElementById('edit-modal-title').innerHTML = `<i class="fas fa-pencil-alt text-brand-purple"></i> Edit SP ${banom.toUpperCase()}`;
+    document.getElementById('edit-modal-body').innerHTML = `
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Pimpinan</label>
+            <input type="text" id="edit-sp-name" value="${item.name}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tipe</label>
+            <select id="edit-sp-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                <option value="ranting" ${item.type === 'ranting' ? 'selected' : ''}>Ranting</option>
+                <option value="komisariat" ${item.type === 'komisariat' ? 'selected' : ''}>Komisariat</option>
+            </select>
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nomor SP Resmi</label>
+            <input type="text" id="edit-sp-number" value="${item.spNumber}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Masa Berlaku (Tanggal)</label>
+            <input type="date" id="edit-sp-expiry" value="${item.expiryDate}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>`;
+    document.getElementById('edit-modal-save-btn').onclick = adminUpdateSp;
+    openEditModal();
+}
+
+async function adminUpdateSp() {
+    if (!editModalContext || editModalContext.type !== 'sp') return;
+    const { banom, index } = editModalContext;
+    const name = document.getElementById('edit-sp-name').value.trim();
+    const type = document.getElementById('edit-sp-type').value;
+    const spNumber = document.getElementById('edit-sp-number').value.trim();
+    const expiryDate = document.getElementById('edit-sp-expiry').value;
+    if (!name || !spNumber || !expiryDate) {
+        showToast('Data Tidak Lengkap', 'Semua kolom wajib diisi.', false);
+        return;
+    }
+    rawDatabase[banom][index] = { name, type, spNumber, expiryDate };
+    if (appsScriptUrl) {
+        await sendFormToAppsScript({ action: 'adminUpdateSp', adminPin: ADMIN_LOCAL_PIN, banom, index, name, type, spNumber, expiryDate })
+            .catch(() => {});
+    }
+    closeEditModal();
+    renderAdminSpTable(banom);
+    renderSpTable();
+    refreshBentoStats();
+    populateDropdownPimpinan();
+    showToast('Data Diperbarui', `SP ${banom.toUpperCase()} berhasil diubah.`);
+}
+
+function openEditMakestaModal(index) {
+    const item = makestaDatabase[index];
+    if (!item) return;
+    editModalContext = { type: 'makesta', index };
+    document.getElementById('edit-modal-title').innerHTML = `<i class="fas fa-pencil-alt text-brand-purple"></i> Edit Rekap Makesta`;
+    document.getElementById('edit-modal-body').innerHTML = `
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Penyelenggara</label>
+            <input type="text" id="edit-mk-penyelenggara" value="${item.penyelenggara}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal Pelaksanaan</label>
+            <input type="text" id="edit-mk-tanggal" value="${item.tanggal}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat Pelaksanaan</label>
+            <input type="text" id="edit-mk-tempat" value="${item.tempat}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Jumlah Peserta</label>
+            <input type="number" id="edit-mk-peserta" value="${item.peserta}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>`;
+    document.getElementById('edit-modal-save-btn').onclick = adminUpdateMakesta;
+    openEditModal();
+}
+
+async function adminUpdateMakesta() {
+    if (!editModalContext || editModalContext.type !== 'makesta') return;
+    const { index } = editModalContext;
+    const penyelenggara = document.getElementById('edit-mk-penyelenggara').value.trim();
+    const tanggal = document.getElementById('edit-mk-tanggal').value.trim();
+    const tempat = document.getElementById('edit-mk-tempat').value.trim();
+    const peserta = parseInt(document.getElementById('edit-mk-peserta').value) || 0;
+    if (!penyelenggara || !tanggal || !tempat) {
+        showToast('Data Tidak Lengkap', 'Penyelenggara, tanggal, dan tempat wajib diisi.', false);
+        return;
+    }
+    makestaDatabase[index] = { ...makestaDatabase[index], penyelenggara, tanggal, tempat, peserta };
+    if (appsScriptUrl) {
+        await sendFormToAppsScript({ action: 'adminUpdateMakesta', adminPin: ADMIN_LOCAL_PIN, index, penyelenggara, tanggal, tempat, peserta })
+            .catch(() => {});
+    }
+    closeEditModal();
+    renderAdminMakestaTable();
+    renderMakestaTable();
+    refreshBentoStats();
+    showToast('Data Diperbarui', 'Rekap Makesta berhasil diubah.');
+}
+
+function openEditRepoModal(index) {
+    const doc = repoDatabase[index];
+    if (!doc) return;
+    editModalContext = { type: 'repo', index };
+    document.getElementById('edit-modal-title').innerHTML = `<i class="fas fa-pencil-alt text-brand-purple"></i> Edit Dokumen Repositori`;
+    document.getElementById('edit-modal-body').innerHTML = `
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Judul Dokumen</label>
+            <input type="text" id="edit-repo-title" value="${doc.title}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Deskripsi</label>
+            <input type="text" id="edit-repo-desc" value="${doc.description || ''}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Kategori</label>
+            <select id="edit-repo-category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                <option value="buku" ${doc.category === 'buku' ? 'selected' : ''}>Buku Wajib</option>
+                <option value="modul" ${doc.category === 'modul' ? 'selected' : ''}>Modul Pelatihan</option>
+                <option value="surat" ${doc.category === 'surat' ? 'selected' : ''}>Template Administrasi</option>
+            </select>
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Google Drive File ID</label>
+            <input type="text" id="edit-repo-driveid" value="${doc.driveId}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">URL Gambar Sampul (opsional)</label>
+            <input type="text" id="edit-repo-cover" value="${doc.coverImage || ''}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>`;
+    document.getElementById('edit-modal-save-btn').onclick = adminUpdateRepo;
+    openEditModal();
+}
+
+async function adminUpdateRepo() {
+    if (!editModalContext || editModalContext.type !== 'repo') return;
+    const { index } = editModalContext;
+    const title = document.getElementById('edit-repo-title').value.trim();
+    const description = document.getElementById('edit-repo-desc').value.trim();
+    const category = document.getElementById('edit-repo-category').value;
+    const driveId = document.getElementById('edit-repo-driveid').value.trim();
+    const coverImage = document.getElementById('edit-repo-cover').value.trim() || repoDatabase[index].coverImage;
+    if (!title || !driveId) {
+        showToast('Data Tidak Lengkap', 'Judul dan Drive ID wajib diisi.', false);
+        return;
+    }
+    repoDatabase[index] = { ...repoDatabase[index], title, description, category, driveId, coverImage };
+    if (appsScriptUrl) {
+        await sendFormToAppsScript({ action: 'adminUpdateRepo', adminPin: ADMIN_LOCAL_PIN, index, title, description, category, driveId, coverImage })
+            .catch(() => {});
+    }
+    closeEditModal();
+    renderAdminRepoTable();
+    renderRepository();
+    showToast('Dokumen Diperbarui', `"${title}" berhasil diubah.`);
 }
 
 // =========================================================================
