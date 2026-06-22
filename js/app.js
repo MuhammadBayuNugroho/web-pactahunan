@@ -30,6 +30,43 @@ let rawDatabase = {
     ]
 };
 
+// MOCK DATABASE BERITA
+let beritaDatabase = [
+    {
+        id: "1",
+        timestamp: "2026-06-15T10:00:00.000Z",
+        title: "Sukses Gelar LAKMUD I, PAC Tahunan Siap Cetak Organisatoris Handal",
+        content: `Latihan Kader Muda (LAKMUD) perdana yang diselenggarakan oleh PAC Tahunan sukses menjaring puluhan peserta terbaik se-Tahunan. Acara ini berlangsung dengan khidmat dan diisi oleh pemateri-pemateri handal.
+
+Dalam sambutannya, ketua PAC IPNU Tahunan menyampaikan bahwa LAKMUD ini adalah wadah regenerasi vital untuk melahirkan kader-kader yang tangguh dan memiliki visi yang jelas di masa depan.
+
+Peserta diajarkan materi kepemimpinan, keorganisasian, ke-NU-an, ke-Aswaja-an, serta materi analisis sosial untuk membekali mereka menghadapi problematika di masyarakat. Diharapkan dengan selesainya LAKMUD I ini, para alumni dapat langsung berkontribusi di ranting dan komisariat masing-masing.`,
+        category: "kegiatan",
+        coverImage: "assets/images/cover-modul.png",
+        likes: 10,
+        views: 120
+    },
+    {
+        id: "2",
+        timestamp: "2026-06-10T14:30:00.000Z",
+        title: "Silaturahmi Bersama MWC NU Tahunan: Menjaga Sanad Amaliyah",
+        content: `Dalam rangka mempererat ukhuwah nahdliyyah, pengurus PAC berkunjung ke jajaran Syuriah dan Tanfidziyah MWC NU Kecamatan Tahunan. Pertemuan ini menghasilkan beberapa program sinergis bersama.
+
+Kunjungan ini merupakan bagian dari silaturahmi berkala untuk menyelaraskan arah pergerakan pelajar NU dengan induk organisasi. Rais Syuriah MWC NU Tahunan memberikan nasihat penting mengenai integritas kader serta pentingnya menjaga sanad keilmuan dan amaliyah Ahlussunnah wal Jamaah.`,
+        category: "info",
+        coverImage: "assets/images/logo-bersama.png",
+        likes: 5,
+        views: 85
+    }
+];
+
+// MOCK DATABASE KOMENTAR
+let komentarDatabase = [
+    { newsId: "1", timestamp: "2026-06-15T11:00:00.000Z", name: "Rekan Ahmad", comment: "Luar biasa! Semangat terus PAC Tahunan!" },
+    { newsId: "1", timestamp: "2026-06-15T12:30:00.000Z", name: "Rekanita Sofia", comment: "LAKMUD I yang sangat berkesan, semoga barokah." },
+    { newsId: "2", timestamp: "2026-06-10T15:00:00.000Z", name: "Zainal Arifin", comment: "Sinergi yang sangat bagus untuk kemajuan banom-banom NU." }
+];
+
 // MOCK DATABASE MAKESTA DETAIL
 let makestaDatabase = [
     {
@@ -122,20 +159,24 @@ window.onload = function () {
 
 // Fetch dynamic monitoring data from Google Apps Script Web App
 function fetchDynamicSpData() {
-    console.log("Fetching dynamic SP and Makesta data from Apps Script...");
+    console.log("Fetching dynamic SP, Makesta, and News data from Apps Script...");
     fetch(`${appsScriptUrl}?action=getSpData`)
         .then(response => response.json())
         .then(data => {
-            if (data && (data.ipnu || data.ippnu || data.makesta)) {
+            if (data && (data.ipnu || data.ippnu || data.makesta || data.berita || data.komentar)) {
                 if (data.ipnu) rawDatabase.ipnu = data.ipnu;
                 if (data.ippnu) rawDatabase.ippnu = data.ippnu;
                 if (data.makesta) makestaDatabase = data.makesta;
+                if (data.berita) beritaDatabase = data.berita;
+                if (data.komentar) komentarDatabase = data.komentar;
                 
                 // Repopulate & refresh views
                 populateDropdownPimpinan();
                 refreshBentoStats();
                 renderSpTable();
                 renderMakestaTable();
+                renderBeritaListHome();
+                renderBerita();
                 console.log("Database updated from Google Sheets.");
             }
         })
@@ -163,16 +204,19 @@ function sendFormToAppsScript(payload) {
 // HASH-BASED ROUTER CONTROLLER (100% Client-Side multi page)
 function handleNavigation() {
     const hash = window.location.hash || '#home';
-    const targets = ['home', 'kaderisasi', 'administrasi', 'repository', 'admin'];
+    const hashBase = hash.split('?')[0];
+    const targets = ['home', 'kaderisasi', 'administrasi', 'repository', 'admin', 'berita', 'berita-detail'];
 
     let matched = false;
     targets.forEach(t => {
         const view = document.getElementById(`view-${t}`);
-        if (hash === `#${t}`) {
-            view.classList.remove('hidden');
-            matched = true;
-        } else {
-            view.classList.add('hidden');
+        if (view) {
+            if (hashBase === `#${t}`) {
+                view.classList.remove('hidden');
+                matched = true;
+            } else {
+                view.classList.add('hidden');
+            }
         }
     });
 
@@ -182,25 +226,41 @@ function handleNavigation() {
     }
 
     // Sync navigation styles visually
-    syncNavbarState(hash);
+    syncNavbarState(hashBase);
     
     // Always render SP table when on Home (Beranda)
     renderSpTable();
+
+    // Always render dynamic news list on Home
+    renderBeritaListHome();
 
     // Always render MAKESTA table when on Kaderisasi page
     renderMakestaTable();
 
     // Always render Repository when on Repository page
-    if (hash === '#repository') {
+    if (hashBase === '#repository') {
         renderRepository();
     }
 
+    // Always render News when on News page
+    if (hashBase === '#berita') {
+        renderBerita();
+    }
+
+    // Render detail page dynamically
+    if (hashBase === '#berita-detail') {
+        const params = new URLSearchParams(hash.split('?')[1] || '');
+        const newsId = params.get('id');
+        renderBeritaDetail(newsId);
+    }
+
     // Render admin tables when visiting admin page
-    if (hash === '#admin') {
+    if (hashBase === '#admin') {
         renderAdminSpTable('ipnu');
         renderAdminSpTable('ippnu');
         renderAdminMakestaTable();
         renderAdminRepoTable();
+        renderAdminBeritaTable();
     }
 
     // Scroll safely back to top
@@ -931,6 +991,7 @@ function onAdminLoginSuccess(pin) {
     renderAdminSpTable('ippnu');
     renderAdminMakestaTable();
     renderAdminRepoTable();
+    renderAdminBeritaTable();
     showToast('Login Berhasil', 'Selamat datang, Administrator.');
 }
 
@@ -951,21 +1012,21 @@ function adminLogout() {
 
 function switchAdminTab(tab) {
     adminCurrentTab = tab;
-    const tabs = ['sp-ipnu', 'sp-ippnu', 'makesta', 'repository', 'pengaturan'];
+    const tabs = ['sp-ipnu', 'sp-ippnu', 'makesta', 'repository', 'berita', 'pengaturan'];
     tabs.forEach(t => {
         const btn = document.getElementById(`adm-tab-${t}`);
         const panel = document.getElementById(`adm-panel-${t}`);
         if (t === tab) {
             panel.classList.remove('hidden');
             btn.className = 'admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-extrabold transition duration-200 bg-brand-purple text-white shadow-sm';
-            const icons = { 'sp-ipnu': 'fa-mars', 'sp-ippnu': 'fa-venus', 'makesta': 'fa-graduation-cap', 'repository': 'fa-book-open', 'pengaturan': 'fa-cog' };
-            const labels = { 'sp-ipnu': 'SP IPNU', 'sp-ippnu': 'SP IPPNU', 'makesta': 'Rekap Makesta', 'repository': 'Repositori Dok.', 'pengaturan': 'Pengaturan' };
+            const icons = { 'sp-ipnu': 'fa-mars', 'sp-ippnu': 'fa-venus', 'makesta': 'fa-graduation-cap', 'repository': 'fa-book-open', 'berita': 'fa-newspaper', 'pengaturan': 'fa-cog' };
+            const labels = { 'sp-ipnu': 'SP IPNU', 'sp-ippnu': 'SP IPPNU', 'makesta': 'Rekap Makesta', 'repository': 'Repositori Dok.', 'berita': 'Kelola Berita', 'pengaturan': 'Pengaturan' };
             btn.innerHTML = `<i class="fas ${icons[t]} mr-1.5"></i> ${labels[t]}`;
         } else {
             panel.classList.add('hidden');
             btn.className = 'admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50';
-            const icons = { 'sp-ipnu': 'fa-mars', 'sp-ippnu': 'fa-venus', 'makesta': 'fa-graduation-cap', 'repository': 'fa-book-open', 'pengaturan': 'fa-cog' };
-            const labels = { 'sp-ipnu': 'SP IPNU', 'sp-ippnu': 'SP IPPNU', 'makesta': 'Rekap Makesta', 'repository': 'Repositori Dok.', 'pengaturan': 'Pengaturan' };
+            const icons = { 'sp-ipnu': 'fa-mars', 'sp-ippnu': 'fa-venus', 'makesta': 'fa-graduation-cap', 'repository': 'fa-book-open', 'berita': 'fa-newspaper', 'pengaturan': 'fa-cog' };
+            const labels = { 'sp-ipnu': 'SP IPNU', 'sp-ippnu': 'SP IPPNU', 'makesta': 'Rekap Makesta', 'repository': 'Repositori Dok.', 'berita': 'Kelola Berita', 'pengaturan': 'Pengaturan' };
             btn.innerHTML = `<i class="fas ${icons[t]} mr-1.5"></i> ${labels[t]}`;
         }
     });
@@ -1562,5 +1623,524 @@ function closePreviewModal() {
             if (iframe) iframe.src = '';
         }, 200);
     }
+}
+
+// =========================================================================
+// BERITA & INFORMASI SYSTEM (Dynamic News & Interactive Comments)
+// =========================================================================
+
+let currentBeritaFilter = 'all';
+let currentBeritaSearch = '';
+let currentOpenBeritaId = null;
+
+// Helper to format ISO date to readable Indonesian date
+function formatIndonesianDate(isoString) {
+    if (!isoString) return '';
+    try {
+        const date = new Date(isoString);
+        return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    } catch (e) {
+        return isoString;
+    }
+}
+
+// Render News on Homepage
+function renderBeritaListHome() {
+    const container = document.getElementById('home-news-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Take top 3 recent news
+    const sorted = [...beritaDatabase].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 3);
+
+    if (sorted.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 font-medium">Belum ada berita terpublikasi.</p>`;
+        return;
+    }
+
+    sorted.forEach(news => {
+        const iconClass = news.category === 'kegiatan' ? 'fa-newspaper text-violet-300' : news.category === 'info' ? 'fa-info-circle text-emerald-300' : 'fa-bullhorn text-amber-300';
+        const bgClass = news.category === 'kegiatan' ? 'bg-violet-50 text-brand-purple' : news.category === 'info' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600';
+        const badgeColor = news.category === 'kegiatan' ? 'bg-brand-purple/10 text-brand-purple' : news.category === 'info' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700';
+        
+        container.innerHTML += `
+            <div onclick="navigateToBeritaDetail('${news.id}')"
+                class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-brand-purple/20 transition duration-200 flex flex-col sm:flex-row gap-4 items-start cursor-pointer group">
+                <div class="w-full sm:w-32 h-24 rounded-xl flex items-center justify-center flex-shrink-0 text-2xl font-extrabold overflow-hidden border border-slate-50">
+                    ${news.coverImage ? `<img src="${news.coverImage}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.outerHTML='<i class=\\\'fas ${iconClass}\\\'></i>'">` : `<div class="${bgClass} w-full h-full flex items-center justify-center"><i class="fas ${iconClass}"></i></div>`}
+                </div>
+                <div class="space-y-1.5 flex-grow">
+                    <span class="px-2 py-0.5 rounded-md ${badgeColor} text-[8px] font-extrabold uppercase tracking-widest">${news.category}</span>
+                    <h4 class="font-extrabold text-xs sm:text-sm text-brand-textDark hover:text-brand-purple transition duration-200 line-clamp-2">
+                        ${news.title}
+                    </h4>
+                    <p class="text-xs text-slate-500 line-clamp-2">${news.content.replace(/<[^>]*>/g, '')}</p>
+                    <div class="text-[9px] text-slate-400 font-bold flex items-center gap-3 pt-1">
+                        <span class="flex items-center gap-1"><i class="far fa-calendar-alt"></i> ${formatIndonesianDate(news.timestamp)}</span>
+                        <span class="flex items-center gap-1"><i class="far fa-eye"></i> ${news.views || 0}</span>
+                        <span class="flex items-center gap-1"><i class="far fa-thumbs-up"></i> ${news.likes || 0}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    // Also populate home agenda list from berita of category 'kegiatan' or 'pengumuman'
+    renderAgendaListHome();
+}
+
+// Render dynamic agendas
+function renderAgendaListHome() {
+    const container = document.getElementById('home-agenda-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Agendas are events, we can display them based on news of category 'kegiatan' or 'pengumuman'
+    const agendas = beritaDatabase.filter(n => n.category === 'kegiatan' || n.category === 'pengumuman')
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 3);
+
+    if (agendas.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 font-medium">Belum ada agenda terdekat.</p>`;
+        return;
+    }
+
+    agendas.forEach((agenda, idx) => {
+        const dateObj = new Date(agenda.timestamp);
+        const day = dateObj.getDate();
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+        const month = monthNames[dateObj.getMonth()];
+        
+        const gradients = [
+            'from-violet-600 to-indigo-700 shadow-violet-200',
+            'from-indigo-500 to-blue-600 shadow-indigo-100',
+            'from-emerald-500 to-teal-600 shadow-emerald-100'
+        ];
+        const grad = gradients[idx % gradients.length];
+
+        container.innerHTML += `
+            <div onclick="navigateToBeritaDetail('${agenda.id}')" class="flex gap-4 items-start border-b border-slate-100 pb-3 last:border-b-0 last:pb-0 cursor-pointer hover:bg-slate-50 p-2 rounded-xl transition group">
+                <div class="bg-gradient-to-br ${grad} text-white rounded-xl w-12 h-12 flex flex-col items-center justify-center flex-shrink-0 font-extrabold shadow-sm">
+                    <span class="text-sm leading-none">${day}</span>
+                    <span class="text-[8px] uppercase tracking-wider mt-0.5">${month}</span>
+                </div>
+                <div class="space-y-0.5 flex-grow">
+                    <h5 class="font-bold text-xs text-brand-textDark group-hover:text-brand-purple transition duration-200 line-clamp-1">${agenda.title}</h5>
+                    <p class="text-xs text-slate-500 flex items-center gap-1"><i class="fas fa-map-marker-alt text-slate-400"></i> Kantor PAC Tahunan / Kegiatan</p>
+                    <p class="text-[9px] text-brand-purple font-semibold">Klik untuk detail lengkap</p>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function navigateToBeritaDetail(id) {
+    window.location.hash = `#berita-detail?id=${id}`;
+}
+
+// Render News Portal Page Grid
+function renderBerita() {
+    const grid = document.getElementById('berita-grid');
+    const emptyState = document.getElementById('berita-empty-state');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const filtered = beritaDatabase.filter(news => {
+        const matchesCategory = currentBeritaFilter === 'all' || news.category === currentBeritaFilter;
+        const matchesSearch = news.title.toLowerCase().includes(currentBeritaSearch.toLowerCase()) || 
+                              news.content.toLowerCase().includes(currentBeritaSearch.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+    }
+    emptyState.classList.add('hidden');
+
+    filtered.forEach(news => {
+        const iconClass = news.category === 'kegiatan' ? 'fa-newspaper text-violet-300' : news.category === 'info' ? 'fa-info-circle text-emerald-300' : 'fa-bullhorn text-amber-300';
+        const bgClass = news.category === 'kegiatan' ? 'bg-violet-50 text-brand-purple' : news.category === 'info' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600';
+        const badgeColor = news.category === 'kegiatan' ? 'bg-brand-purple/10 text-brand-purple' : news.category === 'info' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700';
+
+        grid.innerHTML += `
+            <div class="bg-white border border-slate-100 rounded-3xl p-5 hover:border-brand-purple/40 shadow-sm transition-all duration-300 flex flex-col justify-between group hover:shadow-md">
+                <div class="space-y-4">
+                    <div class="w-full h-48 bg-slate-50 rounded-2xl overflow-hidden relative flex items-center justify-center border border-slate-100/50">
+                        ${news.coverImage ? `<img src="${news.coverImage}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.outerHTML='<i class=\\\'fas ${iconClass} text-slate-350 text-4xl\\\'></i>'">` : `<div class="${bgClass} w-full h-full flex items-center justify-center"><i class="fas ${iconClass} text-4xl"></i></div>`}
+                        
+                        <div class="absolute inset-0 bg-violet-950/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center gap-2 backdrop-blur-[2px]">
+                            <button onclick="navigateToBeritaDetail('${news.id}')" 
+                                    class="px-4 py-2 rounded-xl bg-white/95 text-brand-purple hover:bg-white hover:scale-105 transition text-xs font-extrabold flex items-center gap-1.5 shadow-md">
+                                <i class="fas fa-eye"></i> Baca Selengkapnya
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <span class="text-[8px] font-extrabold uppercase tracking-widest ${badgeColor} px-2 py-0.5 rounded-md inline-block">
+                            ${news.category}
+                        </span>
+                        <h4 class="font-extrabold text-sm text-brand-textDark group-hover:text-brand-purple transition duration-200 line-clamp-2" title="${news.title}">${news.title}</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed line-clamp-2">${news.content.replace(/<[^>]*>/g, '')}</p>
+                    </div>
+                </div>
+                
+                <div class="mt-5 pt-4 border-t border-slate-50 flex items-center justify-between text-[10px] text-slate-400 font-bold">
+                    <span><i class="far fa-calendar-alt"></i> ${formatIndonesianDate(news.timestamp)}</span>
+                    <div class="flex items-center gap-3">
+                        <span><i class="far fa-eye"></i> ${news.views || 0}</span>
+                        <span><i class="far fa-thumbs-up"></i> ${news.likes || 0}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function filterBerita(category) {
+    currentBeritaFilter = category;
+    
+    const categories = ['all', 'kegiatan', 'info', 'pengumuman'];
+    categories.forEach(cat => {
+        const btn = document.getElementById(`berita-cat-${cat}`);
+        if (btn) {
+            if (cat === category) {
+                btn.className = "px-4 py-2 rounded-xl text-xs font-extrabold transition duration-200 bg-brand-purple text-white shadow-sm";
+            } else {
+                btn.className = "px-4 py-2 rounded-xl text-xs font-bold transition duration-200 text-slate-500 hover:text-slate-800 bg-white border border-slate-100 hover:bg-slate-50";
+            }
+        }
+    });
+
+    renderBerita();
+}
+
+function searchBerita() {
+    currentBeritaSearch = document.getElementById('berita-search-input')?.value || '';
+    renderBerita();
+}
+
+// Render Detailed News Article
+async function renderBeritaDetail(newsId) {
+    currentOpenBeritaId = newsId;
+    const news = beritaDatabase.find(n => n.id === String(newsId));
+    if (!news) {
+        showToast('Error', 'Berita tidak ditemukan', false);
+        window.location.hash = '#berita';
+        return;
+    }
+
+    // Increment view count (send to apps script backend)
+    if (!sessionStorage.getItem(`viewed_berita_${newsId}`)) {
+        news.views = (news.views || 0) + 1;
+        sessionStorage.setItem(`viewed_berita_${newsId}`, 'true');
+        
+        if (appsScriptUrl) {
+            sendFormToAppsScript({ action: 'submitView', id: newsId }).catch(() => {});
+        }
+    }
+
+    // Fill UI elements
+    document.getElementById('detail-berita-category').innerText = news.category;
+    document.getElementById('detail-berita-date').innerHTML = `<i class="far fa-calendar-alt"></i> ${formatIndonesianDate(news.timestamp)}`;
+    document.getElementById('detail-berita-title').innerText = news.title;
+    document.getElementById('detail-berita-views').innerText = news.views || 0;
+    document.getElementById('detail-berita-likes').innerText = news.likes || 0;
+    document.getElementById('detail-berita-content').innerText = news.content;
+
+    const imgEl = document.getElementById('detail-berita-img');
+    if (news.coverImage) {
+        imgEl.src = news.coverImage;
+        imgEl.classList.remove('hidden');
+    } else {
+        imgEl.src = 'assets/images/logo-bersama.png';
+    }
+
+    // Render comments list
+    renderComments(newsId);
+    
+    // Clear comment inputs
+    document.getElementById('comment-name').value = '';
+    document.getElementById('comment-text').value = '';
+}
+
+function renderComments(newsId) {
+    const list = document.getElementById('detail-comments-list');
+    const countEl = document.getElementById('detail-comments-count');
+    if (!list) return;
+    list.innerHTML = '';
+
+    const comments = komentarDatabase.filter(c => String(c.newsId) === String(newsId));
+    countEl.innerText = comments.length;
+
+    if (comments.length === 0) {
+        list.innerHTML = `<p class="py-4 text-xs text-slate-400 text-center font-medium">Belum ada komentar. Jadilah yang pertama memberikan masukan!</p>`;
+        return;
+    }
+
+    comments.forEach(c => {
+        list.innerHTML += `
+            <div class="py-4 first:pt-0 space-y-1">
+                <div class="flex items-center justify-between text-xs">
+                    <span class="font-extrabold text-brand-textDark">${c.name}</span>
+                    <span class="text-slate-400 font-semibold">${formatIndonesianDate(c.timestamp)}</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed font-normal">${c.comment}</p>
+            </div>
+        `;
+    });
+}
+
+function goBackToBerita() {
+    window.location.hash = '#berita';
+}
+
+async function likeCurrentNews() {
+    if (!currentOpenBeritaId) return;
+    const news = beritaDatabase.find(n => n.id === String(currentOpenBeritaId));
+    if (!news) return;
+
+    if (localStorage.getItem(`liked_berita_${currentOpenBeritaId}`)) {
+        showToast('Info', 'Anda sudah menyukai berita ini.', true);
+        return;
+    }
+
+    news.likes = (news.likes || 0) + 1;
+    localStorage.setItem(`liked_berita_${currentOpenBeritaId}`, 'true');
+    document.getElementById('detail-berita-likes').innerText = news.likes;
+
+    showToast('Berhasil Menyukai', 'Terima kasih atas tanggapan Anda!');
+
+    if (appsScriptUrl) {
+        sendFormToAppsScript({ action: 'submitLike', id: currentOpenBeritaId }).catch(() => {});
+    }
+}
+
+async function postComment() {
+    if (!currentOpenBeritaId) return;
+    const name = document.getElementById('comment-name').value.trim();
+    const comment = document.getElementById('comment-text').value.trim();
+
+    if (!name || !comment) {
+        showToast('Data Tidak Lengkap', 'Nama dan isi komentar wajib diisi.', false);
+        return;
+    }
+
+    const newComment = {
+        newsId: currentOpenBeritaId,
+        timestamp: new Date().toISOString(),
+        name,
+        comment
+    };
+
+    komentarDatabase.push(newComment);
+    renderComments(currentOpenBeritaId);
+
+    document.getElementById('comment-name').value = '';
+    document.getElementById('comment-text').value = '';
+
+    showToast('Komentar Dikirim', 'Komentar Anda berhasil diterbitkan.');
+
+    if (appsScriptUrl) {
+        sendFormToAppsScript({ action: 'submitKomentar', ...newComment }).catch(() => {});
+    }
+}
+
+// =========================================================================
+// ADMIN PORTAL - BERITA MANAGEMENT (CRUD + Drive Image Upload)
+// =========================================================================
+
+let adminBeritaEditIndex = null;
+
+function renderAdminBeritaTable() {
+    const tbody = document.getElementById('admin-berita-tbody');
+    const emptyEl = document.getElementById('admin-berita-empty');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (beritaDatabase.length === 0) {
+        emptyEl.classList.remove('hidden');
+        return;
+    }
+    emptyEl.classList.add('hidden');
+
+    beritaDatabase.forEach((news, idx) => {
+        tbody.innerHTML += `
+            <tr class="hover:bg-slate-50 transition">
+                <td class="py-3 font-bold text-brand-textDark max-w-xs truncate" title="${news.title}">${news.title}</td>
+                <td class="py-3">
+                    <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-purple bg-violet-50 px-2 py-0.5 rounded">${news.category}</span>
+                </td>
+                <td class="py-3 text-right font-bold text-slate-500">${news.likes || 0}</td>
+                <td class="py-3 text-right font-bold text-slate-500">${news.views || 0}</td>
+                <td class="py-3 text-center">
+                    <button onclick="openEditBeritaForm(${idx})" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 transition flex items-center justify-center mx-auto" title="Edit">
+                        <i class="fas fa-pencil-alt text-xs"></i>
+                    </button>
+                </td>
+                <td class="py-3 text-center">
+                    <button onclick="adminDeleteBerita(${idx})" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition flex items-center justify-center mx-auto" title="Hapus">
+                        <i class="fas fa-trash-alt text-xs"></i>
+                    </button>
+                </td>
+            </tr>`;
+    });
+}
+
+function openEditBeritaForm(index) {
+    const news = beritaDatabase[index];
+    if (!news) return;
+
+    adminBeritaEditIndex = index;
+    document.getElementById('adm-berita-form-title').innerHTML = `<i class="fas fa-pencil-alt text-brand-purple"></i> Edit Berita`;
+    document.getElementById('adm-berita-id').value = news.id;
+    document.getElementById('adm-berita-title').value = news.title;
+    document.getElementById('adm-berita-category').value = news.category;
+    document.getElementById('adm-berita-content').value = news.content;
+    document.getElementById('adm-berita-image-url').value = news.coverImage || '';
+    
+    document.getElementById('adm-berita-submit-btn').innerHTML = `<i class="fas fa-save"></i> Perbarui Berita`;
+    document.getElementById('adm-berita-cancel-btn').classList.remove('hidden');
+
+    // Scroll to form
+    document.getElementById('adm-berita-form-title').scrollIntoView({ behavior: 'smooth' });
+}
+
+function adminCancelEditBerita() {
+    adminBeritaEditIndex = null;
+    document.getElementById('adm-berita-form-title').innerHTML = `<i class="fas fa-plus-circle"></i> Tambah Berita Baru`;
+    document.getElementById('adm-berita-id').value = '';
+    document.getElementById('adm-berita-title').value = '';
+    document.getElementById('adm-berita-category').value = 'kegiatan';
+    document.getElementById('adm-berita-content').value = '';
+    document.getElementById('adm-berita-image-url').value = '';
+    document.getElementById('adm-berita-image-file').value = '';
+
+    document.getElementById('adm-berita-submit-btn').innerHTML = `<i class="fas fa-plus"></i> Simpan Berita`;
+    document.getElementById('adm-berita-cancel-btn').classList.add('hidden');
+}
+
+// Save or Update Berita
+async function adminSaveBerita() {
+    const title = document.getElementById('adm-berita-title').value.trim();
+    const category = document.getElementById('adm-berita-category').value;
+    const content = document.getElementById('adm-berita-content').value.trim();
+    const fileInput = document.getElementById('adm-berita-image-file');
+    const existingImgUrl = document.getElementById('adm-berita-image-url').value;
+
+    if (!title || !content) {
+        showToast('Data Tidak Lengkap', 'Judul dan isi berita wajib diisi.', false);
+        return;
+    }
+
+    const submitBtn = document.getElementById('adm-berita-submit-btn');
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+    submitBtn.disabled = true;
+
+    try {
+        let payload = {
+            title,
+            category,
+            content,
+            coverImage: existingImgUrl,
+            adminPin: ADMIN_LOCAL_PIN
+        };
+
+        // If file selected, read as Base64 for Drive Upload
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const base64Data = await convertFileToBase64(file);
+            payload.fileData = base64Data.split(',')[1];
+            payload.fileName = file.name;
+            payload.fileType = file.type;
+        }
+
+        if (adminBeritaEditIndex !== null) {
+            // Edit mode
+            const news = beritaDatabase[adminBeritaEditIndex];
+            payload.id = news.id;
+            payload.action = 'adminUpdateBerita';
+            
+            // Local update fallback
+            news.title = title;
+            news.category = category;
+            news.content = content;
+            if (fileInput.files.length > 0) {
+                // Mock local URL for instant feedback
+                news.coverImage = URL.createObjectURL(fileInput.files[0]);
+            }
+
+            if (appsScriptUrl) {
+                await sendFormToAppsScript(payload);
+            }
+            showToast('Berita Diperbarui', 'Berita berhasil diedit.');
+        } else {
+            // Add mode
+            payload.id = String(Date.now());
+            payload.timestamp = new Date().toISOString();
+            payload.action = 'adminAddBerita';
+
+            // Local fallback
+            let newNews = {
+                id: payload.id,
+                timestamp: payload.timestamp,
+                title,
+                category,
+                content,
+                coverImage: fileInput.files.length > 0 ? URL.createObjectURL(fileInput.files[0]) : '',
+                likes: 0,
+                views: 0
+            };
+            beritaDatabase.push(newNews);
+
+            if (appsScriptUrl) {
+                await sendFormToAppsScript(payload);
+            }
+            showToast('Berita Disimpan', 'Berita baru berhasil ditambahkan.');
+        }
+
+        adminCancelEditBerita();
+        renderAdminBeritaTable();
+        renderBerita();
+        renderBeritaListHome();
+    } catch (err) {
+        console.error(err);
+        showToast('Gagal Menyimpan', 'Terjadi kesalahan saat memproses data.', false);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = adminBeritaEditIndex !== null ? `<i class="fas fa-save"></i> Perbarui Berita` : `<i class="fas fa-plus"></i> Simpan Berita`;
+    }
+}
+
+async function adminDeleteBerita(index) {
+    if (!confirm('Yakin ingin menghapus berita ini secara permanen beserta komentarnya?')) return;
+    
+    const news = beritaDatabase[index];
+    if (!news) return;
+
+    const newsId = news.id;
+    beritaDatabase.splice(index, 1);
+    
+    // clean comments locally too
+    komentarDatabase = komentarDatabase.filter(c => String(c.newsId) !== String(newsId));
+
+    if (appsScriptUrl) {
+        sendFormToAppsScript({ action: 'adminDeleteBerita', adminPin: ADMIN_LOCAL_PIN, id: newsId }).catch(() => {});
+    }
+
+    renderAdminBeritaTable();
+    renderBerita();
+    renderBeritaListHome();
+    showToast('Berita Dihapus', 'Berita berhasil dihapus secara permanen.');
+}
+
+// Utility to convert files to base64
+function convertFileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 }
 

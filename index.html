@@ -61,6 +61,7 @@
             <!-- Navigation Links -->
             <div class="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-wider text-slate-600">
                 <a href="#home" class="nav-link hover:text-brand-purple transition duration-200 py-2">Beranda</a>
+                <a href="#berita" class="nav-link hover:text-brand-purple transition duration-200 py-2">Berita</a>
                 <a href="#kaderisasi"
                     class="nav-link hover:text-brand-purple transition duration-200 py-2">Kaderisasi</a>
                 <a href="#administrasi"
@@ -90,6 +91,8 @@
             class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2 text-xs font-bold uppercase tracking-wider">
             <a href="#home" onclick="toggleMobileMenu()"
                 class="block py-2 text-slate-600 hover:text-brand-purple">Beranda</a>
+            <a href="#berita" onclick="toggleMobileMenu()"
+                class="block py-2 text-slate-600 hover:text-brand-purple">Berita</a>
             <a href="#kaderisasi" onclick="toggleMobileMenu()"
                 class="block py-2 text-slate-600 hover:text-brand-purple">Kaderisasi</a>
             <a href="#administrasi" onclick="toggleMobileMenu()"
@@ -309,51 +312,8 @@
                     <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase">Berita Utama &
                         Informasi PAC</h3>
 
-                    <div class="space-y-4">
-                        <!-- News Card 1 -->
-                        <div
-                            class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition duration-200 flex flex-col sm:flex-row gap-4 items-start">
-                            <div
-                                class="w-full sm:w-32 h-24 bg-violet-50 rounded-xl flex items-center justify-center text-brand-purple flex-shrink-0 text-2xl font-extrabold">
-                                <i class="fas fa-newspaper text-violet-300"></i>
-                            </div>
-                            <div class="space-y-1.5">
-                                <span
-                                    class="px-2 py-0.5 rounded-md bg-brand-purple/10 text-brand-purple text-[8px] font-extrabold uppercase tracking-widest">Kaderisasi</span>
-                                <h4
-                                    class="font-extrabold text-xs sm:text-sm text-brand-textDark hover:text-brand-purple cursor-pointer transition">
-                                    Sukses Gelar LAKMUD I, PAC Tahunan Siap Cetak Organisatoris Handal</h4>
-                                <p class="text-xs text-slate-500 line-clamp-2">Latihan Kader Muda (LAKMUD) perdana
-                                    yang diselenggarakan oleh PAC Tahunan sukses menjaring puluhan peserta terbaik
-                                    se-Tahunan...</p>
-                                <div class="text-[9px] text-slate-400 font-bold flex items-center gap-1">
-                                    <i class="far fa-calendar-alt"></i> 15 Juni 2026
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- News Card 2 -->
-                        <div
-                            class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition duration-200 flex flex-col sm:flex-row gap-4 items-start">
-                            <div
-                                class="w-full sm:w-32 h-24 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 flex-shrink-0 text-2xl font-extrabold">
-                                <i class="fas fa-handshake text-emerald-200"></i>
-                            </div>
-                            <div class="space-y-1.5">
-                                <span
-                                    class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[8px] font-extrabold uppercase tracking-widest">Sinergi
-                                    MWC</span>
-                                <h4
-                                    class="font-extrabold text-xs sm:text-sm text-brand-textDark hover:text-brand-purple cursor-pointer transition">
-                                    Silaturahmi Bersama MWC NU Tahunan: Menjaga Sanad Amaliyah</h4>
-                                <p class="text-xs text-slate-500 line-clamp-2">Dalam rangka mempererat ukhuwah
-                                    nahdliyyah, pengurus PAC berkunjung ke jajaran Syuriah dan Tanfidziyah MWC NU
-                                    Kecamatan Tahunan...</p>
-                                <div class="text-[9px] text-slate-400 font-bold flex items-center gap-1">
-                                    <i class="far fa-calendar-alt"></i> 10 Juni 2026
-                                </div>
-                            </div>
-                        </div>
+                    <div id="home-news-list" class="space-y-4">
+                        <!-- Dynamic News Cards will be loaded here -->
                     </div>
                 </div>
 
@@ -362,53 +322,126 @@
                     <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase">Sekilas Agenda
                         Terdekat</h3>
                     <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-4">
-
-                        <!-- Agenda Item 1 -->
-                        <div class="flex gap-4 items-start border-b border-slate-100 pb-3">
-                            <div
-                                class="bg-gradient-to-br from-violet-600 to-indigo-700 text-white rounded-xl w-12 h-12 flex flex-col items-center justify-center flex-shrink-0 font-extrabold shadow-sm shadow-violet-200">
-                                <span class="text-sm leading-none">27</span>
-                                <span class="text-[8px] uppercase tracking-wider mt-0.5">Juni</span>
-                            </div>
-                            <div class="space-y-0.5">
-                                <h5 class="font-bold text-xs text-brand-textDark">Selapanan & Rutinan Sabtu Pon</h5>
-                                <p class="text-xs text-slate-500 flex items-center gap-1"><i
-                                        class="fas fa-map-marker-alt text-violet-500"></i> Gedung MWC NU Tahunan</p>
-                                <p class="text-[9px] text-brand-purple font-semibold">Mulai pukul 19:30 WIB</p>
-                            </div>
+                        <div id="home-agenda-list" class="space-y-4">
+                            <!-- Dynamic Agenda items will be loaded here -->
                         </div>
-
-                        <!-- Agenda Item 2 -->
-                        <div class="flex gap-4 items-start border-b border-slate-100 pb-3">
-                            <div
-                                class="bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-xl w-12 h-12 flex flex-col items-center justify-center flex-shrink-0 font-extrabold shadow-sm shadow-indigo-100">
-                                <span class="text-sm leading-none">12</span>
-                                <span class="text-[8px] uppercase tracking-wider mt-0.5">Juli</span>
-                            </div>
-                            <div class="space-y-0.5">
-                                <h5 class="font-bold text-xs text-brand-textDark">MAKESTA Raya Se-Tahunan 2026</h5>
-                                <p class="text-xs text-slate-500 flex items-center gap-1"><i
-                                        class="fas fa-map-marker-alt text-indigo-500"></i> Lapangan Desa Tegalsambi</p>
-                                <p class="text-[9px] text-indigo-600 font-semibold">Pemberkasan H-7</p>
-                            </div>
-                        </div>
-
-                        <!-- Agenda Item 3 -->
-                        <div class="flex gap-4 items-start">
-                            <div
-                                class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl w-12 h-12 flex flex-col items-center justify-center flex-shrink-0 font-extrabold shadow-sm shadow-emerald-100">
-                                <span class="text-sm leading-none">05</span>
-                                <span class="text-[8px] uppercase tracking-wider mt-0.5">Agt</span>
-                            </div>
-                            <div class="space-y-0.5">
-                                <h5 class="font-bold text-xs text-brand-textDark">Rapat Koordinasi Tengah Tahun</h5>
-                                <p class="text-xs text-slate-500 flex items-center gap-1"><i
-                                        class="fas fa-map-marker-alt text-emerald-500"></i> Sekretariat PAC Tahunan</p>
-                                <p class="text-[9px] text-emerald-600 font-semibold">Khusus Ketua PR & PK</p>
-                            </div>
-                        </div>
-
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2.5: PORTAL BERITA -->
+        <section id="view-berita" class="view-section hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="space-y-2 border-b border-slate-100 pb-5">
+                <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-brand-textDark">Portal Berita & Informasi Kegiatan</h2>
+                <p class="text-xs text-slate-500">
+                    Menyajikan informasi kegiatan resmi, pengumuman, dan artikel terupdate seputar PAC IPNU IPPNU Kecamatan Tahunan.
+                </p>
+            </div>
+
+            <!-- Filter & Search Controls -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <!-- Tab Kategori Berita -->
+                <div class="flex flex-wrap gap-2" id="berita-categories">
+                    <button onclick="filterBerita('all')" id="berita-cat-all" class="px-4 py-2 rounded-xl text-xs font-extrabold transition duration-200 bg-brand-purple text-white shadow-sm">Semua</button>
+                    <button onclick="filterBerita('kegiatan')" id="berita-cat-kegiatan" class="px-4 py-2 rounded-xl text-xs font-bold transition duration-200 text-slate-500 hover:text-slate-800 bg-white border border-slate-100 hover:bg-slate-50">Kegiatan</button>
+                    <button onclick="filterBerita('info')" id="berita-cat-info" class="px-4 py-2 rounded-xl text-xs font-bold transition duration-200 text-slate-500 hover:text-slate-800 bg-white border border-slate-100 hover:bg-slate-50">Informasi</button>
+                    <button onclick="filterBerita('pengumuman')" id="berita-cat-pengumuman" class="px-4 py-2 rounded-xl text-xs font-bold transition duration-200 text-slate-500 hover:text-slate-800 bg-white border border-slate-100 hover:bg-slate-50">Pengumuman</button>
+                </div>
+                <!-- Search Bar -->
+                <div class="relative w-full md:w-80">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="berita-search-input" oninput="searchBerita()" placeholder="Cari berita..." 
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-9 pr-4 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+            </div>
+
+            <!-- News Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="berita-grid">
+                <!-- Dynamic Content Rendered by JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="berita-empty-state" class="hidden py-12 text-center space-y-3 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-lg">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-slate-700 text-sm">Berita Tidak Ditemukan</p>
+                    <p class="text-xs text-slate-400 mt-1">Coba sesuaikan kata kunci pencarian atau kategori filter Anda.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2.6: BERITA DETAIL -->
+        <section id="view-berita-detail" class="view-section hidden py-8 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <!-- Back Button -->
+            <button onclick="goBackToBerita()" class="inline-flex items-center gap-2 text-xs font-bold text-brand-purple hover:text-brand-purpleDark transition-all duration-200 bg-violet-50 hover:bg-violet-100/80 px-4 py-2 rounded-xl border border-violet-100">
+                <i class="fas fa-arrow-left"></i> Kembali ke Berita
+            </button>
+
+            <!-- Article Card -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+                <!-- Header Info -->
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span id="detail-berita-category" class="px-2.5 py-1 rounded-lg bg-brand-purple/10 text-brand-purple text-[10px] font-extrabold uppercase tracking-widest">Kaderisasi</span>
+                        <span class="text-slate-300 text-xs">|</span>
+                        <span id="detail-berita-date" class="text-slate-400 text-xs font-semibold flex items-center gap-1"><i class="far fa-calendar-alt"></i> 15 Juni 2026</span>
+                    </div>
+                    <h1 id="detail-berita-title" class="text-xl sm:text-3xl font-extrabold text-brand-textDark leading-tight">Detail Berita</h1>
+                    <!-- Views and Likes stats -->
+                    <div class="flex items-center gap-4 pt-1 text-slate-500 text-xs font-medium">
+                        <span class="flex items-center gap-1.5"><i class="far fa-eye text-slate-400"></i> <span id="detail-berita-views">0</span> Kali Dilihat</span>
+                        <span class="flex items-center gap-1.5"><i class="far fa-thumbs-up text-slate-400"></i> <span id="detail-berita-likes">0</span> Menyukai</span>
+                    </div>
+                </div>
+
+                <!-- Cover Image -->
+                <div class="w-full h-[250px] sm:h-[400px] bg-slate-50 rounded-2xl overflow-hidden border border-slate-100/50">
+                    <img id="detail-berita-img" src="" alt="Cover Berita" class="w-full h-full object-cover">
+                </div>
+
+                <!-- Article Content -->
+                <div id="detail-berita-content" class="text-slate-650 text-sm leading-relaxed space-y-4 whitespace-pre-line font-normal animate-fade-in">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <!-- Like Button Call to Action -->
+                <div class="pt-6 border-t border-slate-100 flex justify-center">
+                    <button id="like-btn" onclick="likeCurrentNews()" class="flex items-center gap-2 px-6 py-3 rounded-2xl bg-violet-50 hover:bg-brand-purple hover:text-white border border-brand-purple/20 text-brand-purple text-xs font-extrabold transition-all duration-300 transform hover:scale-[1.03] shadow-sm">
+                        <i class="fas fa-thumbs-up"></i> Sukai Berita Ini
+                    </button>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+                <h3 class="font-extrabold text-sm uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                    <i class="far fa-comments text-brand-purple text-base"></i> Komentar (<span id="detail-comments-count">0</span>)
+                </h3>
+
+                <!-- Comments List -->
+                <div id="detail-comments-list" class="space-y-4 divide-y divide-slate-100">
+                    <!-- Dynamic comments -->
+                </div>
+
+                <!-- Comment Form -->
+                <div class="pt-6 border-t border-slate-100 space-y-4">
+                    <h4 class="font-extrabold text-xs text-brand-textDark uppercase tracking-wide">Tulis Komentar Anda</h4>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="space-y-1">
+                            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Anda</label>
+                            <input type="text" id="comment-name" placeholder="Masukkan nama Anda..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Isi Komentar</label>
+                            <textarea id="comment-text" rows="3" placeholder="Tulis komentar/masukan Anda di sini..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition"></textarea>
+                        </div>
+                    </div>
+                    <button onclick="postComment()" class="px-6 py-2.5 rounded-xl bg-brand-purple hover:bg-brand-purpleDark text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
+                        <i class="fas fa-paper-plane"></i> Kirim Komentar
+                    </button>
                 </div>
             </div>
         </section>
@@ -902,6 +935,10 @@
                         class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50">
                         <i class="fas fa-book-open mr-1.5"></i> Repositori Dok.
                     </button>
+                    <button onclick="switchAdminTab('berita')" id="adm-tab-berita"
+                        class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50">
+                        <i class="fas fa-newspaper mr-1.5"></i> Kelola Berita
+                    </button>
                     <button onclick="switchAdminTab('pengaturan')" id="adm-tab-pengaturan"
                         class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50">
                         <i class="fas fa-cog mr-1.5"></i> Pengaturan
@@ -1134,6 +1171,74 @@
                             class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
                             <i class="fas fa-plus"></i> Tambah Dokumen
                         </button>
+                    </div>
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- TAB 4.5: KELOLA BERITA -->
+                <!-- ============================================================ -->
+                <div id="adm-panel-berita" class="space-y-6 hidden">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Daftar Berita & Informasi</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-100 text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">
+                                        <th class="pb-3">Judul Berita</th>
+                                        <th class="pb-3">Kategori</th>
+                                        <th class="pb-3 text-right">Likes</th>
+                                        <th class="pb-3 text-right">Views</th>
+                                        <th class="pb-3 text-center">Edit</th>
+                                        <th class="pb-3 text-center">Hapus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-berita-tbody" class="divide-y divide-slate-50"></tbody>
+                            </table>
+                        </div>
+                        <div id="admin-berita-empty" class="hidden py-6 text-center text-xs text-slate-400 font-medium">Belum ada berita terpublikasi.</div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 id="adm-berita-form-title" class="text-xs font-extrabold text-brand-purple uppercase tracking-wider flex items-center gap-2"><i class="fas fa-plus-circle"></i> Tambah Berita Baru</h3>
+                        <input type="hidden" id="adm-berita-id" value="">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Judul Berita</label>
+                                <input type="text" id="adm-berita-title" placeholder="cth: Sukses Gelar LAKMUD I, PAC Tahunan Siap Cetak Organisatoris Handal"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Kategori</label>
+                                    <select id="adm-berita-category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                        <option value="kegiatan">Kegiatan</option>
+                                        <option value="info">Informasi</option>
+                                        <option value="pengumuman">Pengumuman</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">File Gambar Cover (Upload ke Drive)</label>
+                                    <input type="file" id="adm-berita-image-file" accept="image/*"
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    <p class="text-[9px] text-slate-400">File akan otomatis diunggah ke Google Drive.</p>
+                                    <input type="hidden" id="adm-berita-image-url" value="">
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Konten Berita</label>
+                                <textarea id="adm-berita-content" rows="6" placeholder="Tulis isi berita secara lengkap di sini..."
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition"></textarea>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button id="adm-berita-submit-btn" onclick="adminSaveBerita()"
+                                class="px-6 py-2.5 rounded-xl bg-brand-purple hover:bg-brand-purpleDark text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
+                                <i class="fas fa-plus"></i> Simpan Berita
+                            </button>
+                            <button id="adm-berita-cancel-btn" onclick="adminCancelEditBerita()" class="hidden px-6 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-650 font-bold text-xs uppercase tracking-wider transition duration-300">
+                                Batal
+                            </button>
+                        </div>
                     </div>
                 </div>
 

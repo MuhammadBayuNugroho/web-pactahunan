@@ -131,6 +131,12 @@ function doPost(e) {
     if (action === 'adminDeleteMakesta') return handleAdminDeleteMakesta(ss, data);
     if (action === 'adminAddRepo')     return handleAdminAddRepo(ss, data);
     if (action === 'adminDeleteRepo')  return handleAdminDeleteRepo(ss, data);
+    if (action === 'adminAddBerita')   return handleAdminAddBerita(ss, data);
+    if (action === 'adminDeleteBerita') return handleAdminDeleteBerita(ss, data);
+    if (action === 'adminUpdateBerita') return handleAdminUpdateBerita(ss, data);
+    if (action === 'submitLike')       return handleSubmitLike(ss, data);
+    if (action === 'submitView')       return handleSubmitView(ss, data);
+    if (action === 'submitKomentar')   return handleSubmitKomentar(ss, data);
     
     return createJsonResponse({ status: "error", message: "Action POST tidak dikenal" });
 
@@ -222,8 +228,8 @@ function saveFileToDrive(base64Data, fileName, mimeType) {
   if (!base64Data || !fileName) return "";
   
   try {
-    // Target folder spesifik yang diberikan oleh user
-    var folderId = "1Oe9Jie92JvDFMLlAGghe3ZhHpM3_OF0-";
+    // Target folder spesifik yang diberikan oleh user (1JHAH_eeS2504wE6GClRElK_XsaQiDwll)
+    var folderId = "1JHAH_eeS2504wE6GClRElK_XsaQiDwll";
     var folder = DriveApp.getFolderById(folderId);
     
     var decoded = Utilities.base64Decode(base64Data);
@@ -308,6 +314,34 @@ function readSpData() {
     ]
   ];
   
+  var defaultBerita = [
+    [
+      "1",
+      "2026-06-15T10:00:00.000Z",
+      "Sukses Gelar LAKMUD I, PAC Tahunan Siap Cetak Organisatoris Handal",
+      "Latihan Kader Muda (LAKMUD) perdana yang diselenggarakan oleh PAC Tahunan sukses menjaring puluhan peserta terbaik se-Tahunan. Acara ini berlangsung dengan khidmat dan diisi oleh pemateri-pemateri handal.",
+      "kegiatan",
+      "assets/images/cover-modul.png",
+      10,
+      120
+    ],
+    [
+      "2",
+      "2026-06-10T14:30:00.000Z",
+      "Silaturahmi Bersama MWC NU Tahunan: Menjaga Sanad Amaliyah",
+      "Dalam rangka mempererat ukhuwah nahdliyyah, pengurus PAC berkunjung ke jajaran Syuriah dan Tanfidziyah MWC NU Kecamatan Tahunan. Pertemuan ini menghasilkan beberapa program sinergis bersama.",
+      "info",
+      "assets/images/logo-bersama.png",
+      5,
+      85
+    ]
+  ];
+  var defaultKomentar = [
+    ["1", "2026-06-15T11:00:00.000Z", "Rekan Ahmad", "Luar biasa! Semangat terus PAC Tahunan!"],
+    ["1", "2026-06-15T12:30:00.000Z", "Rekanita Sofia", "LAKMUD I yang sangat berkesan, semoga barokah."],
+    ["2", "2026-06-10T15:00:00.000Z", "Zainal Arifin", "Sinergi yang sangat bagus untuk kemajuan banom-banom NU."]
+  ];
+
   var sheetIpnu = getOrCreateSheet(ss, "sp_ipnu", ["Nama", "Tipe", "Nomor SP Resmi", "Masa Berlaku"], defaultIpnu);
   var sheetIppnu = getOrCreateSheet(ss, "sp_ippnu", ["Nama", "Tipe", "Nomor SP Resmi", "Masa Berlaku"], defaultIppnu);
   
@@ -321,10 +355,15 @@ function readSpData() {
   ];
   var sheetMakesta = getOrCreateSheet(ss, "makesta", makestaHeaders, defaultMakesta);
   
+  var sheetBerita = getOrCreateSheet(ss, "berita", ["ID", "Timestamp", "Judul", "Konten", "Kategori", "Gambar", "Likes", "Views"], defaultBerita);
+  var sheetKomentar = getOrCreateSheet(ss, "komentar", ["NewsID", "Timestamp", "Nama", "Komentar"], defaultKomentar);
+
   return {
     ipnu: sheetToObjects(sheetIpnu),
     ippnu: sheetToObjects(sheetIppnu),
-    makesta: sheetMakestaToObjects(sheetMakesta)
+    makesta: sheetMakestaToObjects(sheetMakesta),
+    berita: sheetBeritaToObjects(sheetBerita),
+    komentar: sheetKomentarToObjects(sheetKomentar)
   };
 }
 
@@ -459,4 +498,158 @@ function triggerOtorisasiLengkap() {
     DriveApp.createFile("dummy.txt", "dummy");
   }
   Logger.log("Otorisasi selesai dipicu. Silakan periksa apakah Anda sudah memberikan izin.");
+}
+
+function sheetBeritaToObjects(sheet) {
+  var range = sheet.getDataRange();
+  var values = range.getValues();
+  var objects = [];
+  if (values.length <= 1) return objects;
+  for (var i = 1; i < values.length; i++) {
+    var row = values[i];
+    objects.push({
+      id: String(row[0]).trim(),
+      timestamp: String(row[1]).trim(),
+      title: String(row[2]).trim(),
+      content: String(row[3]).trim(),
+      category: String(row[4]).trim(),
+      coverImage: String(row[5]).trim(),
+      likes: Number(row[6]) || 0,
+      views: Number(row[7]) || 0
+    });
+  }
+  return objects;
+}
+
+function sheetKomentarToObjects(sheet) {
+  var range = sheet.getDataRange();
+  var values = range.getValues();
+  var objects = [];
+  if (values.length <= 1) return objects;
+  for (var i = 1; i < values.length; i++) {
+    var row = values[i];
+    objects.push({
+      newsId: String(row[0]).trim(),
+      timestamp: String(row[1]).trim(),
+      name: String(row[2]).trim(),
+      comment: String(row[3]).trim()
+    });
+  }
+  return objects;
+}
+
+function handleAdminAddBerita(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheet = getOrCreateSheet(ss, 'berita', ["ID", "Timestamp", "Judul", "Konten", "Kategori", "Gambar", "Likes", "Views"]);
+  
+  var imageUrl = data.coverImage;
+  if (data.fileData) {
+    imageUrl = saveFileToDrive(data.fileData, data.fileName, data.fileType);
+  }
+  
+  sheet.appendRow([
+    data.id || String(Date.now()),
+    data.timestamp || new Date().toISOString(),
+    data.title,
+    data.content,
+    data.category,
+    imageUrl || "",
+    0, // Likes
+    0  // Views
+  ]);
+  return createJsonResponse({ status: "success", message: "Berita berhasil ditambahkan." });
+}
+
+function handleAdminDeleteBerita(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheet = ss.getSheetByName('berita');
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet berita tidak ditemukan." });
+  var values = sheet.getDataRange().getValues();
+  var targetId = String(data.id);
+  
+  for (var i = 1; i < values.length; i++) {
+    if (String(values[i][0]) === targetId) {
+      sheet.deleteRow(i + 1);
+      
+      // Also delete comments associated with this news item
+      var commentSheet = ss.getSheetByName('komentar');
+      if (commentSheet) {
+        var commentValues = commentSheet.getDataRange().getValues();
+        for (var j = commentValues.length - 1; j >= 1; j--) {
+          if (String(commentValues[j][0]) === targetId) {
+            commentSheet.deleteRow(j + 1);
+          }
+        }
+      }
+      return createJsonResponse({ status: "success", message: "Berita berhasil dihapus." });
+    }
+  }
+  return createJsonResponse({ status: "error", message: "Berita tidak ditemukan." });
+}
+
+function handleAdminUpdateBerita(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheet = ss.getSheetByName('berita');
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet berita tidak ditemukan." });
+  var values = sheet.getDataRange().getValues();
+  var targetId = String(data.id);
+  
+  for (var i = 1; i < values.length; i++) {
+    if (String(values[i][0]) === targetId) {
+      var imageUrl = data.coverImage || values[i][5];
+      if (data.fileData) {
+        imageUrl = saveFileToDrive(data.fileData, data.fileName, data.fileType);
+      }
+      
+      sheet.getRange(i + 1, 3).setValue(data.title);
+      sheet.getRange(i + 1, 4).setValue(data.content);
+      sheet.getRange(i + 1, 5).setValue(data.category);
+      sheet.getRange(i + 1, 6).setValue(imageUrl);
+      return createJsonResponse({ status: "success", message: "Berita berhasil diperbarui." });
+    }
+  }
+  return createJsonResponse({ status: "error", message: "Berita tidak ditemukan." });
+}
+
+function handleSubmitLike(ss, data) {
+  var sheet = ss.getSheetByName('berita');
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet berita tidak ditemukan." });
+  var values = sheet.getDataRange().getValues();
+  var targetId = String(data.id);
+  
+  for (var i = 1; i < values.length; i++) {
+    if (String(values[i][0]) === targetId) {
+      var currentLikes = Number(values[i][6]) || 0;
+      sheet.getRange(i + 1, 7).setValue(currentLikes + 1);
+      return createJsonResponse({ status: "success", message: "Like berhasil ditambahkan.", likes: currentLikes + 1 });
+    }
+  }
+  return createJsonResponse({ status: "error", message: "Berita tidak ditemukan." });
+}
+
+function handleSubmitView(ss, data) {
+  var sheet = ss.getSheetByName('berita');
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet berita tidak ditemukan." });
+  var values = sheet.getDataRange().getValues();
+  var targetId = String(data.id);
+  
+  for (var i = 1; i < values.length; i++) {
+    if (String(values[i][0]) === targetId) {
+      var currentViews = Number(values[i][7]) || 0;
+      sheet.getRange(i + 1, 8).setValue(currentViews + 1);
+      return createJsonResponse({ status: "success", message: "View berhasil ditambahkan.", views: currentViews + 1 });
+    }
+  }
+  return createJsonResponse({ status: "error", message: "Berita tidak ditemukan." });
+}
+
+function handleSubmitKomentar(ss, data) {
+  var sheet = getOrCreateSheet(ss, 'komentar', ["NewsID", "Timestamp", "Nama", "Komentar"]);
+  sheet.appendRow([
+    String(data.newsId),
+    data.timestamp || new Date().toISOString(),
+    data.name,
+    data.comment
+  ]);
+  return createJsonResponse({ status: "success", message: "Komentar berhasil ditambahkan." });
 }
