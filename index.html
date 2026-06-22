@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAC IPNU IPPNU Tahunan - Portal Satu Pintu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#6D28D9',     /* Violet 700 */
+                            purpleLight: '#8B5CF6',/* Violet 500 */
+                            purpleDark: '#4C1D95', /* Violet 900 */
+                            bgLight: '#F8FAFC',    /* Cool slate light background */
+                            textDark: '#0F172A'    /* Slate 900 */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom CSS Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-purple selection:text-white">
+
+    <!-- STICKY NAVBAR -->
+    <nav
+        class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Identity with Official Logo -->
+            <a href="#home" class="flex items-center gap-3 group">
+                <div class="flex items-center">
+                    <img src="assets/images/logo-bersama.png" alt="Logo Bersama PAC Tahunan"
+                        class="w-12 h-12 object-contain group-hover:scale-105 transition duration-300">
+                </div>
+                <div class="leading-tight">
+                    <h1
+                        class="font-extrabold text-sm sm:text-base tracking-tight text-brand-textDark uppercase leading-none">
+                        PAC IPNU IPPNU</h1>
+                    <span class="text-xs text-brand-purple font-bold uppercase tracking-normal">Kecamatan
+                        Tahunan</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <div class="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-wider text-slate-600">
+                <a href="#home" class="nav-link hover:text-brand-purple transition duration-200 py-2">Beranda</a>
+                <a href="#kaderisasi"
+                    class="nav-link hover:text-brand-purple transition duration-200 py-2">Kaderisasi</a>
+                <a href="#administrasi"
+                    class="nav-link hover:text-brand-purple transition duration-200 py-2">Administrasi</a>
+                <a href="#repository"
+                    class="nav-link hover:text-brand-purple transition duration-200 py-2">Repository</a>
+            </div>
+
+            <!-- Action Button / Settings Admin -->
+            <div class="flex items-center gap-2">
+                <button onclick="openSettingsModal()"
+                    class="p-2 sm:p-2.5 rounded-xl bg-violet-50 hover:bg-violet-100 text-brand-purple transition border border-violet-100 text-sm flex items-center gap-2 font-bold"
+                    title="Set HP Sekretaris">
+                    <i class="fas fa-cog text-sm"></i>
+                    <span class="hidden md:inline">Sekretaris Utama</span>
+                </button>
+
+                <!-- Mobile Navigation Toggle -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-slate-100 text-slate-700">
+                    <i id="menu-icon" class="fas fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu list -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2 text-xs font-bold uppercase tracking-wider">
+            <a href="#home" onclick="toggleMobileMenu()"
+                class="block py-2 text-slate-600 hover:text-brand-purple">Beranda</a>
+            <a href="#kaderisasi" onclick="toggleMobileMenu()"
+                class="block py-2 text-slate-600 hover:text-brand-purple">Kaderisasi</a>
+            <a href="#administrasi" onclick="toggleMobileMenu()"
+                class="block py-2 text-slate-600 hover:text-brand-purple">Administrasi</a>
+            <a href="#repository" onclick="toggleMobileMenu()"
+                class="block py-2 text-slate-600 hover:text-brand-purple">Repository</a>
+        </div>
+    </nav>
+
+    <!-- MAIN APP ROUTER VIEWPORTS -->
+    <main class="flex-grow w-full">
+
+        <!-- SECTION 1: HOME (BERANDA) -->
+        <section id="view-home" class="view-section hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <!-- Greeting & Welcome Banner with Translucent Logo watermark -->
+            <div
+                class="bg-gradient-to-tr from-violet-900 via-indigo-900 to-purple-950 text-white rounded-3xl p-6 sm:p-12 relative overflow-hidden shadow-xl shadow-indigo-900/10">
+                <!-- Translucent Background Logo -->
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 opacity-10 pointer-events-none transform rotate-12">
+                    <img src="assets/images/logo-bersama.png" alt="Overlay Logo" class="w-full h-full object-contain">
+                </div>
+
+                <div class="relative z-10 space-y-4 max-w-2xl">
+                    <span
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-bold uppercase tracking-widest text-violet-200">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Portal Resmi Satu Pintu
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                        Selamat Datang di Portal <br class="hidden sm:inline"> PAC IPNU IPPNU Kecamatan Tahunan
+                    </h2>
+                    <p class="text-violet-200 text-sm leading-relaxed font-medium">
+                        Wadah utama integrasi program, penyederhanaan birokrasi persuratan, pemantauan status hukum
+                        pimpinan ranting/komisariat, serta rekapitulasi data kaderisasi se-Kecamatan Tahunan, Jepara.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3 items-center">
+                        <span
+                            class="inline-flex items-center gap-1.5 text-xs bg-white/15 text-white font-bold px-3 py-1.5 rounded-lg border border-white/10">
+                            <i class="fas fa-calendar-check text-xs text-purple-300"></i> Periode Aktif: Masa Khidmat
+                            2025 - 2027
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto-scrolling / Non-forcing Statistics & Insights (3 Cards) -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase">Statistik & Analisis
+                        Organisasi</h3>
+                </div>
+
+                <!-- 4 Cards Layout -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="stats-container">
+
+                    <!-- Insight Card 1 -->
+                    <div
+                        class="p-6 bg-white rounded-2xl border border-slate-100 flex flex-col justify-between hover-glow shadow-sm min-h-[160px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs uppercase tracking-wider font-extrabold text-slate-400">Kader
+                                Terdata</span>
+                            <div
+                                class="w-8 h-8 rounded-lg bg-violet-50 text-brand-purple flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-users text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span id="stat-total-kader"
+                                class="text-xl sm:text-2xl font-black text-brand-textDark tracking-tight">1.250+
+                                Anggota</span>
+                            <div id="stat-detail-kader"
+                                class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mt-2">
+                                <span class="text-emerald-600"><i class="fas fa-mars mr-0.5"></i> IPNU: 580</span>
+                                <span class="mx-1 text-slate-300">|</span>
+                                <span class="text-pink-600"><i class="fas fa-venus mr-0.5"></i> IPPNU: 670</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Insight Card 2 -->
+                    <div
+                        class="p-6 bg-white rounded-2xl border border-slate-100 flex flex-col justify-between hover-glow shadow-sm min-h-[160px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs uppercase tracking-wider font-extrabold text-slate-400">Pimpinan
+                                Ranting</span>
+                            <div
+                                class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-home text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span id="stat-total-ranting"
+                                class="text-xl sm:text-2xl font-black text-brand-textDark tracking-tight">15
+                                Ranting</span>
+                            <span
+                                class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mt-2">Kepengurusan
+                                Ranting Desa</span>
+                        </div>
+                    </div>
+
+                    <!-- Insight Card 3 -->
+                    <div
+                        class="p-6 bg-white rounded-2xl border border-slate-100 flex flex-col justify-between hover-glow shadow-sm min-h-[160px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs uppercase tracking-wider font-extrabold text-slate-400">Pimpinan
+                                Komisariat</span>
+                            <div
+                                class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-graduation-cap text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span id="stat-total-komisariat"
+                                class="text-xl sm:text-2xl font-black text-brand-textDark tracking-tight">9
+                                Komisariat</span>
+                            <span
+                                class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mt-2">Komisariat
+                                Sekolah & Madin</span>
+                        </div>
+                    </div>
+
+                    <!-- Insight Card 4 -->
+                    <div
+                        class="p-6 bg-white rounded-2xl border border-slate-100 flex flex-col justify-between hover-glow shadow-sm min-h-[160px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs uppercase tracking-wider font-extrabold text-slate-400">Penyelenggaraan
+                                Makesta</span>
+                            <div
+                                class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-calendar-alt text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span id="stat-total-makesta"
+                                class="text-xl sm:text-2xl font-black text-brand-textDark tracking-tight">0
+                                Kegiatan</span>
+                            <span
+                                class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mt-2">Kaderisasi
+                                Tingkat Dasar</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SECTION: MONITORING SP (Integrated into Beranda) -->
+            <div class="space-y-4 pt-4 border-t border-slate-100 animate-fade-in-up">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <h3 class="text-lg font-bold text-brand-textDark">Monitoring Legalitas & Masa Aktif SP</h3>
+                        <p class="text-xs text-slate-500">Menampilkan 5 pimpinan teratas dengan status kritis atau masa
+                            aktif yang segera habis.</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 items-center w-full md:w-auto">
+                        <!-- Search Bar -->
+                        <div class="relative w-full sm:w-60">
+                            <i
+                                class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input type="text" id="sp-search-input" oninput="applyTableFiltering()"
+                                placeholder="Cari ranting / komisariat..."
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-8 pr-4 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                        </div>
+
+                        <!-- Banom Switcher -->
+                        <div
+                            class="bg-slate-100 p-1 rounded-xl flex border border-slate-200 self-stretch sm:self-auto justify-center">
+                            <button id="sp-tab-ipnu" onclick="switchSpBanom('ipnu')"
+                                class="px-4 py-1.5 rounded-lg text-xs font-bold transition duration-200 bg-brand-purple text-white shadow-sm flex items-center gap-1.5">
+                                IPNU
+                            </button>
+                            <button id="sp-tab-ippnu" onclick="switchSpBanom('ippnu')"
+                                class="px-4 py-1.5 rounded-lg text-xs font-bold transition duration-200 text-slate-500 hover:text-slate-800 flex items-center gap-1.5">
+                                IPPNU
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Table Card -->
+                <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr
+                                    class="bg-slate-50 border-b border-slate-100 text-slate-500 font-extrabold text-xs uppercase tracking-wider">
+                                    <th class="p-4">Nama Ranting / Komisariat</th>
+                                    <th class="p-4">Nomor SP Resmi</th>
+                                    <th class="p-4">Masa Berlaku</th>
+                                    <th class="p-4">Hari Tersisa</th>
+                                    <th class="p-4">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sp-table-body" class="divide-y divide-slate-100">
+                                <!-- Dynamic Content (Max 5 items) Rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Table Empty State -->
+                    <div id="sp-empty-state" class="hidden py-8 text-center space-y-2">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-sm">
+                            <i class="fas fa-search-minus"></i>
+                        </div>
+                        <p class="font-bold text-slate-700 text-sm">Data Tidak Ditemukan</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2-Column Desktop Layout: Berita Utama (Left) & Agenda Terdekat (Right) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+                <!-- Column 1: Berita Utama -->
+                <div class="space-y-4">
+                    <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase">Berita Utama &
+                        Informasi PAC</h3>
+
+                    <div class="space-y-4">
+                        <!-- News Card 1 -->
+                        <div
+                            class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition duration-200 flex flex-col sm:flex-row gap-4 items-start">
+                            <div
+                                class="w-full sm:w-32 h-24 bg-violet-50 rounded-xl flex items-center justify-center text-brand-purple flex-shrink-0 text-2xl font-extrabold">
+                                <i class="fas fa-newspaper text-violet-300"></i>
+                            </div>
+                            <div class="space-y-1.5">
+                                <span
+                                    class="px-2 py-0.5 rounded-md bg-brand-purple/10 text-brand-purple text-[8px] font-extrabold uppercase tracking-widest">Kaderisasi</span>
+                                <h4
+                                    class="font-extrabold text-xs sm:text-sm text-brand-textDark hover:text-brand-purple cursor-pointer transition">
+                                    Sukses Gelar LAKMUD I, PAC Tahunan Siap Cetak Organisatoris Handal</h4>
+                                <p class="text-xs text-slate-500 line-clamp-2">Latihan Kader Muda (LAKMUD) perdana
+                                    yang diselenggarakan oleh PAC Tahunan sukses menjaring puluhan peserta terbaik
+                                    se-Tahunan...</p>
+                                <div class="text-[9px] text-slate-400 font-bold flex items-center gap-1">
+                                    <i class="far fa-calendar-alt"></i> 15 Juni 2026
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- News Card 2 -->
+                        <div
+                            class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition duration-200 flex flex-col sm:flex-row gap-4 items-start">
+                            <div
+                                class="w-full sm:w-32 h-24 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 flex-shrink-0 text-2xl font-extrabold">
+                                <i class="fas fa-handshake text-emerald-200"></i>
+                            </div>
+                            <div class="space-y-1.5">
+                                <span
+                                    class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[8px] font-extrabold uppercase tracking-widest">Sinergi
+                                    MWC</span>
+                                <h4
+                                    class="font-extrabold text-xs sm:text-sm text-brand-textDark hover:text-brand-purple cursor-pointer transition">
+                                    Silaturahmi Bersama MWC NU Tahunan: Menjaga Sanad Amaliyah</h4>
+                                <p class="text-xs text-slate-500 line-clamp-2">Dalam rangka mempererat ukhuwah
+                                    nahdliyyah, pengurus PAC berkunjung ke jajaran Syuriah dan Tanfidziyah MWC NU
+                                    Kecamatan Tahunan...</p>
+                                <div class="text-[9px] text-slate-400 font-bold flex items-center gap-1">
+                                    <i class="far fa-calendar-alt"></i> 10 Juni 2026
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2: Agenda Terdekat -->
+                <div class="space-y-4">
+                    <h3 class="text-xs font-extrabold text-slate-400 tracking-wider uppercase">Sekilas Agenda
+                        Terdekat</h3>
+                    <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm space-y-4">
+
+                        <!-- Agenda Item 1 -->
+                        <div class="flex gap-4 items-start border-b border-slate-100 pb-3">
+                            <div
+                                class="bg-gradient-to-br from-violet-600 to-indigo-700 text-white rounded-xl w-12 h-12 flex flex-col items-center justify-center flex-shrink-0 font-extrabold shadow-sm shadow-violet-200">
+                                <span class="text-sm leading-none">27</span>
+                                <span class="text-[8px] uppercase tracking-wider mt-0.5">Juni</span>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h5 class="font-bold text-xs text-brand-textDark">Selapanan & Rutinan Sabtu Pon</h5>
+                                <p class="text-xs text-slate-500 flex items-center gap-1"><i
+                                        class="fas fa-map-marker-alt text-violet-500"></i> Gedung MWC NU Tahunan</p>
+                                <p class="text-[9px] text-brand-purple font-semibold">Mulai pukul 19:30 WIB</p>
+                            </div>
+                        </div>
+
+                        <!-- Agenda Item 2 -->
+                        <div class="flex gap-4 items-start border-b border-slate-100 pb-3">
+                            <div
+                                class="bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-xl w-12 h-12 flex flex-col items-center justify-center flex-shrink-0 font-extrabold shadow-sm shadow-indigo-100">
+                                <span class="text-sm leading-none">12</span>
+                                <span class="text-[8px] uppercase tracking-wider mt-0.5">Juli</span>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h5 class="font-bold text-xs text-brand-textDark">MAKESTA Raya Se-Tahunan 2026</h5>
+                                <p class="text-xs text-slate-500 flex items-center gap-1"><i
+                                        class="fas fa-map-marker-alt text-indigo-500"></i> Lapangan Desa Tegalsambi</p>
+                                <p class="text-[9px] text-indigo-600 font-semibold">Pemberkasan H-7</p>
+                            </div>
+                        </div>
+
+                        <!-- Agenda Item 3 -->
+                        <div class="flex gap-4 items-start">
+                            <div
+                                class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl w-12 h-12 flex flex-col items-center justify-center flex-shrink-0 font-extrabold shadow-sm shadow-emerald-100">
+                                <span class="text-sm leading-none">05</span>
+                                <span class="text-[8px] uppercase tracking-wider mt-0.5">Agt</span>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h5 class="font-bold text-xs text-brand-textDark">Rapat Koordinasi Tengah Tahun</h5>
+                                <p class="text-xs text-slate-500 flex items-center gap-1"><i
+                                        class="fas fa-map-marker-alt text-emerald-500"></i> Sekretariat PAC Tahunan</p>
+                                <p class="text-[9px] text-emerald-600 font-semibold">Khusus Ketua PR & PK</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 3: KADERISASI -->
+        <section id="view-kaderisasi" class="view-section hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="space-y-2 border-b border-slate-100 pb-5">
+                <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-brand-textDark">Sistem Informasi
+                    Kaderisasi</h2>
+                <p class="text-xs text-slate-500">
+                    Memantau perkembangan Masa Kesetiaan Anggota (MAKESTA) dan alur permohonan kepelatihan kader di
+                    wilayah kerja PAC Tahunan.
+                </p>
+            </div>
+
+            <!-- MAKESTA Execution Flowchart / Timeline (Moved to Top) -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+                <div class="text-center max-w-xl mx-auto space-y-1">
+                    <h4 class="font-extrabold text-sm uppercase text-brand-purple tracking-widest">Alur Penyelenggaraan
+                        MAKESTA</h4>
+                    <p class="text-xs text-slate-500">Langkah wajib ranting untuk menyelenggarakan MAKESTA.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 relative pt-4">
+                    <!-- Step 1 -->
+                    <div class="space-y-3 text-center sm:text-left">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-violet-50 text-brand-purple flex items-center justify-center font-black text-sm mx-auto sm:mx-0 shadow-sm">
+                            01</div>
+                        <h5 class="font-bold text-sm text-brand-textDark uppercase tracking-wide">Pemberitahuan PAC</h5>
+                        <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">Mengajukan pemberitahuan ke
+                            Departemen Kaderisasi PAC minimal H-14 acara.</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="space-y-3 text-center sm:text-left">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-violet-50 text-brand-purple flex items-center justify-center font-black text-sm mx-auto sm:mx-0 shadow-sm">
+                            02</div>
+                        <h5 class="font-bold text-sm text-brand-textDark uppercase tracking-wide">Tim Instruktur</h5>
+                        <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">Berkoordinasi dengan Team
+                            Instruktur PAC mengenai narasumber & pemateri wajib.</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="space-y-3 text-center sm:text-left">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-violet-50 text-brand-purple flex items-center justify-center font-black text-sm mx-auto sm:mx-0 shadow-sm">
+                            03</div>
+                        <h5 class="font-bold text-sm text-brand-textDark uppercase tracking-wide">Pelaksanaan</h5>
+                        <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">Penyelenggaraan acara wajib
+                            mengikuti modul silabus kaderisasi resmi dari PAC.</p>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="space-y-3 text-center sm:text-left">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-violet-50 text-brand-purple flex items-center justify-center font-black text-sm mx-auto sm:mx-0 shadow-sm">
+                            04</div>
+                        <h5 class="font-bold text-sm text-brand-textDark uppercase tracking-wide">Pelaporan Berkas</h5>
+                        <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">Menyetor SPJ kegiatan beserta draf
+                            nama kader maksimal H+7 acara.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Three Resource Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 py-2">
+                <!-- Card 1: Pedoman Kaderisasi -->
+                <div style="min-height: 260px;"
+                    class="p-6 text-left rounded-2xl bg-gradient-to-br from-white to-violet-50/20 border border-slate-150 text-brand-textDark shadow-sm hover:shadow-md hover:border-brand-purple/40 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="space-y-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-violet-50 text-brand-purple flex items-center justify-center text-lg shadow-sm">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-sm uppercase tracking-wider text-brand-textDark">Pedoman
+                                Kaderisasi</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Buku pedoman kaderisasi resmi baik
+                                untuk pelaksanaan MAKESTA maupun LAKMUD.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 z-10">
+                        <a href="https://drive.google.com/drive/folders/1AQ00D1srOr53Jjf5w377NkFgLD5V-8e2?usp=drive_link"
+                            target="_blank"
+                            class="w-full py-2.5 px-4 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center justify-center gap-2">
+                            <i class="fas fa-folder-open text-xs"></i> Buka Folder Pedoman
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2: Berkas Makesta -->
+                <div style="min-height: 260px;"
+                    class="p-6 text-left rounded-2xl bg-gradient-to-br from-white to-emerald-50/20 border border-slate-150 text-brand-textDark shadow-sm hover:shadow-md hover:border-emerald-500/40 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="space-y-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg shadow-sm">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-sm uppercase tracking-wider text-brand-textDark">Berkas
+                                Makesta</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Template surat, cara pengajuan
+                                makesta, dan contoh berkas pendukung lainnya.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 z-10">
+                        <a href="https://drive.google.com/drive/folders/1B0ci-oiR9-izbp-sn0Zhy_sQJ8hRuoqC?usp=drive_link"
+                            target="_blank"
+                            class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center justify-center gap-2">
+                            <i class="fas fa-folder-open text-xs"></i> Buka Folder Berkas
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 3: Kirim Surat Kaderisasi -->
+                <div style="min-height: 260px;"
+                    class="p-6 text-left rounded-2xl bg-gradient-to-br from-white to-indigo-50/20 border border-slate-150 text-brand-textDark shadow-sm hover:shadow-md hover:border-indigo-500/40 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="space-y-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg shadow-sm">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-sm uppercase tracking-wider text-brand-textDark">Kirim Surat
+                                Kaderisasi</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Layanan persuratan administrasi
+                                langsung ke Departemen Kaderisasi PAC.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 z-10">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLScrGwHBrVX-QlwNeHje1UsJSPyZvRzO9yq5Ydye0vrTwO5RMw/viewform"
+                            target="_blank"
+                            class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center justify-center gap-2">
+                            <i class="fas fa-external-link-alt text-xs"></i> Buka Formulir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table (Riwayat Rekap MAKESTA) -->
+            <div class="bg-white border border-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <h4 class="font-extrabold text-xs sm:text-sm uppercase tracking-wider text-slate-400">Riwayat
+                            Rekap MAKESTA Terbaru</h4>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-xs text-slate-500 font-medium">Total Terlaksana:</span>
+                            <span id="makesta-total-count"
+                                class="px-2 py-0.5 rounded bg-brand-purple/10 text-brand-purple text-xs font-bold">0
+                                Kegiatan</span>
+                        </div>
+                    </div>
+                    <!-- Search Input Box -->
+                    <div class="relative w-full sm:w-64">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="makesta-search-input" oninput="renderMakestaTable()"
+                            placeholder="Cari penyelenggara / tempat..."
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 pl-8 pr-4 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr
+                                class="border-b border-slate-100 text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">
+                                <th class="pb-3 font-bold text-left">Penyelenggara</th>
+                                <th class="pb-3 font-bold text-left">Waktu Pelaksanaan</th>
+                                <th class="pb-3 font-bold text-left">Tempat</th>
+                                <th class="pb-3 font-bold text-right">Peserta</th>
+                                <th class="pb-3 font-bold text-right pr-2">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="makesta-table-body" class="divide-y divide-slate-50 text-slate-600 font-medium">
+                            <!-- Populated dynamically by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty state for search results -->
+                <div id="makesta-empty-state" class="hidden py-8 text-center space-y-2">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-sm">
+                        <i class="fas fa-search-minus"></i>
+                    </div>
+                    <p class="font-bold text-slate-700 text-sm">Data Tidak Ditemukan</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SECTION 4: ADMINISTRASI -->
+        <section id="view-administrasi"
+            class="view-section hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="space-y-2 border-b border-slate-100 pb-5">
+                <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-brand-textDark">Pusat Layanan
+                    Administrasi</h2>
+                <p class="text-xs text-slate-500">
+                    Layanan satu pintu untuk pengurusan surat pengesahan (SP) IPNU/IPPNU serta konfirmasi kesediaan
+                    delegasi undangan agenda kegiatan PAC.
+                </p>
+            </div>
+
+            <div class="space-y-8">
+                <!-- 3-Column Layout: Option Cards (Horizontal on Desktop) with Gradients and Transparent Logos -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                    <!-- Card SP IPNU -->
+                    <!-- Card SP IPNU -->
+                    <div
+                        class="p-6 text-left rounded-2xl bg-gradient-to-br from-white to-violet-50/20 border border-slate-150 text-brand-textDark shadow-sm hover:shadow-md hover:border-brand-purple/40 transition-all duration-300 flex flex-col justify-between min-h-[220px] relative overflow-hidden group">
+                        <!-- Translucent Background Logo watermark -->
+                        <div
+                            class="absolute -right-8 -bottom-8 w-32 h-32 opacity-15 pointer-events-none group-hover:scale-110 transition duration-300">
+                            <img src="assets/images/logo-ipnu.png" alt="watermark ipnu"
+                                class="w-full h-full object-contain" onerror="this.style.display='none'">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 text-white flex items-center justify-center text-lg shadow-sm">
+                                <i class="fas fa-mars"></i>
+                            </div>
+                            <div class="z-10">
+                                <h4 class="font-extrabold text-sm uppercase tracking-wider text-brand-textDark">
+                                    Pengajuan SP IPNU</h4>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Rekomendasi Surat Pengesahan IPNU
+                                    Ranting/Komisariat</p>
+                            </div>
+                        </div>
+                        <div class="z-10 mt-4">
+                            <a id="lnk-form-sp-ipnu" href="#" target="_blank"
+                                class="w-full py-2.5 px-4 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center justify-center gap-2">
+                                <i class="fas fa-external-link-alt text-xs"></i> Buka Formulir
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card SP IPPNU -->
+                    <div
+                        class="p-6 text-left rounded-2xl bg-gradient-to-br from-white to-emerald-50/20 border border-slate-150 text-brand-textDark shadow-sm hover:shadow-md hover:border-emerald-500/40 transition-all duration-300 flex flex-col justify-between min-h-[220px] relative overflow-hidden group">
+                        <!-- Translucent Background Logo watermark -->
+                        <div
+                            class="absolute -right-8 -bottom-8 w-32 h-32 opacity-15 pointer-events-none group-hover:scale-110 transition duration-300">
+                            <img src="assets/images/logo-ippnu.png" alt="watermark ippnu"
+                                class="w-full h-full object-contain" onerror="this.style.display='none'">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white flex items-center justify-center text-lg shadow-sm">
+                                <i class="fas fa-venus"></i>
+                            </div>
+                            <div class="z-10">
+                                <h4 class="font-extrabold text-sm uppercase tracking-wider text-brand-textDark">
+                                    Pengajuan SP IPPNU</h4>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Rekomendasi Surat Pengesahan
+                                    IPPNU Ranting/Komisariat</p>
+                            </div>
+                        </div>
+                        <div class="z-10 mt-4">
+                            <a id="lnk-form-sp-ippnu" href="#" target="_blank"
+                                class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center justify-center gap-2">
+                                <i class="fas fa-external-link-alt text-xs"></i> Buka Formulir
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card Undangan Kegiatan -->
+                    <div
+                        class="p-6 text-left rounded-2xl bg-gradient-to-br from-white to-indigo-50/20 border border-slate-150 text-brand-textDark shadow-sm hover:shadow-md hover:border-indigo-500/40 transition-all duration-300 flex flex-col justify-between min-h-[220px] relative overflow-hidden group">
+                        <!-- Translucent Background Logo watermark (IPNU & IPPNU) -->
+                        <div
+                            class="absolute -right-10 -bottom-10 flex items-center gap-0.5 opacity-15 pointer-events-none group-hover:scale-110 transition duration-300">
+                            <img src="assets/images/logo-ipnu.png" alt="watermark ipnu" class="w-20 h-20 object-contain"
+                                onerror="this.style.display='none'">
+                            <img src="assets/images/logo-ippnu.png" alt="watermark ippnu"
+                                class="w-20 h-20 object-contain" onerror="this.style.display='none'">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-brand-purple text-white flex items-center justify-center text-lg shadow-sm">
+                                <i class="fas fa-envelope-open-text"></i>
+                            </div>
+                            <div class="z-10">
+                                <h4 class="font-extrabold text-sm uppercase tracking-wider text-brand-textDark">Undangan
+                                    Kegiatan</h4>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Konfirmasi & Surat Masuk Kegiatan
+                                    Ranting/Komisariat</p>
+                            </div>
+                        </div>
+                        <div class="z-10 mt-4">
+                            <a id="lnk-form-undangan" href="#" target="_blank"
+                                class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center justify-center gap-2">
+                                <i class="fas fa-external-link-alt text-xs"></i> Buka Formulir
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Person Section -->
+                <div class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
+                    <h4 class="font-extrabold text-xs uppercase tracking-wider text-slate-400">Kontak Person Sekretaris
+                        PAC</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Sekretaris IPNU -->
+                        <a href="http://wa.me/62895395236035" target="_blank"
+                            class="p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-brand-purple/40 hover:shadow-sm transition-all duration-300 flex items-center justify-between group">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-violet-50 text-brand-purple flex items-center justify-center text-lg">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-brand-textDark">Rekan Wafa</span>
+                                    <span class="block text-[10px] text-slate-500 font-medium">Sekretaris IPNU PAC
+                                        Tahunan</span>
+                                </div>
+                            </div>
+                            <span
+                                class="text-xs font-bold text-brand-purple group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                                Hubungi <i class="fas fa-arrow-right text-[10px]"></i>
+                            </span>
+                        </a>
+
+                        <!-- Sekretaris IPPNU -->
+                        <a href="http://wa.me/62895326847883" target="_blank"
+                            class="p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-emerald-500/40 hover:shadow-sm transition-all duration-300 flex items-center justify-between group">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-bold text-brand-textDark">Rekanita Sasa</span>
+                                    <span class="block text-[10px] text-slate-500 font-medium">Sekretaris IPPNU PAC
+                                        Tahunan</span>
+                                </div>
+                            </div>
+                            <span
+                                class="text-xs font-bold text-emerald-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                                Hubungi <i class="fas fa-arrow-right text-[10px]"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: REPOSITORY -->
+        <section id="view-repository" class="view-section hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="space-y-2 border-b border-slate-100 pb-5">
+                <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-brand-textDark">Pusat Repositori &
+                    Produk Organisasi</h2>
+                <p class="text-xs text-slate-500">
+                    Akses digital satu pintu untuk melihat pratinjau dan mengunduh buku pedoman resmi, AD/ART terbaru, serta modul wajib.
+                </p>
+            </div>
+
+            <!-- Filter & Search Controls -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <!-- Tab Kategori -->
+                <div class="flex flex-wrap gap-2" id="repo-categories">
+                    <button onclick="filterRepo('all')" id="repo-cat-all" class="px-4 py-2 rounded-xl text-xs font-extrabold transition duration-200 bg-brand-purple text-white shadow-sm">Semua</button>
+                    <button onclick="filterRepo('buku')" id="repo-cat-buku" class="px-4 py-2 rounded-xl text-xs font-bold transition duration-200 text-slate-500 hover:text-slate-800 bg-white border border-slate-100 hover:bg-slate-50">Buku Wajib</button>
+                    <button onclick="filterRepo('modul')" id="repo-cat-modul" class="px-4 py-2 rounded-xl text-xs font-bold transition duration-200 text-slate-500 hover:text-slate-800 bg-white border border-slate-100 hover:bg-slate-50">Modul Pelatihan</button>
+                    <button onclick="filterRepo('surat')" id="repo-cat-surat" class="px-4 py-2 rounded-xl text-xs font-bold transition duration-200 text-slate-500 hover:text-slate-800 bg-white border border-slate-100 hover:bg-slate-50">Template Administrasi</button>
+                </div>
+                <!-- Search Bar -->
+                <div class="relative w-full md:w-80">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="repo-search-input" oninput="searchRepo()" placeholder="Cari dokumen..." 
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-9 pr-4 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+            </div>
+
+            <!-- Repository Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="repo-grid">
+                <!-- Dynamic Content Rendered by JS -->
+            </div>
+
+            <!-- Empty State for Search/Filter -->
+            <div id="repo-empty-state" class="hidden py-12 text-center space-y-3 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 mx-auto text-lg">
+                    <i class="fas fa-folder-open"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-slate-700 text-sm">Dokumen Tidak Ditemukan</p>
+                    <p class="text-xs text-slate-400 mt-1">Coba sesuaikan kata kunci pencarian atau kategori filter Anda.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODAL PREVIEW DOKUMEN -->
+        <div id="preview-modal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center hidden p-4 backdrop-blur-sm animate-fade-in">
+            <div class="bg-white border border-slate-100 rounded-3xl w-full max-w-5xl h-[85vh] shadow-2xl flex flex-col overflow-hidden transform scale-95 transition-all duration-300">
+                <div class="flex items-center justify-between border-b border-slate-100 p-4 sm:px-6">
+                    <div class="flex items-center gap-2">
+                        <span class="w-1.5 h-4 bg-brand-purple rounded-full"></span>
+                        <h4 id="preview-modal-title" class="font-extrabold text-xs sm:text-sm uppercase tracking-wider text-brand-textDark truncate max-w-md sm:max-w-xl">Pratinjau Dokumen</h4>
+                    </div>
+                    <button onclick="closePreviewModal()" class="text-slate-400 hover:text-slate-600 transition"><i class="fas fa-times text-lg"></i></button>
+                </div>
+                <div class="flex-grow bg-slate-100 relative">
+                    <iframe id="preview-iframe" src="" class="w-full h-full border-0" allow="autoplay"></iframe>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- NOTIFICATION DIALOG MODAL (WA Forward Preview) -->
+    <div id="wa-modal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center hidden p-4">
+        <div
+            class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-xl space-y-4 transform scale-95 transition-all duration-300">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <span
+                    class="text-xs uppercase tracking-widest font-extrabold text-brand-purple flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Notifikasi Terkirim
+                </span>
+                <button onclick="closeWaModal()" class="text-slate-400 hover:text-slate-600 transition"><i
+                        class="fas fa-times text-lg"></i></button>
+            </div>
+
+            <div class="space-y-2">
+                <h4 class="font-black text-base sm:text-lg text-brand-textDark">Form Rekomendasi Berhasil Diproses!</h4>
+                <p class="text-xs text-slate-500">
+                    Formulir berhasil direkam secara lokal. Silakan klik tombol di bawah ini untuk mengarahkan pesan
+                    draf WhatsApp otomatis ke Sekretaris Umum PAC Tahunan:
+                </p>
+            </div>
+
+            <!-- WhatsApp Message Draft Box -->
+            <div
+                class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-700 leading-relaxed space-y-1 max-h-48 overflow-y-auto">
+                <span
+                    class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block border-b border-slate-150 pb-1 mb-2">Isi
+                    Pesan WhatsApp:</span>
+                <div id="wa-message-preview" class="whitespace-pre-line text-slate-700">
+                    <!-- Dynamic message preview loaded here -->
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 pt-2">
+                <button onclick="closeWaModal()"
+                    class="w-full py-2.5 rounded-xl bg-slate-100 text-slate-500 font-bold text-xs hover:text-slate-800 transition uppercase tracking-wider">Tutup</button>
+                <button onclick="triggerWaBlast()"
+                    class="w-full py-2.5 rounded-xl bg-emerald-500 text-white font-black text-xs hover:bg-emerald-600 transition uppercase tracking-wider flex items-center justify-center gap-1.5">
+                    <i class="fab fa-whatsapp text-sm"></i> Kirim Ke WA Sekretaris
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIGURATION SECRETARIAT MODAL (Set Sekretaris HP) -->
+    <div id="settings-modal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 max-w-md w-full shadow-xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h4 class="font-extrabold text-xs uppercase tracking-wider text-brand-textDark flex items-center gap-2">
+                    <i class="fas fa-cog text-brand-purple"></i> Pengaturan Kontak & Formulir
+                </h4>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 transition"><i
+                        class="fas fa-times"></i></button>
+            </div>
+
+            <p class="text-xs text-slate-500 leading-relaxed">
+                Sesuaikan kontak penerima draf dan tautan Google Form resmi untuk masing-masing pengajuan administrasi
+                di bawah ini.
+            </p>
+
+            <div class="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-bold text-slate-500 uppercase">Nama Sekretaris Umum</label>
+                    <input type="text" id="cfg-sec-name"
+                        class="w-full bg-slate-50 border border-slate-150 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-bold text-slate-500 uppercase">Nomor WhatsApp (Awalan
+                        '62')</label>
+                    <input type="text" id="cfg-sec-wa"
+                        class="w-full bg-slate-50 border border-slate-150 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-bold text-slate-500 uppercase">URL Google Apps Script Web
+                        App</label>
+                    <input type="url" id="cfg-apps-script-url" placeholder="https://script.google.com/macros/s/.../exec"
+                        class="w-full bg-slate-50 border border-slate-150 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple">
+                </div>
+                <div class="border-t border-slate-100 my-2 pt-2">
+                    <span class="block text-[9px] font-extrabold text-brand-purple uppercase tracking-wider mb-2">Tautan
+                        Google Form</span>
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-bold text-slate-500 uppercase">Google Form SP IPNU</label>
+                    <input type="url" id="cfg-form-sp-ipnu-url"
+                        placeholder="https://docs.google.com/forms/d/e/.../viewform"
+                        class="w-full bg-slate-50 border border-slate-150 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-bold text-slate-500 uppercase">Google Form SP IPPNU</label>
+                    <input type="url" id="cfg-form-sp-ippnu-url"
+                        placeholder="https://docs.google.com/forms/d/e/.../viewform"
+                        class="w-full bg-slate-50 border border-slate-150 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-bold text-slate-500 uppercase">Google Form Undangan
+                        Kegiatan</label>
+                    <input type="url" id="cfg-form-undangan-url"
+                        placeholder="https://docs.google.com/forms/d/e/.../viewform"
+                        class="w-full bg-slate-50 border border-slate-150 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-bold text-slate-500 uppercase">Google Form Kaderisasi</label>
+                    <input type="url" id="cfg-form-kaderisasi-url"
+                        placeholder="https://docs.google.com/forms/d/e/.../viewform"
+                        class="w-full bg-slate-50 border border-slate-150 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button onclick="closeSettingsModal()"
+                    class="px-4 py-2 rounded-lg bg-slate-100 text-slate-500 text-xs hover:text-slate-800 transition">Batal</button>
+                <button onclick="saveSecretariatContacts()"
+                    class="px-4 py-2 rounded-lg bg-brand-purple text-white text-xs hover:bg-brand-purpleDark transition font-bold">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LAYANAN PERSURATAN KADERISASI FORM MODAL -->
+    <div id="kd-form-modal"
+        class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center hidden p-4 animate-fade-in">
+        <div
+            class="bg-white border border-slate-150 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5 transform scale-95 transition-all duration-300">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <h4
+                    class="font-extrabold text-base uppercase tracking-wider text-brand-textDark flex items-center gap-2">
+                    <span class="w-1.5 h-4 bg-brand-purple rounded-full"></span> Persuratan & Kaderisasi
+                </h4>
+                <button onclick="closeKaderisasiFormModal()" class="text-slate-400 hover:text-slate-600 transition">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-violet-50 text-brand-purple flex items-center justify-center text-xl flex-shrink-0">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h5 class="font-bold text-xs text-brand-textDark">Layanan Persuratan Dept. Kaderisasi</h5>
+                        <p class="text-[10px] text-slate-500">Mengajukan rekomendasi narasumber, instruktur pendamping,
+                            atau berkas silabus.</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    Untuk mengajukan berkas persuratan kaderisasi, Anda akan diarahkan langsung ke Google Form resmi
+                    Departemen Kaderisasi PAC IPNU IPPNU Tahunan.
+                </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 pt-2 border-t border-slate-100">
+                <button type="button" onclick="closeKaderisasiFormModal()"
+                    class="w-full sm:w-1/3 py-3 rounded-xl bg-slate-100 text-slate-500 text-xs hover:text-slate-800 transition font-bold uppercase tracking-wider">Tutup</button>
+                <a id="lnk-form-kaderisasi" href="#" target="_blank"
+                    class="w-full sm:w-2/3 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-extrabold text-xs uppercase tracking-widest text-center transition duration-300 flex items-center justify-center gap-1.5 shadow-sm shadow-violet-100">
+                    <i class="fas fa-external-link-alt text-xs"></i> Buka Google Form
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL KELENGKAPAN PROSES MAKESTA MODAL -->
+    <div id="makesta-detail-modal"
+        class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center hidden p-4 animate-fade-in">
+        <div
+            class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 max-w-4xl w-full shadow-xl space-y-6 max-h-[90vh] overflow-y-auto transform scale-95 transition-all duration-300">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h4 id="md-detail-title" class="font-extrabold text-base text-brand-textDark flex items-center gap-2">
+                    <i class="fas fa-history text-brand-purple"></i> Detail Proses MAKESTA
+                </h4>
+                <button onclick="closeMakestaDetailModal()" class="text-slate-400 hover:text-slate-600 transition">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Detail Timeline Grid (Pra, Utama, RTL) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Pra-MAKESTA -->
+                <div
+                    class="p-5 rounded-2xl bg-amber-50/40 border border-amber-100/50 space-y-4 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-amber-200/10 rounded-full -mr-8 -mt-8"></div>
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs">1</span>
+                        <h5 class="font-bold text-xs uppercase tracking-wider text-amber-800">Pra-MAKESTA</h5>
+                    </div>
+                    <div class="space-y-3 pt-2">
+                        <div class="space-y-0.5">
+                            <span
+                                class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block">Penyelenggara</span>
+                            <span id="md-pra-penyelenggara" class="text-xs font-semibold text-brand-textDark"></span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <span
+                                class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block">Tanggal
+                                Pelaksanaan</span>
+                            <span id="md-pra-tanggal" class="text-xs font-semibold text-brand-textDark"></span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <span
+                                class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block">Tempat</span>
+                            <span id="md-pra-tempat" class="text-xs font-semibold text-brand-textDark"></span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block">Jumlah
+                                Peserta</span>
+                            <span id="md-pra-peserta" class="text-xs font-bold text-amber-700"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MAKESTA UTAMA -->
+                <div
+                    class="p-5 rounded-2xl bg-emerald-50/40 border border-emerald-100/50 space-y-4 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-200/10 rounded-full -mr-8 -mt-8"></div>
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">2</span>
+                        <h5 class="font-bold text-xs uppercase tracking-wider text-emerald-800">MAKESTA Utama</h5>
+                    </div>
+                    <div class="space-y-3 pt-2">
+                        <div class="space-y-0.5">
+                            <span
+                                class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block">Penyelenggara</span>
+                            <span id="md-mak-penyelenggara" class="text-xs font-semibold text-brand-textDark"></span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <span
+                                class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block">Tanggal
+                                Pelaksanaan</span>
+                            <span id="md-mak-tanggal" class="text-xs font-semibold text-brand-textDark"></span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <span
+                                class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block">Tempat</span>
+                            <span id="md-mak-tempat" class="text-xs font-semibold text-brand-textDark"></span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block">Jumlah
+                                Peserta</span>
+                            <span id="md-mak-peserta" class="text-xs font-bold text-emerald-700"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RTL-MAKESTA (3x) -->
+                <div
+                    class="p-5 rounded-2xl bg-violet-50/40 border border-violet-100/50 space-y-4 relative overflow-hidden md:col-span-1">
+                    <div class="flex items-center gap-2 border-b border-violet-100 pb-2">
+                        <span
+                            class="w-8 h-8 rounded-lg bg-violet-100 text-brand-purple flex items-center justify-center font-bold text-xs">3</span>
+                        <h5 class="font-bold text-xs uppercase tracking-wider text-brand-purple">RTL-MAKESTA (3x)</h5>
+                    </div>
+                    <div id="md-rtl-container" class="space-y-3 max-h-[220px] overflow-y-auto pr-1">
+                        <!-- Dynamic list of RTL events -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-4 border-t border-slate-100">
+                <button onclick="closeMakestaDetailModal()"
+                    class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-600 text-xs hover:text-slate-800 transition font-bold uppercase tracking-wider font-semibold">Tutup
+                    Detail</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST POPUP -->
+    <div id="toast"
+        class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 ease-in-out bg-white text-brand-textDark px-5 py-3.5 rounded-2xl shadow-xl border border-brand-purple flex items-center gap-3 max-w-sm hidden">
+        <i id="toast-icon" class="fas fa-info-circle text-brand-purple text-lg"></i>
+        <div>
+            <h5 id="toast-title" class="font-extrabold text-xs uppercase tracking-wider">Notifikasi</h5>
+            <p id="toast-desc" class="text-[9px] text-slate-500 mt-0.5">Aksi berhasil dijalankan.</p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-100 py-10 text-xs text-slate-500 text-center space-y-4">
+        <div class="max-w-7xl mx-auto px-4 space-y-4">
+            <div class="flex items-center justify-center gap-3">
+                <img src="assets/images/logo-bersama.png" alt="PAC IPNU IPPNU Tahunan" class="w-10 h-10 object-contain">
+                <p class="font-extrabold text-brand-textDark text-sm uppercase tracking-widest">PAC IPNU IPPNU TAHUNAN
+                </p>
+            </div>
+            <p class="text-xs max-w-xl mx-auto leading-relaxed text-slate-400">
+                Portal satu pintu untuk optimalisasi monitoring legalitas kepengurusan pimpinan ranting desa dan
+                pimpinan komisariat sekolah di Kecamatan Tahunan, Jepara, Jawa Tengah.
+            </p>
+            <div class="flex items-center justify-center gap-4 text-xs font-bold">
+                <a href="https://www.instagram.com/pac_ipnuippnutahunan/" target="_blank"
+                    class="hover:text-brand-purple transition"><i class="fab fa-instagram mr-1 text-pink-600"></i>
+                    Instagram</a>
+                <span class="text-slate-200">|</span>
+                <a href="https://linktr.ee/pacipnuippnutahunan" target="_blank"
+                    class="hover:text-brand-purple transition"><i class="fas fa-link mr-1 text-slate-400"></i> Linktree
+                    Lama</a>
+            </div>
+            <p class="text-[9px] text-slate-400 pt-4">© 2026 PAC IPNU IPPNU Kecamatan Tahunan. Hak Cipta Dilindungi
+                Undang-Undang.</p>
+        </div>
+    </footer>
+    <!-- MAIN SCRIPTS & ROUTER CONTROLLER -->
+    <script src="js/app.js?v=3" defer></script>
+</body>
+
+</html>
