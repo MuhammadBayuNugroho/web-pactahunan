@@ -1216,11 +1216,29 @@
                                         <option value="pengumuman">Pengumuman</option>
                                     </select>
                                 </div>
-                                <div class="space-y-1">
-                                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">URL Gambar / Link Google Drive</label>
-                                    <input type="text" id="adm-berita-image-url" placeholder="cth: https://drive.google.com/file/d/.../view?usp=sharing"
-                                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
-                                    <p class="text-[9px] text-slate-400">Masukkan link sharing Google Drive atau URL gambar publik lainnya.</p>
+                                <div class="space-y-2 border border-slate-100 p-4 rounded-2xl bg-slate-50/50">
+                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                                        <span class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider"><i class="fab fa-google-drive text-brand-purple mr-1"></i> Penyimpanan Gambar Berita</span>
+                                        <a href="https://drive.google.com/drive/folders/1JHAH_eeS2504wE6GClRElK_XsaQiDwll?usp=drive_link" target="_blank"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-purple text-white hover:bg-brand-purpleDark text-[9px] font-extrabold uppercase tracking-wider transition">
+                                            <i class="fas fa-folder-open text-[10px]"></i> Buka Folder Drive
+                                        </a>
+                                    </div>
+                                    <div class="text-[10px] text-slate-500 leading-relaxed space-y-1">
+                                        <p class="font-bold text-brand-textDark">Petunjuk Upload & Dapatkan Link Gambar:</p>
+                                        <ol class="list-decimal list-inside space-y-0.5">
+                                            <li>Klik tombol <b>Buka Folder Drive</b> untuk membuka folder penyimpanan resmi.</li>
+                                            <li>Upload/Drop gambar berita Anda di folder tersebut.</li>
+                                            <li>Klik kanan gambar yang telah diupload &rarr; pilih <b>Bagikan (Share)</b> &rarr; ubah akses umum menjadi <b>"Siapa saja yang memiliki link dapat melihat" (Anyone with link)</b>.</li>
+                                            <li>Klik <b>Salin Link (Copy Link)</b>.</li>
+                                            <li>Tempel (paste) link tersebut pada kolom input di bawah ini.</li>
+                                        </ol>
+                                    </div>
+                                    <div class="space-y-1 pt-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">URL Gambar / Link Google Drive</label>
+                                        <input type="text" id="adm-berita-image-url" placeholder="cth: https://drive.google.com/file/d/.../view?usp=sharing"
+                                            class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
                                 </div>
                             </div>
                             <div class="space-y-1">
