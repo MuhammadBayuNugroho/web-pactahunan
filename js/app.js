@@ -2006,6 +2006,24 @@ function openEditBeritaForm(index) {
     document.getElementById('adm-berita-form-title').scrollIntoView({ behavior: 'smooth' });
 }
 
+// Helper to convert Google Drive share links to direct viewable links
+function convertToDirectDriveLink(url) {
+    if (!url) return '';
+    const reg1 = /\/file\/d\/([a-zA-Z0-9_-]+)/;
+    const reg2 = /[?&]id=([a-zA-Z0-9_-]+)/;
+    let fileId = '';
+    if (reg1.test(url)) {
+        fileId = url.match(reg1)[1];
+    } else if (reg2.test(url)) {
+        fileId = url.match(reg2)[1];
+    }
+    
+    if (fileId) {
+        return `https://drive.google.com/uc?export=view&id=${fileId}`;
+    }
+    return url;
+}
+
 function adminCancelEditBerita() {
     adminBeritaEditIndex = null;
     document.getElementById('adm-berita-form-title').innerHTML = `<i class="fas fa-plus-circle"></i> Tambah Berita Baru`;
@@ -2014,7 +2032,6 @@ function adminCancelEditBerita() {
     document.getElementById('adm-berita-category').value = 'kegiatan';
     document.getElementById('adm-berita-content').value = '';
     document.getElementById('adm-berita-image-url').value = '';
-    document.getElementById('adm-berita-image-file').value = '';
 
     document.getElementById('adm-berita-submit-btn').innerHTML = `<i class="fas fa-plus"></i> Simpan Berita`;
     document.getElementById('adm-berita-cancel-btn').classList.add('hidden');
@@ -2025,8 +2042,7 @@ async function adminSaveBerita() {
     const title = document.getElementById('adm-berita-title').value.trim();
     const category = document.getElementById('adm-berita-category').value;
     const content = document.getElementById('adm-berita-content').value.trim();
-    const fileInput = document.getElementById('adm-berita-image-file');
-    const existingImgUrl = document.getElementById('adm-berita-image-url').value;
+    const rawImgUrl = document.getElementById('adm-berita-image-url').value.trim();
 
     if (!title || !content) {
         showToast('Data Tidak Lengkap', 'Judul dan isi berita wajib diisi.', false);
@@ -2037,23 +2053,17 @@ async function adminSaveBerita() {
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
     submitBtn.disabled = true;
 
+    // Convert Drive link to direct display link if applicable
+    const finalImageUrl = convertToDirectDriveLink(rawImgUrl);
+
     try {
         let payload = {
             title,
             category,
             content,
-            coverImage: existingImgUrl,
+            coverImage: finalImageUrl,
             adminPin: ADMIN_LOCAL_PIN
         };
-
-        // If file selected, read as Base64 for Drive Upload
-        if (fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            const base64Data = await convertFileToBase64(file);
-            payload.fileData = base64Data.split(',')[1];
-            payload.fileName = file.name;
-            payload.fileType = file.type;
-        }
 
         if (adminBeritaEditIndex !== null) {
             // Edit mode
@@ -2065,10 +2075,7 @@ async function adminSaveBerita() {
             news.title = title;
             news.category = category;
             news.content = content;
-            if (fileInput.files.length > 0) {
-                // Mock local URL for instant feedback
-                news.coverImage = URL.createObjectURL(fileInput.files[0]);
-            }
+            news.coverImage = finalImageUrl;
 
             if (appsScriptUrl) {
                 await sendFormToAppsScript(payload);
@@ -2087,7 +2094,7 @@ async function adminSaveBerita() {
                 title,
                 category,
                 content,
-                coverImage: fileInput.files.length > 0 ? URL.createObjectURL(fileInput.files[0]) : '',
+                coverImage: finalImageUrl,
                 likes: 0,
                 views: 0
             };
@@ -2132,15 +2139,5 @@ async function adminDeleteBerita(index) {
     renderBerita();
     renderBeritaListHome();
     showToast('Berita Dihapus', 'Berita berhasil dihapus secara permanen.');
-}
-
-// Utility to convert files to base64
-function convertFileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
 }
 
