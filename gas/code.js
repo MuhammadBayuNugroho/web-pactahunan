@@ -14,6 +14,11 @@
  * 8. Klik Terapkan (Deploy). Salin URL Aplikasi Web yang diberikan dan masukkan ke menu Pengaturan di Website.
  */
 
+// =========================================================================
+// KONFIGURASI ADMIN — Ganti nilai di bawah dengan PIN rahasia Anda
+var ADMIN_PIN = "admin1234";
+// =========================================================================
+
 // Menangani permintaan GET (Membaca data SP)
 function doGet(e) {
   // Cegah error jika fungsi dijalankan secara manual dengan tombol "Run" di editor Apps Script
@@ -27,6 +32,13 @@ function doGet(e) {
 
   var action = e.parameter.action;
   
+  // Endpoint khusus: verifikasi PIN admin
+  if (action === 'verifyPin') {
+    var pin = e.parameter.pin || '';
+    return ContentService.createTextOutput(JSON.stringify({ valid: pin === ADMIN_PIN }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
   if (action === 'getSpData') {
     return ContentService.createTextOutput(JSON.stringify(readSpData()))
       .setMimeType(ContentService.MimeType.JSON);
@@ -112,11 +124,97 @@ function doPost(e) {
       return createJsonResponse({ status: "success", message: "Form Kaderisasi berhasil direkam" });
     }
     
+    // ---- Admin CRUD Actions ----
+    if (action === 'adminAddSp')       return handleAdminAddSp(ss, data);
+    if (action === 'adminDeleteSp')    return handleAdminDeleteSp(ss, data);
+    if (action === 'adminAddMakesta')  return handleAdminAddMakesta(ss, data);
+    if (action === 'adminDeleteMakesta') return handleAdminDeleteMakesta(ss, data);
+    if (action === 'adminAddRepo')     return handleAdminAddRepo(ss, data);
+    if (action === 'adminDeleteRepo')  return handleAdminDeleteRepo(ss, data);
+    
     return createJsonResponse({ status: "error", message: "Action POST tidak dikenal" });
+
     
   } catch (error) {
     return createJsonResponse({ status: "error", message: error.toString() });
   }
+}
+
+// =========================================================================
+// ADMIN CRUD HANDLERS
+// =========================================================================
+
+// Validasi PIN admin sebelum setiap aksi
+function validateAdminPin(data) {
+  return data && data.adminPin === ADMIN_PIN;
+}
+
+function handleAdminAddSp(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheetName = data.banom === 'ipnu' ? 'sp_ipnu' : 'sp_ippnu';
+  var sheet = ss.getSheetByName(sheetName);
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet tidak ditemukan." });
+  sheet.appendRow([data.name, data.type, data.spNumber, data.expiryDate]);
+  return createJsonResponse({ status: "success", message: "SP baru berhasil ditambahkan." });
+}
+
+function handleAdminDeleteSp(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheetName = data.banom === 'ipnu' ? 'sp_ipnu' : 'sp_ippnu';
+  var sheet = ss.getSheetByName(sheetName);
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet tidak ditemukan." });
+  var rowIndex = Number(data.index) + 2; // +1 header, +1 untuk 1-based
+  if (rowIndex > 1 && rowIndex <= sheet.getLastRow()) {
+    sheet.deleteRow(rowIndex);
+    return createJsonResponse({ status: "success", message: "Baris berhasil dihapus." });
+  }
+  return createJsonResponse({ status: "error", message: "Baris tidak ditemukan." });
+}
+
+function handleAdminAddMakesta(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheet = ss.getSheetByName('makesta');
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet makesta tidak ditemukan." });
+  sheet.appendRow([
+    data.penyelenggara, data.tanggal, data.tempat, data.peserta,
+    data.penyelenggara, '-', '-', 0,
+    data.penyelenggara, data.tanggal, data.tempat, data.peserta,
+    data.penyelenggara, '-', '-', 0,
+    data.penyelenggara, '-', '-', 0,
+    data.penyelenggara, '-', '-', 0
+  ]);
+  return createJsonResponse({ status: "success", message: "Rekap Makesta berhasil ditambahkan." });
+}
+
+function handleAdminDeleteMakesta(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheet = ss.getSheetByName('makesta');
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet makesta tidak ditemukan." });
+  var rowIndex = Number(data.index) + 2;
+  if (rowIndex > 1 && rowIndex <= sheet.getLastRow()) {
+    sheet.deleteRow(rowIndex);
+    return createJsonResponse({ status: "success", message: "Rekap Makesta berhasil dihapus." });
+  }
+  return createJsonResponse({ status: "error", message: "Baris tidak ditemukan." });
+}
+
+function handleAdminAddRepo(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheet = getOrCreateSheet(ss, 'repository', ['ID', 'Judul', 'Deskripsi', 'Kategori', 'Drive ID', 'Cover Image']);
+  sheet.appendRow([data.id, data.title, data.description, data.category, data.driveId, data.coverImage]);
+  return createJsonResponse({ status: "success", message: "Dokumen repositori berhasil ditambahkan." });
+}
+
+function handleAdminDeleteRepo(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheet = ss.getSheetByName('repository');
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet repository tidak ditemukan." });
+  var rowIndex = Number(data.index) + 2;
+  if (rowIndex > 1 && rowIndex <= sheet.getLastRow()) {
+    sheet.deleteRow(rowIndex);
+    return createJsonResponse({ status: "success", message: "Dokumen repositori berhasil dihapus." });
+  }
+  return createJsonResponse({ status: "error", message: "Baris tidak ditemukan." });
 }
 
 // Helper untuk menyimpan berkas Base64 ke Google Drive dan mengembalikan tautan unduhan publik

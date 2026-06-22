@@ -163,7 +163,7 @@ function sendFormToAppsScript(payload) {
 // HASH-BASED ROUTER CONTROLLER (100% Client-Side multi page)
 function handleNavigation() {
     const hash = window.location.hash || '#home';
-    const targets = ['home', 'kaderisasi', 'administrasi', 'repository'];
+    const targets = ['home', 'kaderisasi', 'administrasi', 'repository', 'admin'];
 
     let matched = false;
     targets.forEach(t => {
@@ -193,6 +193,14 @@ function handleNavigation() {
     // Always render Repository when on Repository page
     if (hash === '#repository') {
         renderRepository();
+    }
+
+    // Render admin tables when visiting admin page
+    if (hash === '#admin') {
+        renderAdminSpTable('ipnu');
+        renderAdminSpTable('ippnu');
+        renderAdminMakestaTable();
+        renderAdminRepoTable();
     }
 
     // Scroll safely back to top
@@ -854,6 +862,351 @@ function openKaderisasiFormModal() {
 
 function closeKaderisasiFormModal() {
     document.getElementById('kd-form-modal').classList.add('hidden');
+}
+
+// =========================================================================
+// ADMIN PANEL SYSTEM
+// =========================================================================
+
+// Default fallback PIN (only for offline/no-GAS mode). Real PIN lives in Apps Script.
+const ADMIN_LOCAL_PIN = "admin1234";
+let isAdminLoggedIn = false;
+let adminCurrentTab = 'sp-ipnu';
+
+function adminLogin() {
+    const pin = document.getElementById('admin-pin-input').value.trim();
+    const errorEl = document.getElementById('admin-login-error');
+    const btn = document.getElementById('admin-login-btn');
+
+    if (!pin) {
+        errorEl.classList.remove('hidden');
+        return;
+    }
+
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memverifikasi...';
+    btn.disabled = true;
+
+    // Jika Apps Script URL dikonfigurasi, verifikasi ke server
+    if (appsScriptUrl) {
+        fetch(`${appsScriptUrl}?action=verifyPin&pin=${encodeURIComponent(pin)}`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.valid) {
+                    onAdminLoginSuccess(pin);
+                } else {
+                    onAdminLoginFail(errorEl, btn);
+                }
+            })
+            .catch(() => {
+                // Fallback: verifikasi lokal jika GAS tidak bisa dihubungi
+                if (pin === ADMIN_LOCAL_PIN) {
+                    onAdminLoginSuccess(pin);
+                } else {
+                    onAdminLoginFail(errorEl, btn);
+                }
+            });
+    } else {
+        // Mode offline: verifikasi lokal
+        setTimeout(() => {
+            if (pin === ADMIN_LOCAL_PIN) {
+                onAdminLoginSuccess(pin);
+            } else {
+                onAdminLoginFail(errorEl, btn);
+            }
+        }, 600);
+    }
+}
+
+function onAdminLoginSuccess(pin) {
+    isAdminLoggedIn = true;
+    document.getElementById('admin-login-screen').classList.add('hidden');
+    document.getElementById('admin-dashboard-screen').classList.remove('hidden');
+    document.getElementById('admin-pin-input').value = '';
+    document.getElementById('admin-login-error').classList.add('hidden');
+    const btn = document.getElementById('admin-login-btn');
+    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Masuk ke Admin Panel';
+    btn.disabled = false;
+
+    renderAdminSpTable('ipnu');
+    renderAdminSpTable('ippnu');
+    renderAdminMakestaTable();
+    renderAdminRepoTable();
+    showToast('Login Berhasil', 'Selamat datang, Administrator.');
+}
+
+function onAdminLoginFail(errorEl, btn) {
+    errorEl.classList.remove('hidden');
+    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Masuk ke Admin Panel';
+    btn.disabled = false;
+    document.getElementById('admin-pin-input').value = '';
+    document.getElementById('admin-pin-input').focus();
+}
+
+function adminLogout() {
+    isAdminLoggedIn = false;
+    document.getElementById('admin-login-screen').classList.remove('hidden');
+    document.getElementById('admin-dashboard-screen').classList.add('hidden');
+    showToast('Logout Berhasil', 'Sesi admin telah diakhiri.');
+}
+
+function switchAdminTab(tab) {
+    adminCurrentTab = tab;
+    const tabs = ['sp-ipnu', 'sp-ippnu', 'makesta', 'repository'];
+    tabs.forEach(t => {
+        const btn = document.getElementById(`adm-tab-${t}`);
+        const panel = document.getElementById(`adm-panel-${t}`);
+        if (t === tab) {
+            panel.classList.remove('hidden');
+            btn.className = 'admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-extrabold transition duration-200 bg-brand-purple text-white shadow-sm';
+            // Restore icon
+            const icons = { 'sp-ipnu': 'fa-mars', 'sp-ippnu': 'fa-venus', 'makesta': 'fa-graduation-cap', 'repository': 'fa-book-open' };
+            const labels = { 'sp-ipnu': 'SP IPNU', 'sp-ippnu': 'SP IPPNU', 'makesta': 'Rekap Makesta', 'repository': 'Repositori Dok.' };
+            btn.innerHTML = `<i class="fas ${icons[t]} mr-1.5"></i> ${labels[t]}`;
+        } else {
+            panel.classList.add('hidden');
+            btn.className = 'admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50';
+            const icons = { 'sp-ipnu': 'fa-mars', 'sp-ippnu': 'fa-venus', 'makesta': 'fa-graduation-cap', 'repository': 'fa-book-open' };
+            const labels = { 'sp-ipnu': 'SP IPNU', 'sp-ippnu': 'SP IPPNU', 'makesta': 'Rekap Makesta', 'repository': 'Repositori Dok.' };
+            btn.innerHTML = `<i class="fas ${icons[t]} mr-1.5"></i> ${labels[t]}`;
+        }
+    });
+}
+
+// ---- Render Admin Tables ----
+
+function renderAdminSpTable(banom) {
+    const tbody = document.getElementById(`admin-sp-${banom}-tbody`);
+    const emptyEl = document.getElementById(`admin-sp-${banom}-empty`);
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    const list = rawDatabase[banom] || [];
+    if (list.length === 0) {
+        emptyEl.classList.remove('hidden');
+        return;
+    }
+    emptyEl.classList.add('hidden');
+    list.forEach((item, idx) => {
+        const expiryFormatted = new Date(item.expiryDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        tbody.innerHTML += `
+            <tr class="hover:bg-slate-50 transition">
+                <td class="py-3 font-bold text-brand-textDark">${item.name}</td>
+                <td class="py-3 text-slate-500 capitalize">${item.type}</td>
+                <td class="py-3 text-slate-500 font-mono text-[11px]">${item.spNumber}</td>
+                <td class="py-3 text-slate-500">${expiryFormatted}</td>
+                <td class="py-3 text-center">
+                    <button onclick="adminDeleteSp('${banom}', ${idx})" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition flex items-center justify-center mx-auto" title="Hapus">
+                        <i class="fas fa-trash-alt text-xs"></i>
+                    </button>
+                </td>
+            </tr>`;
+    });
+}
+
+function renderAdminMakestaTable() {
+    const tbody = document.getElementById('admin-makesta-tbody');
+    const emptyEl = document.getElementById('admin-makesta-empty');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    if (makestaDatabase.length === 0) {
+        emptyEl.classList.remove('hidden');
+        return;
+    }
+    emptyEl.classList.add('hidden');
+    makestaDatabase.forEach((item, idx) => {
+        tbody.innerHTML += `
+            <tr class="hover:bg-slate-50 transition">
+                <td class="py-3 font-bold text-brand-textDark">${item.penyelenggara}</td>
+                <td class="py-3 text-slate-500">${item.tanggal}</td>
+                <td class="py-3 text-slate-500">${item.tempat}</td>
+                <td class="py-3 text-right font-bold text-brand-purple">${item.peserta} Org</td>
+                <td class="py-3 text-center">
+                    <button onclick="adminDeleteMakesta(${idx})" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition flex items-center justify-center mx-auto" title="Hapus">
+                        <i class="fas fa-trash-alt text-xs"></i>
+                    </button>
+                </td>
+            </tr>`;
+    });
+}
+
+function renderAdminRepoTable() {
+    const tbody = document.getElementById('admin-repo-tbody');
+    const emptyEl = document.getElementById('admin-repo-empty');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    if (repoDatabase.length === 0) {
+        emptyEl.classList.remove('hidden');
+        return;
+    }
+    emptyEl.classList.add('hidden');
+    const catLabels = { buku: 'Buku Wajib', modul: 'Modul Pelatihan', surat: 'Template Administrasi' };
+    repoDatabase.forEach((doc, idx) => {
+        tbody.innerHTML += `
+            <tr class="hover:bg-slate-50 transition">
+                <td class="py-3 font-bold text-brand-textDark max-w-xs truncate" title="${doc.title}">${doc.title}</td>
+                <td class="py-3">
+                    <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-purple bg-violet-50 px-2 py-0.5 rounded">${catLabels[doc.category] || doc.category}</span>
+                </td>
+                <td class="py-3 font-mono text-[11px] text-slate-400 max-w-[120px] truncate" title="${doc.driveId}">${doc.driveId}</td>
+                <td class="py-3 text-center">
+                    <button onclick="adminDeleteRepo(${idx})" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition flex items-center justify-center mx-auto" title="Hapus">
+                        <i class="fas fa-trash-alt text-xs"></i>
+                    </button>
+                </td>
+            </tr>`;
+    });
+}
+
+// ---- Admin CRUD Actions ----
+
+async function adminAddSp(banom) {
+    const name = document.getElementById(`adm-${banom}-name`).value.trim();
+    const type = document.getElementById(`adm-${banom}-type`).value;
+    const spNumber = document.getElementById(`adm-${banom}-spnumber`).value.trim();
+    const expiry = document.getElementById(`adm-${banom}-expiry`).value;
+
+    if (!name || !spNumber || !expiry) {
+        showToast('Data Tidak Lengkap', 'Harap isi semua kolom yang wajib diisi.', false);
+        return;
+    }
+
+    const newEntry = { name, type, spNumber, expiryDate: expiry };
+    rawDatabase[banom].push(newEntry);
+
+    // Coba kirim ke GAS jika URL tersedia
+    if (appsScriptUrl) {
+        const pin = ADMIN_LOCAL_PIN;
+        await sendFormToAppsScript({ action: 'adminAddSp', adminPin: pin, banom, ...newEntry })
+            .catch(() => {});
+    }
+
+    // Reset form
+    document.getElementById(`adm-${banom}-name`).value = '';
+    document.getElementById(`adm-${banom}-spnumber`).value = '';
+    document.getElementById(`adm-${banom}-expiry`).value = '';
+
+    renderAdminSpTable(banom);
+    renderSpTable();
+    refreshBentoStats();
+    populateDropdownPimpinan();
+    showToast('Data Disimpan', `SP ${banom.toUpperCase()} berhasil ditambahkan.`);
+}
+
+async function adminDeleteSp(banom, index) {
+    if (!confirm(`Yakin ingin menghapus data ini?`)) return;
+    rawDatabase[banom].splice(index, 1);
+
+    if (appsScriptUrl) {
+        await sendFormToAppsScript({ action: 'adminDeleteSp', adminPin: ADMIN_LOCAL_PIN, banom, index })
+            .catch(() => {});
+    }
+
+    renderAdminSpTable(banom);
+    renderSpTable();
+    refreshBentoStats();
+    populateDropdownPimpinan();
+    showToast('Data Dihapus', `Entri SP ${banom.toUpperCase()} berhasil dihapus.`);
+}
+
+async function adminAddMakesta() {
+    const penyelenggara = document.getElementById('adm-mk-penyelenggara').value.trim();
+    const tanggal = document.getElementById('adm-mk-tanggal').value.trim();
+    const tempat = document.getElementById('adm-mk-tempat').value.trim();
+    const peserta = parseInt(document.getElementById('adm-mk-peserta').value) || 0;
+
+    if (!penyelenggara || !tanggal || !tempat) {
+        showToast('Data Tidak Lengkap', 'Harap isi penyelenggara, tanggal, dan tempat.', false);
+        return;
+    }
+
+    const newEntry = {
+        penyelenggara, tanggal, tempat, peserta,
+        praMakesta: { penyelenggara, tanggal: '-', tempat: '-', peserta: 0 },
+        makesta: { penyelenggara, tanggal, tempat, peserta },
+        rtl: [
+            { penyelenggara, tanggal: '-', tempat: '-', peserta: 0 },
+            { penyelenggara, tanggal: '-', tempat: '-', peserta: 0 },
+            { penyelenggara, tanggal: '-', tempat: '-', peserta: 0 }
+        ]
+    };
+    makestaDatabase.push(newEntry);
+
+    if (appsScriptUrl) {
+        await sendFormToAppsScript({ action: 'adminAddMakesta', adminPin: ADMIN_LOCAL_PIN, ...newEntry })
+            .catch(() => {});
+    }
+
+    document.getElementById('adm-mk-penyelenggara').value = '';
+    document.getElementById('adm-mk-tanggal').value = '';
+    document.getElementById('adm-mk-tempat').value = '';
+    document.getElementById('adm-mk-peserta').value = '';
+
+    renderAdminMakestaTable();
+    renderMakestaTable();
+    refreshBentoStats();
+    showToast('Rekap Disimpan', 'Data Makesta baru berhasil ditambahkan.');
+}
+
+async function adminDeleteMakesta(index) {
+    if (!confirm(`Yakin ingin menghapus rekap Makesta ini?`)) return;
+    makestaDatabase.splice(index, 1);
+
+    if (appsScriptUrl) {
+        await sendFormToAppsScript({ action: 'adminDeleteMakesta', adminPin: ADMIN_LOCAL_PIN, index })
+            .catch(() => {});
+    }
+
+    renderAdminMakestaTable();
+    renderMakestaTable();
+    refreshBentoStats();
+    showToast('Rekap Dihapus', 'Entri Makesta berhasil dihapus.');
+}
+
+async function adminAddRepo() {
+    const title = document.getElementById('adm-repo-title').value.trim();
+    const description = document.getElementById('adm-repo-desc').value.trim();
+    const category = document.getElementById('adm-repo-category').value;
+    const driveId = document.getElementById('adm-repo-driveid').value.trim();
+    const coverImage = document.getElementById('adm-repo-cover').value.trim() || 'assets/images/logo-bersama.png';
+
+    if (!title || !driveId) {
+        showToast('Data Tidak Lengkap', 'Judul dokumen dan Google Drive ID wajib diisi.', false);
+        return;
+    }
+
+    const newDoc = {
+        id: String(Date.now()),
+        title, description, category, coverImage, driveId
+    };
+    repoDatabase.push(newDoc);
+
+    if (appsScriptUrl) {
+        await sendFormToAppsScript({ action: 'adminAddRepo', adminPin: ADMIN_LOCAL_PIN, ...newDoc })
+            .catch(() => {});
+    }
+
+    document.getElementById('adm-repo-title').value = '';
+    document.getElementById('adm-repo-desc').value = '';
+    document.getElementById('adm-repo-driveid').value = '';
+    document.getElementById('adm-repo-cover').value = '';
+
+    renderAdminRepoTable();
+    renderRepository();
+    showToast('Dokumen Ditambahkan', `"${title}" berhasil masuk ke repositori.`);
+}
+
+async function adminDeleteRepo(index) {
+    if (!confirm(`Yakin ingin menghapus dokumen ini dari repositori?`)) return;
+    const title = repoDatabase[index]?.title || 'dokumen ini';
+    repoDatabase.splice(index, 1);
+
+    if (appsScriptUrl) {
+        await sendFormToAppsScript({ action: 'adminDeleteRepo', adminPin: ADMIN_LOCAL_PIN, index })
+            .catch(() => {});
+    }
+
+    renderAdminRepoTable();
+    renderRepository();
+    showToast('Dokumen Dihapus', `"${title}" berhasil dihapus dari repositori.`);
 }
 
 // =========================================================================

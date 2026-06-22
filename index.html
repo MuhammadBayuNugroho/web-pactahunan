@@ -67,6 +67,8 @@
                     class="nav-link hover:text-brand-purple transition duration-200 py-2">Administrasi</a>
                 <a href="#repository"
                     class="nav-link hover:text-brand-purple transition duration-200 py-2">Repository</a>
+                <a href="#admin"
+                    class="nav-link hover:text-brand-purple transition duration-200 py-2 flex items-center gap-1"><i class="fas fa-lock text-[9px] text-brand-purple"></i> Admin</a>
             </div>
 
             <!-- Action Button / Settings Admin -->
@@ -96,6 +98,8 @@
                 class="block py-2 text-slate-600 hover:text-brand-purple">Administrasi</a>
             <a href="#repository" onclick="toggleMobileMenu()"
                 class="block py-2 text-slate-600 hover:text-brand-purple">Repository</a>
+            <a href="#admin" onclick="toggleMobileMenu()"
+                class="block py-2 text-brand-purple hover:text-brand-purpleDark flex items-center gap-1"><i class="fas fa-lock text-[9px]"></i> Admin Panel</a>
         </div>
     </nav>
 
@@ -816,7 +820,322 @@
             </div>
         </div>
 
+        <!-- SECTION 6: ADMIN PANEL -->
+        <section id="view-admin" class="view-section hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- LAYAR 1: LOGIN PIN -->
+            <div id="admin-login-screen" class="flex items-center justify-center min-h-[70vh]">
+                <div class="w-full max-w-md">
+                    <!-- Card Login Premium -->
+                    <div class="bg-white border border-slate-100 rounded-3xl p-8 sm:p-10 shadow-xl shadow-violet-100/50 space-y-6 relative overflow-hidden">
+                        <!-- Background watermark -->
+                        <div class="absolute -right-10 -bottom-10 w-48 h-48 opacity-[0.04] pointer-events-none">
+                            <img src="assets/images/logo-bersama.png" alt="" class="w-full h-full object-contain">
+                        </div>
+                        <!-- Header -->
+                        <div class="text-center space-y-2">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 text-white flex items-center justify-center mx-auto text-2xl shadow-lg shadow-violet-200">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h2 class="text-xl font-extrabold tracking-tight text-brand-textDark">Admin Panel</h2>
+                            <p class="text-xs text-slate-400">Masukkan PIN Administrator untuk melanjutkan.</p>
+                        </div>
+
+                        <!-- PIN Input -->
+                        <div class="space-y-3">
+                            <label class="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">PIN Administrator</label>
+                            <div class="relative">
+                                <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                                <input type="password" id="admin-pin-input" placeholder="••••••••"
+                                    onkeydown="if(event.key==='Enter') adminLogin()"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-11 pr-5 text-sm text-brand-textDark tracking-widest font-bold focus:outline-none focus:border-brand-purple transition placeholder-slate-300">
+                            </div>
+                            <div id="admin-login-error" class="hidden text-xs font-bold text-red-500 flex items-center gap-1.5">
+                                <i class="fas fa-exclamation-circle"></i> PIN salah. Akses ditolak.
+                            </div>
+                        </div>
+
+                        <!-- Login Button -->
+                        <button onclick="adminLogin()" id="admin-login-btn"
+                            class="w-full py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-extrabold text-sm uppercase tracking-widest transition duration-300 shadow-md shadow-violet-200 flex items-center justify-center gap-2">
+                            <i class="fas fa-sign-in-alt"></i> Masuk ke Admin Panel
+                        </button>
+
+                        <p class="text-center text-[9px] text-slate-400">
+                            PIN dapat dikonfigurasi di Google Apps Script backend. Hubungi pengembang untuk akses pertama kali.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LAYAR 2: DASHBOARD ADMIN (tersembunyi sampai login berhasil) -->
+            <div id="admin-dashboard-screen" class="hidden space-y-6">
+
+                <!-- Dashboard Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-brand-textDark">Dashboard Admin</h2>
+                        </div>
+                        <p class="text-xs text-slate-500">Kelola data master portal satu pintu PAC IPNU IPPNU Tahunan.</p>
+                    </div>
+                    <button onclick="adminLogout()"
+                        class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 border border-red-100 text-xs font-extrabold transition duration-200 self-start sm:self-auto">
+                        <i class="fas fa-sign-out-alt"></i> Keluar
+                    </button>
+                </div>
+
+                <!-- Admin Tab Switcher -->
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="switchAdminTab('sp-ipnu')" id="adm-tab-sp-ipnu"
+                        class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-extrabold transition duration-200 bg-brand-purple text-white shadow-sm">
+                        <i class="fas fa-mars mr-1.5"></i> SP IPNU
+                    </button>
+                    <button onclick="switchAdminTab('sp-ippnu')" id="adm-tab-sp-ippnu"
+                        class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50">
+                        <i class="fas fa-venus mr-1.5"></i> SP IPPNU
+                    </button>
+                    <button onclick="switchAdminTab('makesta')" id="adm-tab-makesta"
+                        class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50">
+                        <i class="fas fa-graduation-cap mr-1.5"></i> Rekap Makesta
+                    </button>
+                    <button onclick="switchAdminTab('repository')" id="adm-tab-repository"
+                        class="admin-tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition duration-200 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50">
+                        <i class="fas fa-book-open mr-1.5"></i> Repositori Dok.
+                    </button>
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- TAB 1: DATA SP IPNU -->
+                <!-- ============================================================ -->
+                <div id="adm-panel-sp-ipnu" class="space-y-6">
+                    <!-- Table Card -->
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Daftar SP IPNU Terdaftar</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-100 text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">
+                                        <th class="pb-3">Nama Ranting/Komisariat</th>
+                                        <th class="pb-3">Tipe</th>
+                                        <th class="pb-3">Nomor SP</th>
+                                        <th class="pb-3">Masa Berlaku</th>
+                                        <th class="pb-3 text-center">Hapus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-sp-ipnu-tbody" class="divide-y divide-slate-50"></tbody>
+                            </table>
+                        </div>
+                        <div id="admin-sp-ipnu-empty" class="hidden py-6 text-center text-xs text-slate-400 font-medium">Belum ada data SP IPNU.</div>
+                    </div>
+                    <!-- Form Tambah -->
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-brand-purple uppercase tracking-wider flex items-center gap-2"><i class="fas fa-plus-circle"></i> Tambah Data SP IPNU</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Pimpinan</label>
+                                <input type="text" id="adm-ipnu-name" placeholder="cth: PR IPNU Mantingan"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tipe</label>
+                                <select id="adm-ipnu-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    <option value="ranting">Ranting</option>
+                                    <option value="komisariat">Komisariat</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nomor SP Resmi</label>
+                                <input type="text" id="adm-ipnu-spnumber" placeholder="cth: 089/IPNU/SP/A/X/2025"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Masa Berlaku (Tanggal)</label>
+                                <input type="date" id="adm-ipnu-expiry"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                        </div>
+                        <button onclick="adminAddSp('ipnu')"
+                            class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-purple hover:bg-brand-purpleDark text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
+                            <i class="fas fa-plus"></i> Simpan Data SP IPNU
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- TAB 2: DATA SP IPPNU -->
+                <!-- ============================================================ -->
+                <div id="adm-panel-sp-ippnu" class="space-y-6 hidden">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Daftar SP IPPNU Terdaftar</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-100 text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">
+                                        <th class="pb-3">Nama Ranting/Komisariat</th>
+                                        <th class="pb-3">Tipe</th>
+                                        <th class="pb-3">Nomor SP</th>
+                                        <th class="pb-3">Masa Berlaku</th>
+                                        <th class="pb-3 text-center">Hapus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-sp-ippnu-tbody" class="divide-y divide-slate-50"></tbody>
+                            </table>
+                        </div>
+                        <div id="admin-sp-ippnu-empty" class="hidden py-6 text-center text-xs text-slate-400 font-medium">Belum ada data SP IPPNU.</div>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-emerald-600 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-plus-circle"></i> Tambah Data SP IPPNU</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Pimpinan</label>
+                                <input type="text" id="adm-ippnu-name" placeholder="cth: PR IPPNU Mantingan"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tipe</label>
+                                <select id="adm-ippnu-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    <option value="ranting">Ranting</option>
+                                    <option value="komisariat">Komisariat</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nomor SP Resmi</label>
+                                <input type="text" id="adm-ippnu-spnumber" placeholder="cth: 087/IPPNU/SP/A/X/2025"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Masa Berlaku (Tanggal)</label>
+                                <input type="date" id="adm-ippnu-expiry"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                        </div>
+                        <button onclick="adminAddSp('ippnu')"
+                            class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
+                            <i class="fas fa-plus"></i> Simpan Data SP IPPNU
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- TAB 3: REKAP MAKESTA -->
+                <!-- ============================================================ -->
+                <div id="adm-panel-makesta" class="space-y-6 hidden">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Riwayat Rekap Makesta</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-100 text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">
+                                        <th class="pb-3">Penyelenggara</th>
+                                        <th class="pb-3">Tanggal</th>
+                                        <th class="pb-3">Tempat</th>
+                                        <th class="pb-3 text-right">Peserta</th>
+                                        <th class="pb-3 text-center">Hapus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-makesta-tbody" class="divide-y divide-slate-50"></tbody>
+                            </table>
+                        </div>
+                        <div id="admin-makesta-empty" class="hidden py-6 text-center text-xs text-slate-400 font-medium">Belum ada rekap Makesta.</div>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-indigo-600 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-plus-circle"></i> Tambah Rekap Makesta Baru</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1 sm:col-span-2">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Penyelenggara (Nama Ranting/Komisariat)</label>
+                                <input type="text" id="adm-mk-penyelenggara" placeholder="cth: PR Desa Mantingan"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal Pelaksanaan</label>
+                                <input type="text" id="adm-mk-tanggal" placeholder="cth: 14-15/03/2026"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat Pelaksanaan</label>
+                                <input type="text" id="adm-mk-tempat" placeholder="cth: SDN 2 Mantingan"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Jumlah Peserta</label>
+                                <input type="number" id="adm-mk-peserta" placeholder="cth: 35"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                        </div>
+                        <button onclick="adminAddMakesta()"
+                            class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
+                            <i class="fas fa-plus"></i> Simpan Rekap Makesta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- TAB 4: REPOSITORI DOKUMEN -->
+                <!-- ============================================================ -->
+                <div id="adm-panel-repository" class="space-y-6 hidden">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Daftar Dokumen Repositori</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-100 text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">
+                                        <th class="pb-3">Judul Dokumen</th>
+                                        <th class="pb-3">Kategori</th>
+                                        <th class="pb-3">Google Drive ID</th>
+                                        <th class="pb-3 text-center">Hapus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-repo-tbody" class="divide-y divide-slate-50"></tbody>
+                            </table>
+                        </div>
+                        <div id="admin-repo-empty" class="hidden py-6 text-center text-xs text-slate-400 font-medium">Belum ada dokumen di repositori.</div>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-amber-600 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-plus-circle"></i> Tambah Dokumen Repositori</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1 sm:col-span-2">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Judul Dokumen</label>
+                                <input type="text" id="adm-repo-title" placeholder="cth: PD/PRT IPNU IPPNU Hasil Kongres"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1 sm:col-span-2">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Deskripsi Singkat</label>
+                                <input type="text" id="adm-repo-desc" placeholder="cth: Landasan konstitusi organisasi hasil kongres..."
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Kategori</label>
+                                <select id="adm-repo-category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    <option value="buku">Buku Wajib</option>
+                                    <option value="modul">Modul Pelatihan</option>
+                                    <option value="surat">Template Administrasi</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Google Drive File ID</label>
+                                <input type="text" id="adm-repo-driveid" placeholder="cth: 1AQ00D1srOr53Jjf5w377NkFgLD5V-8e2"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1 sm:col-span-2">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">URL Gambar Sampul (opsional, bisa dikosongkan)</label>
+                                <input type="text" id="adm-repo-cover" placeholder="cth: assets/images/cover-pdprt.png atau URL Drive thumbnail"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                        </div>
+                        <button onclick="adminAddRepo()"
+                            class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
+                            <i class="fas fa-plus"></i> Tambah Dokumen
+                        </button>
+                    </div>
+                </div>
+
+            </div><!-- end admin-dashboard-screen -->
+        </section><!-- end view-admin -->
+
     </main>
+
 
     <!-- NOTIFICATION DIALOG MODAL (WA Forward Preview) -->
     <div id="wa-modal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center hidden p-4">
