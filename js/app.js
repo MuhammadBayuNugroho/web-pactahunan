@@ -128,7 +128,7 @@ const defaultSecName = "Rekanita Erna Kumala";
 const defaultSecWa = "6282242147243"; // Default test number for Secretariat General
 let currentSecName = localStorage.getItem("secName") || defaultSecName;
 let currentSecWa = localStorage.getItem("secWa") || defaultSecWa;
-let appsScriptUrl = localStorage.getItem("appsScriptUrl") || "";
+let appsScriptUrl = localStorage.getItem("appsScriptUrl") || "https://script.google.com/macros/s/AKfycbwkcijUZyu64TO2Z_aIf3qxr3bnrlj3YNFS2kOHm1yNmU2c6_aTzLhrySrSTwM_3clH/exec";
 
 // Google Forms Configurable Links
 let formSpIpnuUrl = localStorage.getItem("formSpIpnuUrl") || "https://docs.google.com/forms/d/e/1FAIpQLScGbdwuQsoxbBn2YaVpeKd774_n8cqT-xzhI5g288Dr9d3fpQ/viewform";
