@@ -948,9 +948,9 @@
                 <!-- ============================================================ -->
                 <!-- TAB 1: DATA SP IPNU -->
                 <!-- ============================================================ -->
-                <div id="adm-panel-sp-ipnu" class="space-y-6">
+                <div id="adm-panel-sp-ipnu" class="space-y-4">
                     <!-- Table Card -->
-                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm space-y-4">
                         <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Daftar SP IPNU Terdaftar</h3>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs border-collapse">
@@ -960,6 +960,8 @@
                                         <th class="pb-3">Tipe</th>
                                         <th class="pb-3">Nomor SP</th>
                                         <th class="pb-3">Masa Berlaku</th>
+                                        <th class="pb-3">No HP Pengurus</th>
+                                        <th class="pb-3">Email</th>
                                         <th class="pb-3 text-center">Edit</th>
                                         <th class="pb-3 text-center">Hapus</th>
                                     </tr>
@@ -970,17 +972,17 @@
                         <div id="admin-sp-ipnu-empty" class="hidden py-6 text-center text-xs text-slate-400 font-medium">Belum ada data SP IPNU.</div>
                     </div>
                     <!-- Form Tambah -->
-                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm space-y-4">
                         <h3 class="text-xs font-extrabold text-brand-purple uppercase tracking-wider flex items-center gap-2"><i class="fas fa-plus-circle"></i> Tambah Data SP IPNU</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="space-y-1">
                                 <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Pimpinan</label>
                                 <input type="text" id="adm-ipnu-name" placeholder="cth: PR IPNU Mantingan"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                             </div>
                             <div class="space-y-1">
                                 <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tipe</label>
-                                <select id="adm-ipnu-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                <select id="adm-ipnu-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                                     <option value="ranting">Ranting</option>
                                     <option value="komisariat">Komisariat</option>
                                 </select>
@@ -988,16 +990,26 @@
                             <div class="space-y-1">
                                 <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nomor SP Resmi</label>
                                 <input type="text" id="adm-ipnu-spnumber" placeholder="cth: 089/IPNU/SP/A/X/2025"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                             </div>
                             <div class="space-y-1">
                                 <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Masa Berlaku (Tanggal)</label>
                                 <input type="date" id="adm-ipnu-expiry"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">No HP Ketua / Sekretaris</label>
+                                <input type="text" id="adm-ipnu-phone" placeholder="cth: 08123456789"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Email Organisasi / Sekretaris</label>
+                                <input type="email" id="adm-ipnu-email" placeholder="cth: pr.ipnu.mantingan@gmail.com"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                             </div>
                         </div>
                         <button onclick="adminAddSp('ipnu')"
-                            class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-purple hover:bg-brand-purpleDark text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
+                            class="w-full sm:w-auto px-6 py-2 rounded-xl bg-brand-purple hover:bg-brand-purpleDark text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
                             <i class="fas fa-plus"></i> Simpan Data SP IPNU
                         </button>
                     </div>
@@ -1006,8 +1018,8 @@
                 <!-- ============================================================ -->
                 <!-- TAB 2: DATA SP IPPNU -->
                 <!-- ============================================================ -->
-                <div id="adm-panel-sp-ippnu" class="space-y-6 hidden">
-                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                <div id="adm-panel-sp-ippnu" class="space-y-4 hidden">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm space-y-4">
                         <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Daftar SP IPPNU Terdaftar</h3>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs border-collapse">
@@ -1017,6 +1029,8 @@
                                         <th class="pb-3">Tipe</th>
                                         <th class="pb-3">Nomor SP</th>
                                         <th class="pb-3">Masa Berlaku</th>
+                                        <th class="pb-3">No HP Pengurus</th>
+                                        <th class="pb-3">Email</th>
                                         <th class="pb-3 text-center">Edit</th>
                                         <th class="pb-3 text-center">Hapus</th>
                                     </tr>
@@ -1026,17 +1040,17 @@
                         </div>
                         <div id="admin-sp-ippnu-empty" class="hidden py-6 text-center text-xs text-slate-400 font-medium">Belum ada data SP IPPNU.</div>
                     </div>
-                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm space-y-4">
                         <h3 class="text-xs font-extrabold text-emerald-600 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-plus-circle"></i> Tambah Data SP IPPNU</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="space-y-1">
                                 <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Pimpinan</label>
                                 <input type="text" id="adm-ippnu-name" placeholder="cth: PR IPPNU Mantingan"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                             </div>
                             <div class="space-y-1">
                                 <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tipe</label>
-                                <select id="adm-ippnu-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                <select id="adm-ippnu-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                                     <option value="ranting">Ranting</option>
                                     <option value="komisariat">Komisariat</option>
                                 </select>
@@ -1044,12 +1058,22 @@
                             <div class="space-y-1">
                                 <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nomor SP Resmi</label>
                                 <input type="text" id="adm-ippnu-spnumber" placeholder="cth: 087/IPPNU/SP/A/X/2025"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                             </div>
                             <div class="space-y-1">
                                 <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Masa Berlaku (Tanggal)</label>
                                 <input type="date" id="adm-ippnu-expiry"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">No HP Ketua / Sekretaris</label>
+                                <input type="text" id="adm-ippnu-phone" placeholder="cth: 08123456789"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Email Organisasi / Sekretaris</label>
+                                <input type="email" id="adm-ippnu-email" placeholder="cth: pr.ippnu.mantingan@gmail.com"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                             </div>
                         </div>
                         <button onclick="adminAddSp('ippnu')"
@@ -1082,34 +1106,130 @@
                         </div>
                         <div id="admin-makesta-empty" class="hidden py-6 text-center text-xs text-slate-400 font-medium">Belum ada rekap Makesta.</div>
                     </div>
-                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
-                        <h3 class="text-xs font-extrabold text-indigo-600 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-plus-circle"></i> Tambah Rekap Makesta Baru</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1 sm:col-span-2">
-                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Penyelenggara (Nama Ranting/Komisariat)</label>
-                                <input type="text" id="adm-mk-penyelenggara" placeholder="cth: PR Desa Mantingan"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-5 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-indigo-600 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-plus-circle"></i> Tambah Rekap Makesta & Kaderisasi Baru</h3>
+                        <div class="space-y-4 divide-y divide-slate-100">
+                            <!-- UTAMA -->
+                            <div class="space-y-3">
+                                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-wider">MAKESTA UTAMA</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="space-y-1 sm:col-span-2">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Penyelenggara (Nama Ranting/Komisariat)</label>
+                                        <input type="text" id="adm-mk-penyelenggara" placeholder="cth: PR Desa Mantingan"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal Pelaksanaan</label>
+                                        <input type="text" id="adm-mk-tanggal" placeholder="cth: 14-15/03/2026"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat Pelaksanaan</label>
+                                        <input type="text" id="adm-mk-tempat" placeholder="cth: SDN 2 Mantingan"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Jumlah Peserta Lulus</label>
+                                        <input type="number" id="adm-mk-peserta" placeholder="cth: 35"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="space-y-1">
-                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal Pelaksanaan</label>
-                                <input type="text" id="adm-mk-tanggal" placeholder="cth: 14-15/03/2026"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+
+                            <!-- PRA-MAKESTA -->
+                            <div class="space-y-3 pt-4">
+                                <h4 class="text-[10px] font-black text-amber-600 uppercase tracking-wider">PRA-MAKESTA (Latihan Pra MAKESTA)</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal Pra-MAKESTA</label>
+                                        <input type="text" id="adm-mk-pra-tanggal" placeholder="cth: 07/03/2026"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat Pra-MAKESTA</label>
+                                        <input type="text" id="adm-mk-pra-tempat" placeholder="cth: Madin Mantingan"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1 sm:col-span-2">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Jumlah Peserta Pra-MAKESTA</label>
+                                        <input type="number" id="adm-mk-pra-peserta" placeholder="cth: 35"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="space-y-1">
-                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat Pelaksanaan</label>
-                                <input type="text" id="adm-mk-tempat" placeholder="cth: SDN 2 Mantingan"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+
+                            <!-- RTL 1 -->
+                            <div class="space-y-3 pt-4">
+                                <h4 class="text-[10px] font-black text-violet-600 uppercase tracking-wider">Rencana Tindak Lanjut 1 (RTL I)</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal RTL I</label>
+                                        <input type="text" id="adm-mk-rtl1-tanggal" placeholder="cth: 28/03/2026"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat RTL I</label>
+                                        <input type="text" id="adm-mk-rtl1-tempat" placeholder="cth: Serambi Masjid"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Peserta Hadir RTL I</label>
+                                        <input type="number" id="adm-mk-rtl1-peserta" placeholder="cth: 32"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="space-y-1">
-                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Jumlah Peserta</label>
-                                <input type="number" id="adm-mk-peserta" placeholder="cth: 35"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+
+                            <!-- RTL 2 -->
+                            <div class="space-y-3 pt-4">
+                                <h4 class="text-[10px] font-black text-violet-600 uppercase tracking-wider">Rencana Tindak Lanjut 2 (RTL II)</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal RTL II</label>
+                                        <input type="text" id="adm-mk-rtl2-tanggal" placeholder="cth: 11/04/2026"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat RTL II</label>
+                                        <input type="text" id="adm-mk-rtl2-tempat" placeholder="cth: Rumah Rekan Ketua"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Peserta Hadir RTL II</label>
+                                        <input type="number" id="adm-mk-rtl2-peserta" placeholder="cth: 30"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- RTL 3 -->
+                            <div class="space-y-3 pt-4">
+                                <h4 class="text-[10px] font-black text-violet-600 uppercase tracking-wider">Rencana Tindak Lanjut 3 (RTL III)</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal RTL III</label>
+                                        <input type="text" id="adm-mk-rtl3-tanggal" placeholder="cth: 25/04/2026"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat RTL III</label>
+                                        <input type="text" id="adm-mk-rtl3-tempat" placeholder="cth: Balai Desa Mantingan"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Peserta Hadir RTL III</label>
+                                        <input type="number" id="adm-mk-rtl3-peserta" placeholder="cth: 28"
+                                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <button onclick="adminAddMakesta()"
-                            class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
-                            <i class="fas fa-plus"></i> Simpan Rekap Makesta
-                        </button>
+                        <div class="pt-4">
+                            <button onclick="adminAddMakesta()"
+                                class="w-full sm:w-auto px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm flex items-center gap-2">
+                                <i class="fas fa-plus"></i> Simpan Rekap Makesta & RTL
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1161,10 +1281,29 @@
                                 <input type="text" id="adm-repo-driveid" placeholder="cth: 1AQ00D1srOr53Jjf5w377NkFgLD5V-8e2"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                             </div>
-                            <div class="space-y-1 sm:col-span-2">
-                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">URL Gambar Sampul (opsional, bisa dikosongkan)</label>
-                                <input type="text" id="adm-repo-cover" placeholder="cth: assets/images/cover-pdprt.png atau URL Drive thumbnail"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            <div class="space-y-2 border border-slate-100 p-4 rounded-2xl bg-slate-50/50 sm:col-span-2">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                                    <span class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider"><i class="fab fa-google-drive text-brand-purple mr-1"></i> Penyimpanan Gambar Sampul Repositori</span>
+                                    <a href="https://drive.google.com/drive/folders/1JHAH_eeS2504wE6GClRElK_XsaQiDwll?usp=drive_link" target="_blank"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-purple text-white hover:bg-brand-purpleDark text-[9px] font-extrabold uppercase tracking-wider transition">
+                                        <i class="fas fa-folder-open text-[10px]"></i> Buka Folder Drive
+                                    </a>
+                                </div>
+                                <div class="text-[10px] text-slate-500 leading-relaxed space-y-1">
+                                    <p class="font-bold text-brand-textDark">Petunjuk Upload & Dapatkan Link Gambar Sampul:</p>
+                                    <ol class="list-decimal list-inside space-y-0.5">
+                                        <li>Klik tombol <b>Buka Folder Drive</b> untuk membuka folder penyimpanan resmi.</li>
+                                        <li>Upload gambar sampul buku/modul Anda di folder tersebut.</li>
+                                        <li>Klik kanan gambar yang telah diupload &rarr; pilih <b>Bagikan (Share)</b> &rarr; ubah akses umum menjadi <b>"Siapa saja yang memiliki link dapat melihat" (Anyone with link)</b>.</li>
+                                        <li>Klik <b>Salin Link (Copy Link)</b>.</li>
+                                        <li>Tempel (paste) link tersebut pada kolom input di bawah ini.</li>
+                                    </ol>
+                                </div>
+                                <div class="space-y-1 pt-1">
+                                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">URL Gambar Sampul / Link Google Drive</label>
+                                    <input type="text" id="adm-repo-cover" placeholder="cth: https://drive.google.com/file/d/.../view?usp=sharing"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                                </div>
                             </div>
                         </div>
                         <button onclick="adminAddRepo()"
@@ -1309,6 +1448,24 @@
                             <div class="space-y-1">
                                 <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Google Form Kaderisasi</label>
                                 <input type="url" id="cfg-form-kaderisasi-url" placeholder="https://docs.google.com/forms/..."
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-5">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fas fa-user-edit text-brand-purple"></i> Penyesuaian Jumlah Kader (Manual Override)
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Jumlah Anggota IPNU</label>
+                                <input type="number" id="cfg-kader-ipnu-override" placeholder="cth: 580"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Jumlah Anggota IPPNU</label>
+                                <input type="number" id="cfg-kader-ippnu-override" placeholder="cth: 670"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                             </div>
                         </div>

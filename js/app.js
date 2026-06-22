@@ -1,32 +1,32 @@
 // MOCK DATABASE RANTING & KOMISARIAT (Anchored reference date: 2026-06-21)
 let rawDatabase = {
     ipnu: [
-        { name: "PR IPNU Mantingan", type: "ranting", spNumber: "089/IPNU/SP/A/X/2024", expiryDate: "2026-10-15" },
-        { name: "PR IPNU Senenan", type: "ranting", spNumber: "042/IPNU/SP/A/III/2025", expiryDate: "2027-03-20" },
-        { name: "PR IPNU Tahunan", type: "ranting", spNumber: "102/IPNU/SP/A/I/2024", expiryDate: "2026-01-10" },
-        { name: "PR IPNU Tegalsambi", type: "ranting", spNumber: "067/IPNU/SP/A/VIII/2024", expiryDate: "2026-08-05" },
-        { name: "PR IPNU Demangan", type: "ranting", spNumber: "115/IPNU/SP/A/XI/2024", expiryDate: "2026-11-20" },
-        { name: "PR IPNU Ngabul", type: "ranting", spNumber: "015/IPNU/SP/A/I/2025", expiryDate: "2027-01-15" },
-        { name: "PR IPNU Langon", type: "ranting", spNumber: "099/IPNU/SP/A/V/2024", expiryDate: "2026-05-02" },
-        { name: "PR IPNU Sukodono", type: "ranting", spNumber: "054/IPNU/SP/A/IV/2025", expiryDate: "2027-04-10" },
-        { name: "PR IPNU Kecapi", type: "ranting", spNumber: "078/IPNU/SP/A/VII/2024", expiryDate: "2026-07-28" },
-        { name: "PR IPNU Petekeyan", type: "ranting", spNumber: "130/IPNU/SP/A/XII/2024", expiryDate: "2026-12-15" },
-        { name: "PK IPNU MA Hasyim Asy'ari", type: "komisariat", spNumber: "034/IPNU/SP/B/II/2025", expiryDate: "2026-02-15" },
-        { name: "PK IPNU SMK NU Tahunan", type: "komisariat", spNumber: "049/IPNU/SP/B/VI/2024", expiryDate: "2026-07-15" }
+        { name: "PR IPNU Mantingan", type: "ranting", spNumber: "089/IPNU/SP/A/X/2024", expiryDate: "2026-10-15", phone: "6282242147243", email: "pr.ipnu.mantingan@gmail.com" },
+        { name: "PR IPNU Senenan", type: "ranting", spNumber: "042/IPNU/SP/A/III/2025", expiryDate: "2027-03-20", phone: "", email: "" },
+        { name: "PR IPNU Tahunan", type: "ranting", spNumber: "102/IPNU/SP/A/I/2024", expiryDate: "2026-01-10", phone: "", email: "" },
+        { name: "PR IPNU Tegalsambi", type: "ranting", spNumber: "067/IPNU/SP/A/VIII/2024", expiryDate: "2026-08-05", phone: "", email: "" },
+        { name: "PR IPNU Demangan", type: "ranting", spNumber: "115/IPNU/SP/A/XI/2024", expiryDate: "2026-11-20", phone: "", email: "" },
+        { name: "PR IPNU Ngabul", type: "ranting", spNumber: "015/IPNU/SP/A/I/2025", expiryDate: "2027-01-15", phone: "", email: "" },
+        { name: "PR IPNU Langon", type: "ranting", spNumber: "099/IPNU/SP/A/V/2024", expiryDate: "2026-05-02", phone: "", email: "" },
+        { name: "PR IPNU Sukodono", type: "ranting", spNumber: "054/IPNU/SP/A/IV/2025", expiryDate: "2027-04-10", phone: "", email: "" },
+        { name: "PR IPNU Kecapi", type: "ranting", spNumber: "078/IPNU/SP/A/VII/2024", expiryDate: "2026-07-28", phone: "", email: "" },
+        { name: "PR IPNU Petekeyan", type: "ranting", spNumber: "130/IPNU/SP/A/XII/2024", expiryDate: "2026-12-15", phone: "", email: "" },
+        { name: "PK IPNU MA Hasyim Asy'ari", type: "komisariat", spNumber: "034/IPNU/SP/B/II/2025", expiryDate: "2026-02-15", phone: "", email: "" },
+        { name: "PK IPNU SMK NU Tahunan", type: "komisariat", spNumber: "049/IPNU/SP/B/VI/2024", expiryDate: "2026-07-15", phone: "", email: "" }
     ],
     ippnu: [
-        { name: "PR IPPNU Mantingan", type: "ranting", spNumber: "087/IPPNU/SP/A/X/2024", expiryDate: "2026-10-15" },
-        { name: "PR IPPNU Senenan", type: "ranting", spNumber: "041/IPPNU/SP/A/III/2025", expiryDate: "2027-03-20" },
-        { name: "PR IPPNU Tahunan", type: "ranting", spNumber: "101/IPPNU/SP/A/I/2024", expiryDate: "2026-01-10" },
-        { name: "PR IPPNU Tegalsambi", type: "ranting", spNumber: "065/IPPNU/SP/A/VIII/2024", expiryDate: "2026-08-05" },
-        { name: "PR IPPNU Demangan", type: "ranting", spNumber: "112/IPPNU/SP/A/XI/2024", expiryDate: "2026-11-20" },
-        { name: "PR IPPNU Ngabul", type: "ranting", spNumber: "014/IPPNU/SP/A/I/2025", expiryDate: "2027-01-15" },
-        { name: "PR IPPNU Langon", type: "ranting", spNumber: "098/IPPNU/SP/A/V/2024", expiryDate: "2026-05-02" },
-        { name: "PR IPPNU Sukodono", type: "ranting", spNumber: "053/IPPNU/SP/A/IV/2025", expiryDate: "2027-04-10" },
-        { name: "PR IPPNU Kecapi", type: "ranting", spNumber: "077/IPPNU/SP/A/VII/2024", expiryDate: "2026-07-25" },
-        { name: "PR IPPNU Petekeyan", type: "ranting", spNumber: "128/IPPNU/SP/A/XII/2024", expiryDate: "2026-12-15" },
-        { name: "PK IPPNU MA Hasyim Asy'ari", type: "komisariat", spNumber: "033/IPPNU/SP/B/II/2025", expiryDate: "2026-02-15" },
-        { name: "PK IPPNU SMK NU Tahunan", type: "komisariat", spNumber: "048/IPPNU/SP/B/VI/2024", expiryDate: "2026-07-15" }
+        { name: "PR IPPNU Mantingan", type: "ranting", spNumber: "087/IPPNU/SP/A/X/2024", expiryDate: "2026-10-15", phone: "6282242147243", email: "pr.ippnu.mantingan@gmail.com" },
+        { name: "PR IPPNU Senenan", type: "ranting", spNumber: "041/IPPNU/SP/A/III/2025", expiryDate: "2027-03-20", phone: "", email: "" },
+        { name: "PR IPPNU Tahunan", type: "ranting", spNumber: "101/IPPNU/SP/A/I/2024", expiryDate: "2026-01-10", phone: "", email: "" },
+        { name: "PR IPPNU Tegalsambi", type: "ranting", spNumber: "065/IPPNU/SP/A/VIII/2024", expiryDate: "2026-08-05", phone: "", email: "" },
+        { name: "PR IPPNU Demangan", type: "ranting", spNumber: "112/IPPNU/SP/A/XI/2024", expiryDate: "2026-11-20", phone: "", email: "" },
+        { name: "PR IPPNU Ngabul", type: "ranting", spNumber: "014/IPPNU/SP/A/I/2025", expiryDate: "2027-01-15", phone: "", email: "" },
+        { name: "PR IPPNU Langon", type: "ranting", spNumber: "098/IPPNU/SP/A/V/2024", expiryDate: "2026-05-02", phone: "", email: "" },
+        { name: "PR IPPNU Sukodono", type: "ranting", spNumber: "053/IPPNU/SP/A/IV/2025", expiryDate: "2027-04-10", phone: "", email: "" },
+        { name: "PR IPPNU Kecapi", type: "ranting", spNumber: "077/IPPNU/SP/A/VII/2024", expiryDate: "2026-07-25", phone: "", email: "" },
+        { name: "PR IPPNU Petekeyan", type: "ranting", spNumber: "128/IPPNU/SP/A/XII/2024", expiryDate: "2026-12-15", phone: "", email: "" },
+        { name: "PK IPPNU MA Hasyim Asy'ari", type: "komisariat", spNumber: "033/IPPNU/SP/B/II/2025", expiryDate: "2026-02-15", phone: "", email: "" },
+        { name: "PK IPPNU SMK NU Tahunan", type: "komisariat", spNumber: "048/IPPNU/SP/B/VI/2024", expiryDate: "2026-07-15", phone: "", email: "" }
     ]
 };
 
@@ -364,17 +364,23 @@ function refreshBentoStats() {
         totalPeserta += m.peserta || 0;
     });
     
+    // Check overrides
+    const localOverrideIpnu = localStorage.getItem("kaderIpnuOverride");
+    const localOverrideIppnu = localStorage.getItem("kaderIppnuOverride");
+    
+    const ipnuCount = localOverrideIpnu !== null && localOverrideIpnu !== "" ? parseInt(localOverrideIpnu) : Math.round(totalPeserta * 0.46);
+    const ippnuCount = localOverrideIppnu !== null && localOverrideIppnu !== "" ? parseInt(localOverrideIppnu) : (totalPeserta - Math.round(totalPeserta * 0.46));
+    const calculatedTotalKader = (localOverrideIpnu !== null && localOverrideIpnu !== "") || (localOverrideIppnu !== null && localOverrideIppnu !== "") ? (ipnuCount + ippnuCount) : totalPeserta;
+
     // Update Kader Terdata UI
     const kaderEl = document.getElementById("stat-total-kader");
     const detailKaderEl = document.getElementById("stat-detail-kader");
     const totalMakestaEl = document.getElementById("stat-total-makesta");
     
     if (kaderEl) {
-        kaderEl.innerText = `${totalPeserta} Anggota`;
+        kaderEl.innerText = `${calculatedTotalKader} Anggota`;
     }
     if (detailKaderEl) {
-        const ipnuCount = Math.round(totalPeserta * 0.46);
-        const ippnuCount = totalPeserta - ipnuCount;
         detailKaderEl.innerHTML = `
             <span class="text-emerald-600"><i class="fas fa-mars mr-0.5"></i> IPNU: ${ipnuCount}</span>
             <span class="mx-1 text-slate-300">|</span>
@@ -705,6 +711,9 @@ function openSettingsModal() {
     document.getElementById('cfg-form-sp-ippnu-url').value = formSpIppnuUrl === "#" ? "" : formSpIppnuUrl;
     document.getElementById('cfg-form-undangan-url').value = formUndanganUrl === "#" ? "" : formUndanganUrl;
     document.getElementById('cfg-form-kaderisasi-url').value = formKaderisasiUrl === "#" ? "" : formKaderisasiUrl;
+
+    document.getElementById('cfg-kader-ipnu-override').value = localStorage.getItem("kaderIpnuOverride") || "";
+    document.getElementById('cfg-kader-ippnu-override').value = localStorage.getItem("kaderIppnuOverride") || "";
     
     document.getElementById('settings-modal').classList.remove('hidden');
 }
@@ -722,6 +731,9 @@ function saveSecretariatContacts() {
     const spIppnu = document.getElementById('cfg-form-sp-ippnu-url').value || "#";
     const und = document.getElementById('cfg-form-undangan-url').value || "#";
     const kad = document.getElementById('cfg-form-kaderisasi-url').value || "#";
+
+    const overrideIpnu = document.getElementById('cfg-kader-ipnu-override').value.trim();
+    const overrideIppnu = document.getElementById('cfg-kader-ippnu-override').value.trim();
 
     if (!wa.startsWith('62')) {
         showToast("Gagal Menyimpan", "Pastikan nomor HP berawalan kode negara 62 (contoh: 62822xxxx)", false);
@@ -743,11 +755,18 @@ function saveSecretariatContacts() {
     localStorage.setItem("formSpIppnuUrl", spIppnu);
     localStorage.setItem("formUndanganUrl", und);
     localStorage.setItem("formKaderisasiUrl", kad);
+    
+    if (overrideIpnu !== "") localStorage.setItem("kaderIpnuOverride", overrideIpnu);
+    else localStorage.removeItem("kaderIpnuOverride");
 
-    showToast("Pengaturan Disimpan", `Semua kontak dan tautan formulir berhasil diperbarui.`);
+    if (overrideIppnu !== "") localStorage.setItem("kaderIppnuOverride", overrideIppnu);
+    else localStorage.removeItem("kaderIppnuOverride");
+
+    showToast("Pengaturan Disimpan", `Semua kontak, overrides, dan tautan formulir berhasil diperbarui.`);
     closeSettingsModal();
 
     updateFormLinks();
+    refreshBentoStats();
 
     // Trigger immediate fetch if URL was configured
     if (url) {
@@ -1063,6 +1082,8 @@ function renderAdminSpTable(banom) {
                 <td class="py-3 text-slate-500 capitalize">${item.type}</td>
                 <td class="py-3 text-slate-500 font-mono text-[11px]">${item.spNumber}</td>
                 <td class="py-3 text-slate-500">${expiryFormatted}</td>
+                <td class="py-3 text-slate-500 font-medium">${item.phone || "-"}</td>
+                <td class="py-3 text-slate-500 truncate max-w-[120px]" title="${item.email || ""}">${item.email || "-"}</td>
                 <td class="py-3 text-center">
                     <button onclick="openEditSpModal('${banom}', ${idx})" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 transition flex items-center justify-center mx-auto" title="Edit">
                         <i class="fas fa-pencil-alt text-xs"></i>
@@ -1148,13 +1169,15 @@ async function adminAddSp(banom) {
     const type = document.getElementById(`adm-${banom}-type`).value;
     const spNumber = document.getElementById(`adm-${banom}-spnumber`).value.trim();
     const expiry = document.getElementById(`adm-${banom}-expiry`).value;
+    const phone = document.getElementById(`adm-${banom}-phone`).value.trim();
+    const email = document.getElementById(`adm-${banom}-email`).value.trim();
 
     if (!name || !spNumber || !expiry) {
         showToast('Data Tidak Lengkap', 'Harap isi semua kolom yang wajib diisi.', false);
         return;
     }
 
-    const newEntry = { name, type, spNumber, expiryDate: expiry };
+    const newEntry = { name, type, spNumber, expiryDate: expiry, phone, email };
     rawDatabase[banom].push(newEntry);
 
     // Coba kirim ke GAS jika URL tersedia
@@ -1168,6 +1191,8 @@ async function adminAddSp(banom) {
     document.getElementById(`adm-${banom}-name`).value = '';
     document.getElementById(`adm-${banom}-spnumber`).value = '';
     document.getElementById(`adm-${banom}-expiry`).value = '';
+    document.getElementById(`adm-${banom}-phone`).value = '';
+    document.getElementById(`adm-${banom}-email`).value = '';
 
     renderAdminSpTable(banom);
     renderSpTable();
@@ -1318,11 +1343,11 @@ function openEditSpModal(banom, index) {
         <div class="space-y-1">
             <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Pimpinan</label>
             <input type="text" id="edit-sp-name" value="${item.name}"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
         </div>
         <div class="space-y-1">
             <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tipe</label>
-            <select id="edit-sp-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+            <select id="edit-sp-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                 <option value="ranting" ${item.type === 'ranting' ? 'selected' : ''}>Ranting</option>
                 <option value="komisariat" ${item.type === 'komisariat' ? 'selected' : ''}>Komisariat</option>
             </select>
@@ -1330,12 +1355,22 @@ function openEditSpModal(banom, index) {
         <div class="space-y-1">
             <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Nomor SP Resmi</label>
             <input type="text" id="edit-sp-number" value="${item.spNumber}"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
         </div>
         <div class="space-y-1">
             <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Masa Berlaku (Tanggal)</label>
             <input type="date" id="edit-sp-expiry" value="${item.expiryDate}"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">No HP Ketua / Sekretaris</label>
+            <input type="text" id="edit-sp-phone" value="${item.phone || ''}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        </div>
+        <div class="space-y-1">
+            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Email Organisasi / Sekretaris</label>
+            <input type="email" id="edit-sp-email" value="${item.email || ''}"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
         </div>`;
     document.getElementById('edit-modal-save-btn').onclick = adminUpdateSp;
     openEditModal();
@@ -1348,13 +1383,15 @@ async function adminUpdateSp() {
     const type = document.getElementById('edit-sp-type').value;
     const spNumber = document.getElementById('edit-sp-number').value.trim();
     const expiryDate = document.getElementById('edit-sp-expiry').value;
+    const phone = document.getElementById('edit-sp-phone').value.trim();
+    const email = document.getElementById('edit-sp-email').value.trim();
     if (!name || !spNumber || !expiryDate) {
-        showToast('Data Tidak Lengkap', 'Semua kolom wajib diisi.', false);
+        showToast('Data Tidak Lengkap', 'Nama, Nomor SP, dan Masa Berlaku wajib diisi.', false);
         return;
     }
-    rawDatabase[banom][index] = { name, type, spNumber, expiryDate };
+    rawDatabase[banom][index] = { name, type, spNumber, expiryDate, phone, email };
     if (appsScriptUrl) {
-        await sendFormToAppsScript({ action: 'adminUpdateSp', adminPin: ADMIN_LOCAL_PIN, banom, index, name, type, spNumber, expiryDate })
+        await sendFormToAppsScript({ action: 'adminUpdateSp', adminPin: ADMIN_LOCAL_PIN, banom, index, name, type, spNumber, expiryDate, phone, email })
             .catch(() => {});
     }
     closeEditModal();
@@ -1369,27 +1406,108 @@ function openEditMakestaModal(index) {
     const item = makestaDatabase[index];
     if (!item) return;
     editModalContext = { type: 'makesta', index };
-    document.getElementById('edit-modal-title').innerHTML = `<i class="fas fa-pencil-alt text-brand-purple"></i> Edit Rekap Makesta`;
+    document.getElementById('edit-modal-title').innerHTML = `<i class="fas fa-pencil-alt text-brand-purple"></i> Edit Rekap Makesta & RTL`;
     document.getElementById('edit-modal-body').innerHTML = `
-        <div class="space-y-1">
-            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Penyelenggara</label>
-            <input type="text" id="edit-mk-penyelenggara" value="${item.penyelenggara}"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
-        </div>
-        <div class="space-y-1">
-            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal Pelaksanaan</label>
-            <input type="text" id="edit-mk-tanggal" value="${item.tanggal}"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
-        </div>
-        <div class="space-y-1">
-            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat Pelaksanaan</label>
-            <input type="text" id="edit-mk-tempat" value="${item.tempat}"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
-        </div>
-        <div class="space-y-1">
-            <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Jumlah Peserta</label>
-            <input type="number" id="edit-mk-peserta" value="${item.peserta}"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+        <div class="space-y-3 divide-y divide-slate-100 max-h-[50vh] overflow-y-auto pr-1">
+            <div class="space-y-2">
+                <h5 class="text-[10px] font-black text-brand-purple">MAKESTA UTAMA</h5>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Penyelenggara</label>
+                    <input type="text" id="edit-mk-penyelenggara" value="${item.penyelenggara}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal Pelaksanaan</label>
+                    <input type="text" id="edit-mk-tanggal" value="${item.tanggal}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat Pelaksanaan</label>
+                    <input type="text" id="edit-mk-tempat" value="${item.tempat}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Jumlah Peserta Lulus</label>
+                    <input type="number" id="edit-mk-peserta" value="${item.peserta}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-3">
+                <h5 class="text-[10px] font-black text-amber-600">PRA-MAKESTA</h5>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal Pra-Makesta</label>
+                    <input type="text" id="edit-mk-pra-tanggal" value="${item.praMakesta?.tanggal || '-'}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat Pra-Makesta</label>
+                    <input type="text" id="edit-mk-pra-tempat" value="${item.praMakesta?.tempat || '-'}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Peserta Pra-Makesta</label>
+                    <input type="number" id="edit-mk-pra-peserta" value="${item.praMakesta?.peserta || 0}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-3">
+                <h5 class="text-[10px] font-black text-indigo-600">RTL I</h5>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal RTL I</label>
+                    <input type="text" id="edit-mk-rtl1-tanggal" value="${item.rtl?.[0]?.tanggal || '-'}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat RTL I</label>
+                    <input type="text" id="edit-mk-rtl1-tempat" value="${item.rtl?.[0]?.tempat || '-'}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Peserta RTL I</label>
+                    <input type="number" id="edit-mk-rtl1-peserta" value="${item.rtl?.[0]?.peserta || 0}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-3">
+                <h5 class="text-[10px] font-black text-indigo-600">RTL II</h5>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal RTL II</label>
+                    <input type="text" id="edit-mk-rtl2-tanggal" value="${item.rtl?.[1]?.tanggal || '-'}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat RTL II</label>
+                    <input type="text" id="edit-mk-rtl2-tempat" value="${item.rtl?.[1]?.tempat || '-'}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Peserta RTL II</label>
+                    <input type="number" id="edit-mk-rtl2-peserta" value="${item.rtl?.[1]?.peserta || 0}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-3">
+                <h5 class="text-[10px] font-black text-indigo-600">RTL III</h5>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal RTL III</label>
+                    <input type="text" id="edit-mk-rtl3-tanggal" value="${item.rtl?.[2]?.tanggal || '-'}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tempat RTL III</label>
+                    <input type="text" id="edit-mk-rtl3-tempat" value="${item.rtl?.[2]?.tempat || '-'}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Peserta RTL III</label>
+                    <input type="number" id="edit-mk-rtl3-peserta" value="${item.rtl?.[2]?.peserta || 0}"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                </div>
+            </div>
         </div>`;
     document.getElementById('edit-modal-save-btn').onclick = adminUpdateMakesta;
     openEditModal();
@@ -1402,20 +1520,53 @@ async function adminUpdateMakesta() {
     const tanggal = document.getElementById('edit-mk-tanggal').value.trim();
     const tempat = document.getElementById('edit-mk-tempat').value.trim();
     const peserta = parseInt(document.getElementById('edit-mk-peserta').value) || 0;
+
+    const praTanggal = document.getElementById('edit-mk-pra-tanggal').value.trim();
+    const praTempat = document.getElementById('edit-mk-pra-tempat').value.trim();
+    const praPeserta = parseInt(document.getElementById('edit-mk-pra-peserta').value) || 0;
+
+    const rtl1Tanggal = document.getElementById('edit-mk-rtl1-tanggal').value.trim();
+    const rtl1Tempat = document.getElementById('edit-mk-rtl1-tempat').value.trim();
+    const rtl1Peserta = parseInt(document.getElementById('edit-mk-rtl1-peserta').value) || 0;
+
+    const rtl2Tanggal = document.getElementById('edit-mk-rtl2-tanggal').value.trim();
+    const rtl2Tempat = document.getElementById('edit-mk-rtl2-tempat').value.trim();
+    const rtl2Peserta = parseInt(document.getElementById('edit-mk-rtl2-peserta').value) || 0;
+
+    const rtl3Tanggal = document.getElementById('edit-mk-rtl3-tanggal').value.trim();
+    const rtl3Tempat = document.getElementById('edit-mk-rtl3-tempat').value.trim();
+    const rtl3Peserta = parseInt(document.getElementById('edit-mk-rtl3-peserta').value) || 0;
+
     if (!penyelenggara || !tanggal || !tempat) {
         showToast('Data Tidak Lengkap', 'Penyelenggara, tanggal, dan tempat wajib diisi.', false);
         return;
     }
-    makestaDatabase[index] = { ...makestaDatabase[index], penyelenggara, tanggal, tempat, peserta };
+
+    const updatedEntry = {
+        penyelenggara,
+        tanggal,
+        tempat,
+        peserta,
+        praMakesta: { penyelenggara, tanggal: praTanggal, tempat: praTempat, peserta: praPeserta },
+        makesta: { penyelenggara, tanggal, tempat, peserta },
+        rtl: [
+            { penyelenggara, tanggal: rtl1Tanggal, tempat: rtl1Tempat, peserta: rtl1Peserta },
+            { penyelenggara, tanggal: rtl2Tanggal, tempat: rtl2Tempat, peserta: rtl2Peserta },
+            { penyelenggara, tanggal: rtl3Tanggal, tempat: rtl3Tempat, peserta: rtl3Peserta }
+        ]
+    };
+
+    makestaDatabase[index] = updatedEntry;
+
     if (appsScriptUrl) {
-        await sendFormToAppsScript({ action: 'adminUpdateMakesta', adminPin: ADMIN_LOCAL_PIN, index, penyelenggara, tanggal, tempat, peserta })
+        await sendFormToAppsScript({ action: 'adminUpdateMakesta', adminPin: ADMIN_LOCAL_PIN, index, ...updatedEntry })
             .catch(() => {});
     }
     closeEditModal();
     renderAdminMakestaTable();
     renderMakestaTable();
     refreshBentoStats();
-    showToast('Data Diperbarui', 'Rekap Makesta berhasil diubah.');
+    showToast('Data Diperbarui', 'Rekap Makesta & RTL berhasil diubah.');
 }
 
 function openEditRepoModal(index) {
@@ -1463,11 +1614,12 @@ async function adminUpdateRepo() {
     const description = document.getElementById('edit-repo-desc').value.trim();
     const category = document.getElementById('edit-repo-category').value;
     const driveId = document.getElementById('edit-repo-driveid').value.trim();
-    const coverImage = document.getElementById('edit-repo-cover').value.trim() || repoDatabase[index].coverImage;
+    const rawCover = document.getElementById('edit-repo-cover').value.trim() || repoDatabase[index].coverImage;
     if (!title || !driveId) {
         showToast('Data Tidak Lengkap', 'Judul dan Drive ID wajib diisi.', false);
         return;
     }
+    const coverImage = convertToDirectDriveLink(rawCover);
     repoDatabase[index] = { ...repoDatabase[index], title, description, category, driveId, coverImage };
     if (appsScriptUrl) {
         await sendFormToAppsScript({ action: 'adminUpdateRepo', adminPin: ADMIN_LOCAL_PIN, index, title, description, category, driveId, coverImage })

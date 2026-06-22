@@ -127,10 +127,13 @@ function doPost(e) {
     // ---- Admin CRUD Actions ----
     if (action === 'adminAddSp')       return handleAdminAddSp(ss, data);
     if (action === 'adminDeleteSp')    return handleAdminDeleteSp(ss, data);
+    if (action === 'adminUpdateSp')    return handleAdminUpdateSp(ss, data);
     if (action === 'adminAddMakesta')  return handleAdminAddMakesta(ss, data);
     if (action === 'adminDeleteMakesta') return handleAdminDeleteMakesta(ss, data);
+    if (action === 'adminUpdateMakesta') return handleAdminUpdateMakesta(ss, data);
     if (action === 'adminAddRepo')     return handleAdminAddRepo(ss, data);
     if (action === 'adminDeleteRepo')  return handleAdminDeleteRepo(ss, data);
+    if (action === 'adminUpdateRepo')  return handleAdminUpdateRepo(ss, data);
     if (action === 'adminAddBerita')   return handleAdminAddBerita(ss, data);
     if (action === 'adminDeleteBerita') return handleAdminDeleteBerita(ss, data);
     if (action === 'adminUpdateBerita') return handleAdminUpdateBerita(ss, data);
@@ -140,7 +143,6 @@ function doPost(e) {
     
     return createJsonResponse({ status: "error", message: "Action POST tidak dikenal" });
 
-    
   } catch (error) {
     return createJsonResponse({ status: "error", message: error.toString() });
   }
@@ -160,7 +162,7 @@ function handleAdminAddSp(ss, data) {
   var sheetName = data.banom === 'ipnu' ? 'sp_ipnu' : 'sp_ippnu';
   var sheet = ss.getSheetByName(sheetName);
   if (!sheet) return createJsonResponse({ status: "error", message: "Sheet tidak ditemukan." });
-  sheet.appendRow([data.name, data.type, data.spNumber, data.expiryDate]);
+  sheet.appendRow([data.name, data.type, data.spNumber, data.expiryDate, data.phone || "", data.email || ""]);
   return createJsonResponse({ status: "success", message: "SP baru berhasil ditambahkan." });
 }
 
@@ -177,19 +179,78 @@ function handleAdminDeleteSp(ss, data) {
   return createJsonResponse({ status: "error", message: "Baris tidak ditemukan." });
 }
 
+function handleAdminUpdateSp(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheetName = data.banom === 'ipnu' ? 'sp_ipnu' : 'sp_ippnu';
+  var sheet = ss.getSheetByName(sheetName);
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet tidak ditemukan." });
+  var rowIndex = Number(data.index) + 2;
+  if (rowIndex > 1 && rowIndex <= sheet.getLastRow()) {
+    sheet.getRange(rowIndex, 1).setValue(data.name);
+    sheet.getRange(rowIndex, 2).setValue(data.type);
+    sheet.getRange(rowIndex, 3).setValue(data.spNumber);
+    sheet.getRange(rowIndex, 4).setValue(data.expiryDate);
+    sheet.getRange(rowIndex, 5).setValue(data.phone || "");
+    sheet.getRange(rowIndex, 6).setValue(data.email || "");
+    return createJsonResponse({ status: "success", message: "SP berhasil diperbarui." });
+  }
+  return createJsonResponse({ status: "error", message: "Baris tidak ditemukan." });
+}
+
 function handleAdminAddMakesta(ss, data) {
   if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
   var sheet = ss.getSheetByName('makesta');
   if (!sheet) return createJsonResponse({ status: "error", message: "Sheet makesta tidak ditemukan." });
   sheet.appendRow([
     data.penyelenggara, data.tanggal, data.tempat, data.peserta,
-    data.penyelenggara, '-', '-', 0,
-    data.penyelenggara, data.tanggal, data.tempat, data.peserta,
-    data.penyelenggara, '-', '-', 0,
-    data.penyelenggara, '-', '-', 0,
-    data.penyelenggara, '-', '-', 0
+    data.praMakesta?.penyelenggara || data.penyelenggara, data.praMakesta?.tanggal || '-', data.praMakesta?.tempat || '-', Number(data.praMakesta?.peserta) || 0,
+    data.makesta?.penyelenggara || data.penyelenggara, data.makesta?.tanggal || data.tanggal, data.makesta?.tempat || data.tempat, Number(data.makesta?.peserta) || data.peserta,
+    data.rtl?.[0]?.penyelenggara || data.penyelenggara, data.rtl?.[0]?.tanggal || '-', data.rtl?.[0]?.tempat || '-', Number(data.rtl?.[0]?.peserta) || 0,
+    data.rtl?.[1]?.penyelenggara || data.penyelenggara, data.rtl?.[1]?.tanggal || '-', data.rtl?.[1]?.tempat || '-', Number(data.rtl?.[1]?.peserta) || 0,
+    data.rtl?.[2]?.penyelenggara || data.penyelenggara, data.rtl?.[2]?.tanggal || '-', data.rtl?.[2]?.tempat || '-', Number(data.rtl?.[2]?.peserta) || 0
   ]);
   return createJsonResponse({ status: "success", message: "Rekap Makesta berhasil ditambahkan." });
+}
+
+function handleAdminUpdateMakesta(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheet = ss.getSheetByName('makesta');
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet makesta tidak ditemukan." });
+  var rowIndex = Number(data.index) + 2;
+  if (rowIndex > 1 && rowIndex <= sheet.getLastRow()) {
+    sheet.getRange(rowIndex, 1).setValue(data.penyelenggara);
+    sheet.getRange(rowIndex, 2).setValue(data.tanggal);
+    sheet.getRange(rowIndex, 3).setValue(data.tempat);
+    sheet.getRange(rowIndex, 4).setValue(data.peserta);
+    
+    sheet.getRange(rowIndex, 5).setValue(data.praMakesta?.penyelenggara || data.penyelenggara);
+    sheet.getRange(rowIndex, 6).setValue(data.praMakesta?.tanggal || '-');
+    sheet.getRange(rowIndex, 7).setValue(data.praMakesta?.tempat || '-');
+    sheet.getRange(rowIndex, 8).setValue(Number(data.praMakesta?.peserta) || 0);
+
+    sheet.getRange(rowIndex, 9).setValue(data.makesta?.penyelenggara || data.penyelenggara);
+    sheet.getRange(rowIndex, 10).setValue(data.makesta?.tanggal || data.tanggal);
+    sheet.getRange(rowIndex, 11).setValue(data.makesta?.tempat || data.tempat);
+    sheet.getRange(rowIndex, 12).setValue(Number(data.makesta?.peserta) || data.peserta);
+
+    sheet.getRange(rowIndex, 13).setValue(data.rtl?.[0]?.penyelenggara || data.penyelenggara);
+    sheet.getRange(rowIndex, 14).setValue(data.rtl?.[0]?.tanggal || '-');
+    sheet.getRange(rowIndex, 15).setValue(data.rtl?.[0]?.tempat || '-');
+    sheet.getRange(rowIndex, 16).setValue(Number(data.rtl?.[0]?.peserta) || 0);
+
+    sheet.getRange(rowIndex, 17).setValue(data.rtl?.[1]?.penyelenggara || data.penyelenggara);
+    sheet.getRange(rowIndex, 18).setValue(data.rtl?.[1]?.tanggal || '-');
+    sheet.getRange(rowIndex, 19).setValue(data.rtl?.[1]?.tempat || '-');
+    sheet.getRange(rowIndex, 20).setValue(Number(data.rtl?.[1]?.peserta) || 0);
+
+    sheet.getRange(rowIndex, 21).setValue(data.rtl?.[2]?.penyelenggara || data.penyelenggara);
+    sheet.getRange(rowIndex, 22).setValue(data.rtl?.[2]?.tanggal || '-');
+    sheet.getRange(rowIndex, 23).setValue(data.rtl?.[2]?.tempat || '-');
+    sheet.getRange(rowIndex, 24).setValue(Number(data.rtl?.[2]?.peserta) || 0);
+
+    return createJsonResponse({ status: "success", message: "Rekap Makesta berhasil diperbarui." });
+  }
+  return createJsonResponse({ status: "error", message: "Baris tidak ditemukan." });
 }
 
 function handleAdminDeleteMakesta(ss, data) {
@@ -209,6 +270,22 @@ function handleAdminAddRepo(ss, data) {
   var sheet = getOrCreateSheet(ss, 'repository', ['ID', 'Judul', 'Deskripsi', 'Kategori', 'Drive ID', 'Cover Image']);
   sheet.appendRow([data.id, data.title, data.description, data.category, data.driveId, data.coverImage]);
   return createJsonResponse({ status: "success", message: "Dokumen repositori berhasil ditambahkan." });
+}
+
+function handleAdminUpdateRepo(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheet = ss.getSheetByName('repository');
+  if (!sheet) return createJsonResponse({ status: "error", message: "Sheet repository tidak ditemukan." });
+  var rowIndex = Number(data.index) + 2;
+  if (rowIndex > 1 && rowIndex <= sheet.getLastRow()) {
+    sheet.getRange(rowIndex, 2).setValue(data.title);
+    sheet.getRange(rowIndex, 3).setValue(data.description);
+    sheet.getRange(rowIndex, 4).setValue(data.category);
+    sheet.getRange(rowIndex, 5).setValue(data.driveId);
+    sheet.getRange(rowIndex, 6).setValue(data.coverImage);
+    return createJsonResponse({ status: "success", message: "Dokumen repositori berhasil diperbarui." });
+  }
+  return createJsonResponse({ status: "error", message: "Baris tidak ditemukan." });
 }
 
 function handleAdminDeleteRepo(ss, data) {
@@ -342,8 +419,8 @@ function readSpData() {
     ["2", "2026-06-10T15:00:00.000Z", "Zainal Arifin", "Sinergi yang sangat bagus untuk kemajuan banom-banom NU."]
   ];
 
-  var sheetIpnu = getOrCreateSheet(ss, "sp_ipnu", ["Nama", "Tipe", "Nomor SP Resmi", "Masa Berlaku"], defaultIpnu);
-  var sheetIppnu = getOrCreateSheet(ss, "sp_ippnu", ["Nama", "Tipe", "Nomor SP Resmi", "Masa Berlaku"], defaultIppnu);
+  var sheetIpnu = getOrCreateSheet(ss, "sp_ipnu", ["Nama", "Tipe", "Nomor SP Resmi", "Masa Berlaku", "No HP Pengurus", "Email Pengurus"], defaultIpnu);
+  var sheetIppnu = getOrCreateSheet(ss, "sp_ippnu", ["Nama", "Tipe", "Nomor SP Resmi", "Masa Berlaku", "No HP Pengurus", "Email Pengurus"], defaultIppnu);
   
   var makestaHeaders = [
     "Penyelenggara", "Tanggal", "Tempat", "Peserta",
@@ -391,10 +468,94 @@ function sheetToObjects(sheet) {
       name: String(row[0]).trim(),
       type: String(row[1]).trim(),
       spNumber: String(row[2]).trim(),
-      expiryDate: expiryDate
+      expiryDate: expiryDate,
+      phone: row[4] ? String(row[4]).trim() : "",
+      email: row[5] ? String(row[5]).trim() : ""
     });
   }
   return objects;
+}
+
+// Menjalankan pengecekan SP kadaluarsa dan mengirim notifikasi email
+function checkAndSendSpNotifications() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheets = [ss.getSheetByName("sp_ipnu"), ss.getSheetByName("sp_ippnu")];
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  for (var s = 0; s < sheets.length; s++) {
+    var sheet = sheets[s];
+    if (!sheet) continue;
+    var values = sheet.getDataRange().getValues();
+    if (values.length <= 1) continue;
+
+    for (var i = 1; i < values.length; i++) {
+      var row = values[i];
+      var name = String(row[0]).trim();
+      var spNumber = String(row[2]).trim();
+      var expiryVal = row[3];
+      var phone = row[4] ? String(row[4]).trim() : "";
+      var email = row[5] ? String(row[5]).trim() : "";
+
+      if (!expiryVal) continue;
+      var expiryDate = new Date(expiryVal);
+      expiryDate.setHours(0, 0, 0, 0);
+      
+      var diffTime = expiryDate.getTime() - today.getTime();
+      var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      // Jika mendekati 2 bulan (kurang dari atau sama dengan 60 hari) dan belum terlewat
+      if (diffDays > 0 && diffDays <= 60) {
+        // Kirim email peringatan mendekati masa berakhir
+        if (email) {
+          sendEmailAlert(email, name, spNumber, diffDays, false);
+        }
+      } 
+      // Jika sudah lewat masa berakhir
+      else if (diffDays <= 0) {
+        var daysPast = Math.abs(diffDays);
+        // Setiap 2 minggu (kelipatan 14 hari) kirim peringatan rapat anggota / reorganisasi
+        if (daysPast === 0 || daysPast % 14 === 0) {
+          if (email) {
+            sendEmailAlert(email, name, spNumber, daysPast, true);
+          }
+        }
+      }
+    }
+  }
+}
+
+function sendEmailAlert(toEmail, organizationName, spNumber, days, isExpired) {
+  var subject = "";
+  var body = "";
+  
+  if (isExpired) {
+    subject = "[PERINGATAN REORGANISASI] SP " + organizationName + " Telah Berakhir";
+    body = "Assalamu'alaikum Wr. Wb.\n\n" +
+           "Pemberitahuan kepada Pengurus " + organizationName + ",\n\n" +
+           "Masa berlaku Surat Keputusan (SP) Anda dengan nomor surat " + spNumber + " telah berakhir sekitar " + days + " hari yang lalu.\n" +
+           "Berdasarkan peraturan organisasi, mohon untuk SEGERA melakukan rapat anggota dan proses reorganisasi kepengurusan baru selambat-lambatnya dalam 2 minggu ke depan.\n\n" +
+           "Semoga lancar dan berkah.\n" +
+           "Wallahul muwaffiq ila aqwamith thariq.\n\n" +
+           "PAC IPNU IPPNU Kecamatan Tahunan\n" +
+           "Sistem Monitoring Portal Satu Pintu";
+  } else {
+    subject = "[PENTING] Masa Aktif SP " + organizationName + " Tinggal " + days + " Hari Lagi";
+    body = "Assalamu'alaikum Wr. Wb.\n\n" +
+           "Pemberitahuan kepada Pengurus " + organizationName + ",\n\n" +
+           "Masa berlaku Surat Keputusan (SP) Anda dengan nomor surat " + spNumber + " akan berakhir dalam waktu " + days + " hari lagi.\n" +
+           "Mohon segera siapkan berkas-berkas permohonan SP perpanjangan atau persiapkan agenda rapat reorganisasi sebelum masa aktif habis guna menjaga legalitas organisasi.\n\n" +
+           "Terima kasih atas perhatiannya.\n" +
+           "Wallahul muwaffiq ila aqwamith thariq.\n\n" +
+           "PAC IPNU IPPNU Kecamatan Tahunan\n" +
+           "Sistem Monitoring Portal Satu Pintu";
+  }
+  
+  try {
+    MailApp.sendEmail(toEmail, subject, body);
+  } catch (e) {
+    Logger.log("Gagal mengirim email ke " + toEmail + ": " + e.toString());
+  }
 }
 
 // Helper untuk memformat objek Tanggal menjadi string DD/MM/YYYY
