@@ -136,6 +136,10 @@ let formSpIppnuUrl = localStorage.getItem("formSpIppnuUrl") || "https://docs.goo
 let formUndanganUrl = localStorage.getItem("formUndanganUrl") || "https://docs.google.com/forms/d/e/1FAIpQLSd-EQmH6kalK6ah9oDBb1rjCVKhqKSAxhlLlM4MNeP--m8OUw/viewform";
 let formKaderisasiUrl = localStorage.getItem("formKaderisasiUrl") || "#";
 
+// Board structures PDF URL configurations
+let pdfIpnuUrl = localStorage.getItem("pdfIpnuUrl") || "";
+let pdfIppnuUrl = localStorage.getItem("pdfIppnuUrl") || "";
+
 let selectedSpBanom = 'ipnu';
 let currentDraftMessage = '';
 
@@ -150,6 +154,8 @@ window.onload = function () {
     refreshBentoStats();
     // Update link hrefs
     updateFormLinks();
+    // Render Kontak previews
+    renderKontak();
 
     // Fetch dynamic data from Google Apps Script if URL exists
     if (appsScriptUrl) {
@@ -170,6 +176,17 @@ function fetchDynamicSpData() {
                 if (data.berita) beritaDatabase = data.berita;
                 if (data.komentar) komentarDatabase = data.komentar;
                 
+                if (data.settings) {
+                    if (data.settings.pdfIpnuUrl) {
+                        pdfIpnuUrl = data.settings.pdfIpnuUrl;
+                        localStorage.setItem("pdfIpnuUrl", pdfIpnuUrl);
+                    }
+                    if (data.settings.pdfIppnuUrl) {
+                        pdfIppnuUrl = data.settings.pdfIppnuUrl;
+                        localStorage.setItem("pdfIppnuUrl", pdfIppnuUrl);
+                    }
+                }
+
                 // Repopulate & refresh views
                 populateDropdownPimpinan();
                 refreshBentoStats();
@@ -177,6 +194,7 @@ function fetchDynamicSpData() {
                 renderMakestaTable();
                 renderBeritaListHome();
                 renderBerita();
+                renderKontak();
                 console.log("Database updated from Google Sheets.");
             }
         })
@@ -205,7 +223,7 @@ function sendFormToAppsScript(payload) {
 function handleNavigation() {
     const hash = window.location.hash || '#home';
     const hashBase = hash.split('?')[0];
-    const targets = ['home', 'kaderisasi', 'administrasi', 'repository', 'admin', 'berita', 'berita-detail'];
+    const targets = ['home', 'kaderisasi', 'administrasi', 'repository', 'admin', 'berita', 'berita-detail', 'kontak'];
 
     let matched = false;
     targets.forEach(t => {
@@ -240,6 +258,11 @@ function handleNavigation() {
     // Always render Repository when on Repository page
     if (hashBase === '#repository') {
         renderRepository();
+    }
+
+    // Always render Kontak previews when on Kontak page
+    if (hashBase === '#kontak') {
+        renderKontak();
     }
 
     // Always render News when on News page
@@ -735,6 +758,9 @@ function saveSecretariatContacts() {
     const overrideIpnu = document.getElementById('cfg-kader-ipnu-override').value.trim();
     const overrideIppnu = document.getElementById('cfg-kader-ippnu-override').value.trim();
 
+    const pdfIpnu = document.getElementById('cfg-pdf-ipnu-url').value.trim();
+    const pdfIppnu = document.getElementById('cfg-pdf-ippnu-url').value.trim();
+
     if (!wa.startsWith('62')) {
         showToast("Gagal Menyimpan", "Pastikan nomor HP berawalan kode negara 62 (contoh: 62822xxxx)", false);
         return;
@@ -747,6 +773,8 @@ function saveSecretariatContacts() {
     formSpIppnuUrl = spIppnu;
     formUndanganUrl = und;
     formKaderisasiUrl = kad;
+    pdfIpnuUrl = pdfIpnu;
+    pdfIppnuUrl = pdfIppnu;
 
     localStorage.setItem("secName", name);
     localStorage.setItem("secWa", wa);
@@ -755,6 +783,8 @@ function saveSecretariatContacts() {
     localStorage.setItem("formSpIppnuUrl", spIppnu);
     localStorage.setItem("formUndanganUrl", und);
     localStorage.setItem("formKaderisasiUrl", kad);
+    localStorage.setItem("pdfIpnuUrl", pdfIpnu);
+    localStorage.setItem("pdfIppnuUrl", pdfIppnu);
     
     if (overrideIpnu !== "") localStorage.setItem("kaderIpnuOverride", overrideIpnu);
     else localStorage.removeItem("kaderIpnuOverride");
@@ -762,11 +792,22 @@ function saveSecretariatContacts() {
     if (overrideIppnu !== "") localStorage.setItem("kaderIppnuOverride", overrideIppnu);
     else localStorage.removeItem("kaderIppnuOverride");
 
+    // Persist settings to Google Sheets in a dedicated Settings row if Apps Script is configured
+    if (appsScriptUrl) {
+        sendFormToAppsScript({
+            action: 'adminUpdateSettings',
+            adminPin: ADMIN_LOCAL_PIN,
+            pdfIpnuUrl: pdfIpnu,
+            pdfIppnuUrl: pdfIppnu
+        }).catch(e => console.error("Gagal menyimpan tautan PDF ke Spreadsheet:", e));
+    }
+
     showToast("Pengaturan Disimpan", `Semua kontak, overrides, dan tautan formulir berhasil diperbarui.`);
     closeSettingsModal();
 
     updateFormLinks();
     refreshBentoStats();
+    renderKontak();
 
     // Trigger immediate fetch if URL was configured
     if (url) {
@@ -1058,6 +1099,10 @@ function switchAdminTab(tab) {
         document.getElementById('cfg-form-sp-ippnu-url').value = formSpIppnuUrl === '#' ? '' : formSpIppnuUrl;
         document.getElementById('cfg-form-undangan-url').value = formUndanganUrl === '#' ? '' : formUndanganUrl;
         document.getElementById('cfg-form-kaderisasi-url').value = formKaderisasiUrl === '#' ? '' : formKaderisasiUrl;
+        document.getElementById('cfg-pdf-ipnu-url').value = pdfIpnuUrl;
+        document.getElementById('cfg-pdf-ippnu-url').value = pdfIppnuUrl;
+        document.getElementById('cfg-kader-ipnu-override').value = localStorage.getItem("kaderIpnuOverride") || "";
+        document.getElementById('cfg-kader-ippnu-override').value = localStorage.getItem("kaderIppnuOverride") || "";
     }
 }
 
@@ -2292,4 +2337,68 @@ async function adminDeleteBerita(index) {
     renderBeritaListHome();
     showToast('Berita Dihapus', 'Berita berhasil dihapus secara permanen.');
 }
+
+// Convert Google Drive view/sharing link to embed/preview format
+function convertToEmbedPdfLink(url) {
+    if (!url) return '';
+    // Regex to catch Google Drive file ID
+    const reg1 = /\/file\/d\/([a-zA-Z0-9_-]+)/;
+    const reg2 = /[?&]id=([a-zA-Z0-9_-]+)/;
+    let fileId = '';
+    if (reg1.test(url)) {
+        fileId = url.match(reg1)[1];
+    } else if (reg2.test(url)) {
+        fileId = url.match(reg2)[1];
+    }
+
+    if (fileId) {
+        return `https://drive.google.com/file/d/${fileId}/preview`;
+    }
+    return url;
+}
+
+// Renders the Kontak page dynamic PDF previews and buttons
+function renderKontak() {
+    const containerIpnu = document.getElementById('pdf-preview-container-ipnu');
+    const containerIppnu = document.getElementById('pdf-preview-container-ippnu');
+    const btnIpnu = document.getElementById('btn-view-pdf-ipnu');
+    const btnIppnu = document.getElementById('btn-view-pdf-ippnu');
+
+    if (pdfIpnuUrl && pdfIpnuUrl.trim() !== '') {
+        const embedUrl = convertToEmbedPdfLink(pdfIpnuUrl);
+        if (containerIpnu) {
+            containerIpnu.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full border-0 rounded-lg" allow="autoplay"></iframe>`;
+        }
+        if (btnIpnu) {
+            btnIpnu.href = pdfIpnuUrl;
+            btnIpnu.classList.remove('hidden');
+        }
+    } else {
+        if (containerIpnu) {
+            containerIpnu.innerHTML = `<span class="text-[10px] font-semibold text-slate-400">Tautan PDF belum diset</span>`;
+        }
+        if (btnIpnu) {
+            btnIpnu.href = '#';
+        }
+    }
+
+    if (pdfIppnuUrl && pdfIppnuUrl.trim() !== '') {
+        const embedUrl = convertToEmbedPdfLink(pdfIppnuUrl);
+        if (containerIppnu) {
+            containerIppnu.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full border-0 rounded-lg" allow="autoplay"></iframe>`;
+        }
+        if (btnIppnu) {
+            btnIppnu.href = pdfIppnuUrl;
+            btnIppnu.classList.remove('hidden');
+        }
+    } else {
+        if (containerIppnu) {
+            containerIppnu.innerHTML = `<span class="text-[10px] font-semibold text-slate-400">Tautan PDF belum diset</span>`;
+        }
+        if (btnIppnu) {
+            btnIppnu.href = '#';
+        }
+    }
+}
+
 

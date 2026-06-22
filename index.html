@@ -35,6 +35,8 @@
     </script>
     <!-- Custom CSS Styles -->
     <link rel="stylesheet" href="css/style.css">
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/logo-bersama.png" type="image/png">
 </head>
 
 <body class="min-h-screen flex flex-col justify-between selection:bg-brand-purple selection:text-white">
@@ -68,6 +70,8 @@
                     class="nav-link hover:text-brand-purple transition duration-200 py-2">Administrasi</a>
                 <a href="#repository"
                     class="nav-link hover:text-brand-purple transition duration-200 py-2">Repository</a>
+                <a href="#kontak"
+                    class="nav-link hover:text-brand-purple transition duration-200 py-2">Kontak</a>
             </div>
 
             <!-- Action Button: Admin Panel -->
@@ -99,6 +103,8 @@
                 class="block py-2 text-slate-600 hover:text-brand-purple">Administrasi</a>
             <a href="#repository" onclick="toggleMobileMenu()"
                 class="block py-2 text-slate-600 hover:text-brand-purple">Repository</a>
+            <a href="#kontak" onclick="toggleMobileMenu()"
+                class="block py-2 text-slate-600 hover:text-brand-purple">Kontak</a>
             <a href="#admin" onclick="toggleMobileMenu()"
                 class="block py-2 text-brand-purple hover:text-brand-purpleDark flex items-center gap-1"><i class="fas fa-shield-alt text-[9px]"></i> Admin Panel</a>
         </div>
@@ -791,6 +797,140 @@
             </div>
         </section>
 
+        <!-- SECTION 5: KONTAK -->
+        <section id="view-kontak" class="view-section hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="space-y-2 border-b border-slate-100 pb-5">
+                <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-brand-textDark">Hubungi Kami & Kesekretariatan</h2>
+                <p class="text-xs text-slate-500">
+                    Informasi kontak pengurus harian PAC IPNU IPPNU Kecamatan Tahunan beserta susunan pengurus lengkap.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Kontak Pengurus Harian & Email/Alamat (2 Cols wide on larger screens) -->
+                <div class="md:col-span-2 space-y-6">
+                    <!-- Cards Ketua & Email -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Ketua IPNU -->
+                        <a href="https://wa.me/6282330449041" target="_blank"
+                            class="p-5 rounded-3xl bg-white border border-slate-100 hover:border-brand-purple/40 hover:shadow-md transition-all duration-300 flex items-center justify-between group">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl bg-violet-50 text-brand-purple flex items-center justify-center text-xl">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-black text-brand-textDark">Muhammad Bayu Nugroho</span>
+                                    <span class="block text-[10px] text-slate-400 font-extrabold uppercase tracking-wider mt-0.5">Ketua PAC IPNU Tahunan</span>
+                                    <span class="block text-[10px] text-brand-purple font-mono mt-1">082330449041</span>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-brand-purple group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                                Chat <i class="fas fa-arrow-right text-[10px]"></i>
+                            </span>
+                        </a>
+
+                        <!-- Ketua IPPNU -->
+                        <a href="https://wa.me/6285803228303" target="_blank"
+                            class="p-5 rounded-3xl bg-white border border-slate-100 hover:border-emerald-500/40 hover:shadow-md transition-all duration-300 flex items-center justify-between group">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-black text-brand-textDark">Linda Qurrotul Aini</span>
+                                    <span class="block text-[10px] text-slate-400 font-extrabold uppercase tracking-wider mt-0.5">Ketua PAC IPPNU Tahunan</span>
+                                    <span class="block text-[10px] text-emerald-600 font-mono mt-1">085803228303</span>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                                Chat <i class="fas fa-arrow-right text-[10px]"></i>
+                            </span>
+                        </a>
+
+                        <!-- Email Organisasi -->
+                        <a href="mailto:pacipnuippnutahunan@gmail.com"
+                            class="p-5 rounded-3xl bg-white border border-slate-100 hover:border-indigo-500/40 hover:shadow-md transition-all duration-300 flex items-center justify-between group sm:col-span-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-black text-brand-textDark">Email Resmi Organisasi</span>
+                                    <span class="block text-[10px] text-slate-400 font-extrabold uppercase tracking-wider mt-0.5">Surat Menyurat & Kerjasama</span>
+                                    <span class="block text-xs text-indigo-600 font-semibold mt-1">pacipnuippnutahunan@gmail.com</span>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                                Kirim Email <i class="fas fa-arrow-right text-[10px]"></i>
+                            </span>
+                        </a>
+                    </div>
+
+                    <!-- Alamat Kesekretariatan -->
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fas fa-map-marker-alt text-brand-purple"></i> Kantor Sekretariat
+                        </h3>
+                        <div class="space-y-3">
+                            <p class="text-xs text-brand-textDark font-bold leading-relaxed">
+                                Gedung MWC NU Kecamatan Tahunan
+                            </p>
+                            <p class="text-xs text-slate-500 leading-relaxed font-medium">
+                                Jl. Taman Siswa, Pekeng, Kauman, Tahunan, Kec. Tahunan, Kabupaten Jepara, Jawa Tengah 59451
+                            </p>
+                            <!-- Google Maps iframe integration -->
+                            <div class="w-full h-48 rounded-2xl overflow-hidden border border-slate-100 mt-2">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.267675661448!2d110.6865239!3d-6.613670699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e711faf6c9b3d0d%3A0xe543e4983fb00109!2sGedung%20MWCNU%20Tahunan!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" 
+                                    class="w-full h-full border-0 animate-fade-in" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Susunan Pengurus (PDF Viewer Cards) (1 Col wide) -->
+                <div class="space-y-6">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fas fa-file-pdf text-brand-purple"></i> Berkas Kepengurusan
+                        </h3>
+                        <p class="text-xs text-slate-500 font-medium leading-relaxed">
+                            Lihat susunan lengkap pengurus PAC IPNU & PAC IPPNU Kecamatan Tahunan periode aktif.
+                        </p>
+
+                        <!-- Card Preview IPNU -->
+                        <div class="border border-slate-100 rounded-2xl p-4 space-y-3 bg-slate-50">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-extrabold text-brand-textDark">Susunan Pengurus IPNU</span>
+                                <span class="text-[9px] font-extrabold uppercase tracking-widest text-brand-purple bg-violet-50 px-2 py-0.5 rounded">PDF</span>
+                            </div>
+                            <div id="pdf-preview-container-ipnu" class="w-full aspect-[4/3] rounded-lg overflow-hidden border border-slate-200 bg-slate-200 flex items-center justify-center text-slate-400 relative">
+                                <!-- PDF Iframe will render here if loaded, otherwise falls back to a button -->
+                                <span class="text-[10px] font-semibold">Tautan PDF belum diset</span>
+                            </div>
+                            <a id="btn-view-pdf-ipnu" href="#" target="_blank" class="w-full py-2 px-3 rounded-lg bg-brand-purple hover:bg-brand-purpleDark text-white font-extrabold text-[10px] uppercase tracking-wider transition flex items-center justify-center gap-1.5">
+                                <i class="fas fa-eye text-xs"></i> Pratinjau Lengkap
+                            </a>
+                        </div>
+
+                        <!-- Card Preview IPPNU -->
+                        <div class="border border-slate-100 rounded-2xl p-4 space-y-3 bg-slate-50">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-extrabold text-brand-textDark">Susunan Pengurus IPPNU</span>
+                                <span class="text-[9px] font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">PDF</span>
+                            </div>
+                            <div id="pdf-preview-container-ippnu" class="w-full aspect-[4/3] rounded-lg overflow-hidden border border-slate-200 bg-slate-200 flex items-center justify-center text-slate-400 relative">
+                                <!-- PDF Iframe will render here if loaded, otherwise falls back to a button -->
+                                <span class="text-[10px] font-semibold">Tautan PDF belum diset</span>
+                            </div>
+                            <a id="btn-view-pdf-ippnu" href="#" target="_blank" class="w-full py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[10px] uppercase tracking-wider transition flex items-center justify-center gap-1.5">
+                                <i class="fas fa-eye text-xs"></i> Pratinjau Lengkap
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- SECTION 5: REPOSITORY -->
         <section id="view-repository" class="view-section hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div class="space-y-2 border-b border-slate-100 pb-5">
@@ -1448,6 +1588,24 @@
                             <div class="space-y-1">
                                 <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Google Form Kaderisasi</label>
                                 <input type="url" id="cfg-form-kaderisasi-url" placeholder="https://docs.google.com/forms/..."
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-5">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fas fa-file-pdf text-brand-purple"></i> Tautan Susunan Pengurus (PDF Google Drive)
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tautan PDF Susunan Pengurus IPNU</label>
+                                <input type="url" id="cfg-pdf-ipnu-url" placeholder="https://drive.google.com/file/d/.../view"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[9px] font-extrabold text-slate-400 uppercase">Tautan PDF Susunan Pengurus IPPNU</label>
+                                <input type="url" id="cfg-pdf-ippnu-url" placeholder="https://drive.google.com/file/d/.../view"
                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-brand-textDark focus:outline-none focus:border-brand-purple transition">
                             </div>
                         </div>

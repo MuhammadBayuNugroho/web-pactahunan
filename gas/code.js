@@ -137,6 +137,7 @@ function doPost(e) {
     if (action === 'adminAddBerita')   return handleAdminAddBerita(ss, data);
     if (action === 'adminDeleteBerita') return handleAdminDeleteBerita(ss, data);
     if (action === 'adminUpdateBerita') return handleAdminUpdateBerita(ss, data);
+    if (action === 'adminUpdateSettings') return handleAdminUpdateSettings(ss, data);
     if (action === 'submitLike')       return handleSubmitLike(ss, data);
     if (action === 'submitView')       return handleSubmitView(ss, data);
     if (action === 'submitKomentar')   return handleSubmitKomentar(ss, data);
@@ -300,6 +301,39 @@ function handleAdminDeleteRepo(ss, data) {
   return createJsonResponse({ status: "error", message: "Baris tidak ditemukan." });
 }
 
+function handleAdminUpdateSettings(ss, data) {
+  if (!validateAdminPin(data)) return createJsonResponse({ status: "error", message: "PIN tidak valid!" });
+  var sheet = getOrCreateSheet(ss, 'settings', ["Key", "Value"], [["pdfIpnuUrl", ""], ["pdfIppnuUrl", ""]]);
+  
+  var values = sheet.getDataRange().getValues();
+  
+  // Update or insert pdfIpnuUrl
+  var foundIpnu = false;
+  var foundIppnu = false;
+  
+  for (var i = 1; i < values.length; i++) {
+    var key = String(values[i][0]).trim();
+    if (key === "pdfIpnuUrl") {
+      sheet.getRange(i + 1, 2).setValue(data.pdfIpnuUrl || "");
+      foundIpnu = true;
+    }
+    if (key === "pdfIppnuUrl") {
+      sheet.getRange(i + 1, 2).setValue(data.pdfIppnuUrl || "");
+      foundIppnu = true;
+    }
+  }
+  
+  if (!foundIpnu) {
+    sheet.appendRow(["pdfIpnuUrl", data.pdfIpnuUrl || ""]);
+  }
+  if (!foundIppnu) {
+    sheet.appendRow(["pdfIppnuUrl", data.pdfIppnuUrl || ""]);
+  }
+  
+  return createJsonResponse({ status: "success", message: "Tautan PDF pengurus berhasil disimpan." });
+}
+
+
 // Helper untuk menyimpan berkas Base64 ke Google Drive dan mengembalikan tautan unduhan publik
 function saveFileToDrive(base64Data, fileName, mimeType) {
   if (!base64Data || !fileName) return "";
@@ -434,13 +468,21 @@ function readSpData() {
   
   var sheetBerita = getOrCreateSheet(ss, "berita", ["ID", "Timestamp", "Judul", "Konten", "Kategori", "Gambar", "Likes", "Views"], defaultBerita);
   var sheetKomentar = getOrCreateSheet(ss, "komentar", ["NewsID", "Timestamp", "Nama", "Komentar"], defaultKomentar);
+  
+  var sheetSettings = getOrCreateSheet(ss, "settings", ["Key", "Value"], [["pdfIpnuUrl", ""], ["pdfIppnuUrl", ""]]);
+  var settingsObj = {};
+  var settingsValues = sheetSettings.getDataRange().getValues();
+  for (var k = 1; k < settingsValues.length; k++) {
+    settingsObj[String(settingsValues[k][0]).trim()] = String(settingsValues[k][1]).trim();
+  }
 
   return {
     ipnu: sheetToObjects(sheetIpnu),
     ippnu: sheetToObjects(sheetIppnu),
     makesta: sheetMakestaToObjects(sheetMakesta),
     berita: sheetBeritaToObjects(sheetBerita),
-    komentar: sheetKomentarToObjects(sheetKomentar)
+    komentar: sheetKomentarToObjects(sheetKomentar),
+    settings: settingsObj
   };
 }
 
