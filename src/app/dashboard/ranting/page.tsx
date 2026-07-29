@@ -42,6 +42,7 @@ export default function RantingDashboard() {
     }
 
     async function loadScopedSp() {
+      if (!user) return;
       try {
         const data = await getSpData();
         const activeList = user.role === "admin_ranting" ? data.ipnu : data.ippnu;
