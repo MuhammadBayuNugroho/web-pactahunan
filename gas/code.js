@@ -470,6 +470,24 @@ function readSpData() {
   var sheetKomentar = getOrCreateSheet(ss, "komentar", ["NewsID", "Timestamp", "Nama", "Komentar"], defaultKomentar);
   
   var sheetSettings = getOrCreateSheet(ss, "settings", ["Key", "Value"], [["pdfIpnuUrl", ""], ["pdfIppnuUrl", ""]]);
+  
+  // Inisialisasi sheet-sheet baru untuk sistem manajemen terpadu
+  var sheetUserRoles = getOrCreateSheet(ss, "user_roles", ["Username", "PIN", "Role"], [
+    ["superadmin", "admin1234", "super_admin"],
+    ["pac_tahunan", "pac123", "admin_pac"],
+    ["Mantingan", "ranting123", "admin_ranting"]
+  ]);
+  var sheetAgenda = getOrCreateSheet(ss, "agenda", ["ID", "Judul", "Penyelenggara", "Tipe", "Tanggal", "Waktu", "Tempat", "PIC", "Status"], [
+    ["rakor-1", "Rapat Koordinasi PAC & Ranting", "PAC Tahunan", "PAC", "2026-08-05", "19:30 WIB", "Gedung MWC NU Tahunan", "Rekan Wafa", "Mendatang"],
+    ["lakmud-1", "LAKMUD I (Latihan Kader Muda)", "PAC Tahunan", "PAC", "2026-08-14", "08:00 WIB", "Madrasah Hasyim Asy'ari", "Rekanita Sofia", "Mendatang"]
+  ]);
+  var sheetAdministrasi = getOrCreateSheet(ss, "administrasi", ["Timestamp", "ID", "Pimpinan", "Jenis", "Nomor Surat", "Tanggal Surat", "Status", "Catatan"], [
+    ["2026-07-28T10:00:00.000Z", "REQ-2026-0891", "Mantingan", "Pengajuan Rekomendasi SP IPNU", "012/PR/IPNU/VII/2026", "28 Juli 2026", "Diverifikasi", "Berkas fisik surat permohonan sedang diteliti keabsahannya oleh Sekretaris PAC."]
+  ]);
+  var sheetLogAktivitas = getOrCreateSheet(ss, "log_aktivitas", ["Timestamp", "Teks", "Icon", "Warna"], [
+    [new Date().toISOString(), "SP Ranting Mantingan berhasil disetujui & diaktifkan", "fa-check-circle", "emerald"]
+  ]);
+
   var settingsObj = {};
   var settingsValues = sheetSettings.getDataRange().getValues();
   for (var k = 1; k < settingsValues.length; k++) {

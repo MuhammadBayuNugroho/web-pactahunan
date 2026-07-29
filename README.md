@@ -1,75 +1,532 @@
-# Panduan Konfigurasi Website PAC IPNU IPPNU Tahunan
+# PAC IPNU IPPNU Kecamatan Tahunan
+# Organization Data Center
+## Vision & Development Manifesto
 
-Website ini dirancang untuk dihosting di **GitHub Pages** dan menggunakan **Google Sheets** sebagai database-nya melalui perantara **Google Apps Script**.
-
----
-
-## 📁 Struktur Folder Proyek
-
-```text
-web-pac-tahunan/
-├── assets/
-│   ├── images/      # Folder untuk menampung gambar/logo (.png, .jpg)
-│   └── docs/        # Folder untuk menampung dokumen unduhan (.pdf)
-├── css/
-│   └── style.css    # Custom CSS tambahan
-├── js/
-│   └── app.js       # Logika utama JavaScript website
-├── gas/
-│   └── code.js      # Kode Apps Script (untuk Google Sheets)
-├── index.html       # Halaman utama portal
-└── README.md        # Panduan penggunaan (file ini)
-```
-
-> [!NOTE]
-> Pastikan Anda telah memindahkan file logo (`7. LOGO IPNU RESMI.png` dan `Logo IPPNU Official.jpg`) ke dalam folder `assets/images/` agar logo muncul di website.
+Versi : 1.0
 
 ---
 
-## 🛠️ Langkah 1: Setup Google Spreadsheet & Apps Script
+# Pendahuluan
 
-Untuk mengaktifkan fitur database real-time:
+Website PAC IPNU IPPNU Kecamatan Tahunan bukan sekadar website informasi organisasi.
 
-1. Buat Google Spreadsheet baru di Google Drive Anda.
-2. Pada Spreadsheet tersebut, buka **Ekstensi** -> **Apps Script**.
-3. Buka file [gas/code.js](file:///d:/Pemrograman/web-pac-tahunan/gas/code.js), salin seluruh isinya, lalu tempel (paste) ke dalam editor Apps Script.
-4. Klik tombol **Simpan** (ikon disket) di atas.
+Website ini merupakan sebuah **Portal Data Terpadu**, **Digital Office**, dan **Pusat Arsip Organisasi** yang dibangun untuk digunakan secara berkelanjutan oleh seluruh kepengurusan PAC IPNU IPPNU Kecamatan Tahunan dari masa ke masa.
 
----
+Sistem ini dirancang sebagai warisan digital organisasi sehingga seluruh data, aktivitas, dan sejarah organisasi tetap terjaga meskipun terjadi pergantian kepengurusan.
 
-## 🚀 Langkah 2: Deploy Google Apps Script sebagai Web App
-
-Agar website dapat mengakses data Spreadsheet Anda:
-
-1. Di pojok kanan atas editor Apps Script, klik tombol **Terapkan (Deploy)** -> **Penerapan Baru (New Deployment)**.
-2. Klik ikon gerigi (Pilih Jenis) lalu pilih **Aplikasi Web (Web App)**.
-3. Konfigurasikan detail berikut:
-   - **Deskripsi**: `Backend Portal Satu Pintu PAC Tahunan`
-   - **Jalankan sebagai (Execute as)**: `Saya (Me)` (menggunakan akun Google Anda)
-   - **Siapa yang memiliki akses (Who has access)**: `Siapa saja (Anyone)` (Pilihan paling bawah, agar API bisa dipanggil tanpa token login Google).
-4. Klik **Terapkan (Deploy)**.
-5. Anda mungkin diminta memberikan izin keamanan oleh Google. Izinkan akses tersebut.
-6. Setelah berhasil, salin **URL Aplikasi Web (Web App URL)** yang berakhiran `/exec`.
+Website ini bukan milik individu ataupun pengurus periode tertentu, melainkan milik organisasi.
 
 ---
 
-## ⚙️ Langkah 3: Konfigurasi Web App URL di Website
+# Visi
 
-Setelah mendapatkan Web App URL:
-
-1. Buka website Anda (secara lokal atau setelah dihosting).
-2. Klik tombol **Sekretaris Utama** di pojok kanan atas untuk membuka Pengaturan.
-3. Tempel URL yang sudah disalin ke kolom **URL Google Apps Script Web App**.
-4. Klik **Simpan**.
-5. Halaman monitoring akan langsung memuat data dari Spreadsheet secara dinamis! Jika Spreadsheet masih kosong, Google Apps Script akan membuatkan tabel monitoring default secara otomatis di Spreadsheet Anda.
+Menjadi pusat data, administrasi, kaderisasi, arsip, dan manajemen organisasi IPNU IPPNU Kecamatan Tahunan yang modern, transparan, terintegrasi, dan berkelanjutan.
 
 ---
 
-## 🌐 Langkah 4: Hosting di GitHub Pages
+# Misi
 
-1. Buat repository baru di GitHub (misal: `web-pac-tahunan`).
-2. Unggah (push) seluruh struktur folder proyek ini ke repository Anda.
-3. Masuk ke tab **Settings** di repository GitHub Anda.
-4. Buka menu **Pages** di panel kiri.
-5. Pada bagian **Build and deployment**, pilih branch `main` (atau branch utama Anda), lalu klik **Save**.
-6. Tunggu beberapa menit, GitHub akan memberikan link URL hosting gratis Anda (misal: `https://username.github.io/web-pac-tahunan/`).
+1. Mengintegrasikan seluruh data organisasi dalam satu sistem.
+2. Mempermudah administrasi organisasi.
+3. Meningkatkan transparansi kegiatan.
+4. Menjadi pusat informasi publik.
+5. Menjadi pusat arsip organisasi.
+6. Menjadi media transfer pengetahuan antar periode.
+7. Menjadi dasar pengambilan keputusan berbasis data.
+
+---
+
+# Filosofi Sistem
+
+## Satu Data
+
+Semua data organisasi berada dalam satu sistem.
+
+Tidak boleh ada data yang tersebar di banyak tempat tanpa sinkronisasi.
+
+---
+
+## Satu Akun
+
+Setiap pengurus memiliki akun sesuai jabatannya.
+
+Hak akses diberikan berdasarkan jabatan.
+
+---
+
+## Satu Riwayat
+
+Seluruh aktivitas organisasi memiliki histori.
+
+Tidak ada data yang dihapus tanpa jejak.
+
+---
+
+## Satu Arsip
+
+Seluruh dokumen organisasi menjadi aset organisasi.
+
+Bukan aset pribadi pengurus.
+
+---
+
+## Transparansi
+
+Semua proses administrasi memiliki status.
+
+Seluruh proses dapat dipantau.
+
+Tidak ada proses yang tidak jelas.
+
+---
+
+# Tujuan Jangka Panjang
+
+Website ini diharapkan tetap digunakan minimal selama 10–20 tahun.
+
+Pergantian pengurus tidak boleh menyebabkan:
+
+- kehilangan data
+- kehilangan akun
+- kehilangan arsip
+- kehilangan histori
+- kehilangan dokumentasi
+
+---
+
+# Identitas Sistem
+
+Nama Sistem
+
+Portal Data Terpadu
+PAC IPNU IPPNU Kecamatan Tahunan
+
+Tagline
+
+Satu Data.
+Satu Organisasi.
+Satu Perjalanan.
+
+---
+
+# Pilar Sistem
+
+## 1. Portal Publik
+
+Berita
+
+Agenda
+
+Kalender
+
+Repository
+
+Kontak
+
+Profil
+
+Statistik
+
+Laporan Kegiatan
+
+---
+
+## 2. Digital Office
+
+Administrasi
+
+Persuratan
+
+Monitoring
+
+Workflow
+
+Approval
+
+---
+
+## 3. Data Center
+
+Data Ranting
+
+Data Komisariat
+
+Data Pengurus
+
+Data Kegiatan
+
+Data Kaderisasi
+
+Data Repository
+
+---
+
+## 4. Knowledge Center
+
+Modul
+
+Template
+
+Produk Hukum
+
+Dokumen
+
+Pedoman
+
+Video
+
+Materi
+
+---
+
+## 5. Activity Archive
+
+Seluruh kegiatan organisasi memiliki halaman permanen.
+
+Semua kegiatan dapat diakses kembali kapan pun.
+
+---
+
+# Master Data
+
+Master data anggota bukan berada pada website ini.
+
+Master data berada pada:
+
+SIPADU
+PW IPNU IPPNU Jawa Tengah
+
+Website ini hanya:
+
+- Sinkronisasi
+- Backup
+- Cache
+- Analisis
+
+Sehingga tidak terjadi duplikasi data.
+
+---
+
+# Prinsip Pengembangan
+
+Kode harus:
+
+- Modular
+- Mudah dibaca
+- Mudah dikembangkan
+- Mudah dipindahkan
+- Mudah dipelihara
+
+Tidak boleh membuat kode yang hanya dipahami oleh satu orang.
+
+---
+
+# Desain
+
+Menggunakan prinsip:
+
+Minimalis
+
+Modern
+
+Enterprise
+
+Professional
+
+Cepat
+
+Responsif
+
+Accessible
+
+Inspirasi UI:
+
+- Vercel
+- GitHub
+- Linear
+- Stripe
+- Notion
+
+---
+
+# Role Pengguna
+
+Guest
+
+↓
+
+Anggota
+
+↓
+
+Admin Komisariat
+
+↓
+
+Admin Ranting
+
+↓
+
+Admin PAC
+
+↓
+
+Super Admin
+
+Semua role menggunakan Role Based Access Control (RBAC).
+
+---
+
+# Workflow
+
+Seluruh aktivitas menggunakan workflow.
+
+Contoh
+
+Draft
+
+↓
+
+Diajukan
+
+↓
+
+Diverifikasi
+
+↓
+
+Revisi
+
+↓
+
+Disetujui
+
+↓
+
+Selesai
+
+Tidak boleh ada proses manual yang tidak tercatat.
+
+---
+
+# Kalender Organisasi
+
+Seluruh kegiatan PAC
+
+PR
+
+PK
+
+harus masuk kalender.
+
+Setelah kegiatan selesai
+
+otomatis menjadi Arsip Kegiatan.
+
+---
+
+# Laporan Kegiatan
+
+Setiap kegiatan wajib memiliki:
+
+Proposal
+
+Poster
+
+Surat
+
+Dokumentasi
+
+Berita
+
+LPJ
+
+Video
+
+Absensi
+
+Timeline
+
+---
+
+# Repository
+
+Repository bukan tempat upload file.
+
+Repository merupakan perpustakaan digital organisasi.
+
+---
+
+# Buku Periode
+
+Setiap akhir masa khidmat dibuat Buku Periode.
+
+Minimal berisi:
+
+Sejarah
+
+Program Kerja
+
+Pengurus
+
+Prestasi
+
+Evaluasi
+
+Rekomendasi
+
+Dokumentasi
+
+LPJ
+
+Kemudian diunggah ke Repository.
+
+Buku ini menjadi referensi kepengurusan berikutnya.
+
+---
+
+# Data Tidak Pernah Hilang
+
+Website tidak boleh menghapus data sejarah.
+
+Periode lama tetap dapat diakses.
+
+Kegiatan lama tetap tersedia.
+
+Pengurus lama tetap terdokumentasi.
+
+Berita lama tetap tersedia.
+
+Repository lama tetap tersedia.
+
+Website merupakan memori digital organisasi.
+
+---
+
+# Standar Pengembangan
+
+Setiap fitur baru harus memenuhi:
+
+✓ Bermanfaat
+
+✓ Mudah digunakan
+
+✓ Mobile Friendly
+
+✓ Memiliki histori
+
+✓ Memiliki status
+
+✓ Memiliki dokumentasi
+
+✓ Terintegrasi
+
+✓ Tidak menambah kompleksitas yang tidak perlu
+
+---
+
+# Roadmap
+
+Phase 1
+
+Portal Informasi
+
+✔ Selesai
+
+---
+
+Phase 2
+
+Multi User
+
+Role
+
+Permission
+
+Dashboard
+
+---
+
+Phase 3
+
+Digital Office
+
+Administrasi
+
+Persuratan
+
+Workflow
+
+Approval
+
+---
+
+Phase 4
+
+Organization Data Center
+
+Sinkronisasi SIPADU
+
+Statistik
+
+Dashboard
+
+Repository
+
+---
+
+Phase 5
+
+Knowledge Center
+
+Buku Periode
+
+Pelatihan
+
+Video
+
+Dokumen
+
+Arsip
+
+---
+
+Phase 6
+
+Smart Organization
+
+WhatsApp Automation
+
+Dashboard Analitik
+
+AI Assistant
+
+Pencarian Dokumen
+
+Prediksi Kaderisasi
+
+---
+
+# Prinsip Regenerasi
+
+Setiap pergantian kepengurusan wajib:
+
+1. Mengganti akun admin utama.
+2. Memperbarui data pengurus.
+3. Memperbarui masa khidmat.
+4. Menonaktifkan akun pengurus lama.
+5. Menambahkan akun pengurus baru.
+6. Mengunggah Buku Periode yang telah berakhir.
+7. Melakukan serah terima akses digital secara resmi.
+
+Pergantian kepengurusan tidak boleh mengubah struktur sistem ataupun menghapus data historis.
+
+---
+
+# Penutup
+
+Portal Data Terpadu PAC IPNU IPPNU Kecamatan Tahunan dibangun bukan hanya untuk memenuhi kebutuhan organisasi hari ini, tetapi untuk menjadi fondasi digital yang dapat diwariskan kepada setiap generasi pengurus berikutnya.
+
+Keberhasilan sistem ini tidak diukur dari banyaknya fitur, melainkan dari konsistensi penggunaannya, kualitas data yang tersimpan, kemudahan proses administrasi, serta kemampuannya menjaga sejarah dan memori organisasi secara utuh.
+
+Semoga sistem ini menjadi amal jariyah digital bagi seluruh pihak yang terlibat dalam pengembangannya dan memberikan manfaat yang berkelanjutan bagi organisasi, kader, serta masyarakat.
