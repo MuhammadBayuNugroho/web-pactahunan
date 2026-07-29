@@ -112,6 +112,33 @@ export const mockBeritaData: BeritaItem[] = [
   }
 ];
 
+export const mockRepoData: RepoItem[] = [
+  {
+    id: "pedoman-1",
+    title: "Buku Pedoman Kaderisasi IPNU IPPNU",
+    description: "Buku panduan kurikulum kaderisasi formal resmi hasil Kongres.",
+    category: "buku",
+    driveId: "1AQ00D1srOr53Jjf5w377NkFgLD5V-8e2",
+    coverImage: "/assets/images/cover-modul.png"
+  },
+  {
+    id: "art-1",
+    title: "AD / ART Hasil Kongres Terbaru",
+    description: "Landasan konstitusional organisasi tingkat nasional.",
+    category: "buku",
+    driveId: "1B0ci-oiR9-izbp-sn0Zhy_sQJ8hRuoqC",
+    coverImage: "/assets/images/logo-bersama.png"
+  },
+  {
+    id: "template-1",
+    title: "Template Surat Permohonan SP Rekomendasi",
+    description: "Format resmi pengajuan rekomendasi Surat Pengesahan (SP).",
+    category: "surat",
+    driveId: "1JHAH_eeS2504wE6GClRElK_XsaQiDwll",
+    coverImage: "/assets/images/logo-ipnu.png"
+  }
+];
+
 // Legality Analyzer Utility
 export function analyzeSpLegality(dateString: string): SpLegalityAnalysis {
   const today = new Date();
@@ -160,6 +187,7 @@ export async function getSpData() {
       berita: (data.berita || []) as BeritaItem[],
       komentar: (data.komentar || []) as KomentarItem[],
       settings: (data.settings || {}) as SettingsObj,
+      repository: (data.repository || []) as RepoItem[],
     };
   } catch (err) {
     console.error("Gagal memuat data dari Google Sheets. Menggunakan data mock.", err);
@@ -170,6 +198,7 @@ export async function getSpData() {
       berita: mockBeritaData,
       komentar: [],
       settings: {},
+      repository: mockRepoData,
     };
   }
 }
