@@ -1,6 +1,19 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import {
+  getSpData,
+  SpItem,
+  MakestaItem,
+  BeritaItem,
+  KomentarItem,
+  RepoItem,
+  SettingsObj,
+  mockSpData,
+  mockMakestaData,
+  mockBeritaData,
+  mockRepoData,
+} from "@/lib/api/client";
 
 export type Role = "guest" | "anggota" | "admin_komisariat" | "admin_ranting" | "admin_pac" | "super_admin";
 
@@ -18,6 +31,26 @@ export interface AppNotification {
   timestamp: Date;
   read: boolean;
 }
+
+export interface AppData {
+  ipnu: SpItem[];
+  ippnu: SpItem[];
+  makesta: MakestaItem[];
+  berita: BeritaItem[];
+  komentar: KomentarItem[];
+  settings: SettingsObj;
+  repository: RepoItem[];
+}
+
+const DEFAULT_APP_DATA: AppData = {
+  ipnu: mockSpData.ipnu,
+  ippnu: mockSpData.ippnu,
+  makesta: mockMakestaData,
+  berita: mockBeritaData,
+  komentar: [],
+  settings: {},
+  repository: mockRepoData,
+};
 
 interface AppContextType {
   user: User | null;
@@ -40,6 +73,11 @@ interface AppContextType {
   toast: { title: string; message: string; show: boolean; type: "success" | "error" | "info" } | null;
   showToast: (title: string, message: string, type?: "success" | "error" | "info") => void;
   hideToast: () => void;
+  // Global data cache — fetched once on app mount
+  appData: AppData;
+  dataLoading: boolean;
+  dataLoaded: boolean;
+  refreshData: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -58,12 +96,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     kaderIppnu: 670,
   });
 
+  // Global data cache
+  const [appData, setAppData] = useState<AppData>(DEFAULT_APP_DATA);
+  const [dataLoading, setDataLoading] = useState(true);
+  const [dataLoaded, setDataLoaded] = useState(false);
+
   // Load from localStorage on client side mount
   useEffect(() => {
     const savedUrl = localStorage.getItem("appsScriptUrl");
     if (savedUrl) setAppsScriptUrlState(savedUrl);
     else {
-      // Default fallback Web App URL
       const defaultUrl = "https://script.google.com/macros/s/AKfycbwkcijUZyu64TO2Z_aIf3qxr3bnrlj3YNFS2kOHm1yNmU2c6_aTzLhrySrSTwM_3clH/exec";
       setAppsScriptUrlState(defaultUrl);
       localStorage.setItem("appsScriptUrl", defaultUrl);
@@ -74,6 +116,49 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setUser(JSON.parse(savedUser));
     }
   }, []);
+
+  // Fetch global data once on mount — shared across all pages
+  useEffect(() => {
+    if (!dataLoaded) {
+      fetchGlobalData();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchGlobalData = async () => {
+    setDataLoading(true);
+    try {
+      const data = await getSpData();
+      setAppData(data);
+
+      // Compute stats from fetched data
+      let totalPeserta = 0;
+      data.makesta.forEach((m) => {
+        totalPeserta += m.peserta || 0;
+      });
+
+      setStats({
+        totalKader: totalPeserta > 0 ? totalPeserta : 1250,
+        totalRanting: 15,
+        totalKomisariat: 9,
+        totalMakesta: data.makesta.length || 4,
+        kaderIpnu: Math.round((totalPeserta > 0 ? totalPeserta : 1250) * 0.46),
+        kaderIppnu: (totalPeserta > 0 ? totalPeserta : 1250) - Math.round((totalPeserta > 0 ? totalPeserta : 1250) * 0.46),
+      });
+    } catch (err) {
+      console.warn("Gagal memuat data global. Menggunakan data lokal.", err);
+    } finally {
+      setDataLoading(false);
+      setDataLoaded(true);
+    }
+  };
+
+  // Public method to force refresh (e.g. after admin action)
+  const refreshData = async () => {
+    setDataLoaded(false);
+    await fetchGlobalData();
+    setDataLoaded(true);
+  };
 
   const setAppsScriptUrl = (url: string) => {
     setAppsScriptUrlState(url);
@@ -165,6 +250,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toast,
         showToast,
         hideToast,
+        appData,
+        dataLoading,
+        dataLoaded,
+        refreshData,
       }}
     >
       {children}

@@ -15,6 +15,7 @@ const Navbar: React.FC = () => {
     { name: "Beranda", href: "/" },
     { name: "Berita", href: "/berita" },
     { name: "Kaderisasi", href: "/kaderisasi" },
+    { name: "Kalender", href: "/kalender" },
     { name: "Administrasi", href: "/administrasi" },
     { name: "Repository", href: "/repository" },
     { name: "Kontak", href: "/kontak" },

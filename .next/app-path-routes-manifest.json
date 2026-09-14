@@ -1,15 +1,15 @@
 {
   "/_not-found/page": "/_not-found",
   "/admin/page": "/admin",
-  "/administrasi/page": "/administrasi",
   "/berita/[id]/page": "/berita/[id]",
+  "/administrasi/page": "/administrasi",
+  "/berita/page": "/berita",
+  "/dashboard/ranting/page": "/dashboard/ranting",
   "/dashboard/pac/page": "/dashboard/pac",
   "/kaderisasi/page": "/kaderisasi",
-  "/berita/page": "/berita",
   "/kalender/page": "/kalender",
-  "/dashboard/ranting/page": "/dashboard/ranting",
-  "/page": "/",
   "/kegiatan/[slug]/page": "/kegiatan/[slug]",
   "/kontak/page": "/kontak",
+  "/page": "/",
   "/repository/page": "/repository"
 }

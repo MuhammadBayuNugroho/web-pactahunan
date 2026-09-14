@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/lib/context/AppContext";
 import {
-  getSpData,
   BeritaItem,
   KomentarItem,
   submitLike,
@@ -23,8 +22,7 @@ export default function BeritaDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
   const newsId = resolvedParams.id;
   
-  const { showToast } = useApp();
-  const [loading, setLoading] = useState(true);
+  const { appData, dataLoading, showToast } = useApp();
   const [news, setNews] = useState<BeritaItem | null>(null);
   const [comments, setComments] = useState<KomentarItem[]>([]);
   
@@ -34,31 +32,20 @@ export default function BeritaDetailPage({ params }: PageProps) {
   const [submittingComment, setSubmittingComment] = useState(false);
 
   useEffect(() => {
-    async function loadDetail() {
-      try {
-        const data = await getSpData();
-        const foundNews = data.berita.find((b) => b.id === newsId);
-        
-        if (foundNews) {
-          setNews(foundNews);
-          // Filter comments for this news id
-          const filteredComments = data.komentar.filter((c) => c.newsId === newsId);
-          setComments(filteredComments);
-          
-          // Submit view count dynamically
-          submitView(newsId);
-        } else {
-          showToast("Berita Tidak Ditemukan", "Kembali ke halaman utama.", "error");
-          router.push("/berita");
-        }
-      } catch (err) {
-        console.error("Gagal memuat detail berita", err);
-      } finally {
-        setLoading(false);
-      }
+    if (dataLoading) return;
+
+    const foundNews = (appData.berita || []).find((b) => b.id === newsId);
+    
+    if (foundNews) {
+      setNews(foundNews);
+      const filteredComments = (appData.komentar || []).filter((c) => c.newsId === newsId);
+      setComments(filteredComments);
+      submitView(newsId);
+    } else {
+      showToast("Berita Tidak Ditemukan", "Kembali ke halaman utama.", "error");
+      router.push("/berita");
     }
-    loadDetail();
-  }, [newsId, router, showToast]);
+  }, [newsId, appData.berita, appData.komentar, dataLoading, router, showToast]);
 
   const handleLike = async () => {
     if (hasLiked || !news) return;
@@ -99,7 +86,7 @@ export default function BeritaDetailPage({ params }: PageProps) {
     }
   };
 
-  if (loading) {
+  if (dataLoading) {
     return (
       <div className="py-12 text-center text-xs text-slate-400 font-medium">
         <i className="fas fa-spinner fa-spin mr-2"></i> Membuka artikel...

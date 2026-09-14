@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/lib/context/AppContext";
-import { getSpData, MakestaItem } from "@/lib/api/client";
+import { MakestaItem } from "@/lib/api/client";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -15,43 +15,30 @@ export default function KegiatanDetailPage({ params }: PageProps) {
   const router = useRouter();
   const resolvedParams = use(params);
   const { slug } = resolvedParams;
-  const { showToast } = useApp();
+  const { appData, dataLoading, showToast } = useApp();
 
-  const [loading, setLoading] = useState(true);
   const [makestaData, setMakestaData] = useState<MakestaItem | null>(null);
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        const data = await getSpData();
-        
-        // Find matching makesta based on slug
-        const found = data.makesta.find((m) => {
-          const mSlug = `makesta-${m.penyelenggara.toLowerCase().replace(/ /g, "-").replace(/[^a-z0-9-]/g, "")}`;
-          return mSlug === slug;
-        });
+    if (dataLoading) return;
 
-        if (found) {
-          setMakestaData(found);
-        } else {
-          // If not found, use mock fallback so page is always accessible
-          const mock = data.makesta[0];
-          if (mock) setMakestaData(mock);
-          else {
-            showToast("Kegiatan tidak ditemukan", "Kembali ke Kalender.", "error");
-            router.push("/kalender");
-          }
-        }
-      } catch (err) {
-        console.error("Gagal memuat detail kegiatan", err);
-      } finally {
-        setLoading(false);
-      }
+    const list = appData.makesta || [];
+    const found = list.find((m) => {
+      const mSlug = `makesta-${m.penyelenggara.toLowerCase().replace(/ /g, "-").replace(/[^a-z0-9-]/g, "")}`;
+      return mSlug === slug;
+    });
+
+    if (found) {
+      setMakestaData(found);
+    } else if (list.length > 0) {
+      setMakestaData(list[0]);
+    } else {
+      showToast("Kegiatan tidak ditemukan", "Kembali ke Kalender.", "error");
+      router.push("/kalender");
     }
-    loadData();
-  }, [slug, router, showToast]);
+  }, [slug, appData.makesta, dataLoading, router, showToast]);
 
-  if (loading) {
+  if (dataLoading) {
     return (
       <div className="py-12 text-center text-xs text-slate-400 font-medium">
         <i className="fas fa-spinner fa-spin mr-2"></i> Membuka arsip kegiatan...

@@ -1,11 +1,38 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { getSpData, RepoItem } from "@/lib/api/client";
+import React, { useState } from "react";
+import { useApp } from "@/lib/context/AppContext";
+import { RepoItem } from "@/lib/api/client";
+
+const DEFAULT_DOCS: RepoItem[] = [
+  {
+    id: "pedoman-1",
+    title: "Buku Pedoman Kaderisasi IPNU IPPNU",
+    description: "Buku panduan kurikulum kaderisasi formal resmi hasil Kongres.",
+    category: "buku",
+    driveId: "1AQ00D1srOr53Jjf5w377NkFgLD5V-8e2",
+    coverImage: "/assets/images/cover-modul.png"
+  },
+  {
+    id: "art-1",
+    title: "AD / ART Hasil Kongres Terbaru",
+    description: "Landasan konstitusional organisasi tingkat nasional.",
+    category: "buku",
+    driveId: "1B0ci-oiR9-izbp-sn0Zhy_sQJ8hRuoqC",
+    coverImage: "/assets/images/logo-bersama.png"
+  },
+  {
+    id: "template-1",
+    title: "Template Surat Permohonan SP Rekomendasi",
+    description: "Format resmi pengajuan rekomendasi Surat Pengesahan (SP).",
+    category: "surat",
+    driveId: "1JHAH_eeS2504wE6GClRElK_XsaQiDwll",
+    coverImage: "/assets/images/logo-ipnu.png"
+  }
+];
 
 export default function RepositoryPage() {
-  const [loading, setLoading] = useState(true);
-  const [docs, setDocs] = useState<RepoItem[]>([]);
+  const { appData, dataLoading } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
@@ -14,44 +41,7 @@ export default function RepositoryPage() {
   const [previewUrl, setPreviewUrl] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
 
-  useEffect(() => {
-    async function loadDocs() {
-      try {
-        const data = await getSpData();
-        setDocs(data.repository || [
-          {
-            id: "pedoman-1",
-            title: "Buku Pedoman Kaderisasi IPNU IPPNU",
-            description: "Buku panduan kurikulum kaderisasi formal resmi hasil Kongres.",
-            category: "buku",
-            driveId: "1AQ00D1srOr53Jjf5w377NkFgLD5V-8e2",
-            coverImage: "/assets/images/cover-modul.png"
-          },
-          {
-            id: "art-1",
-            title: "AD / ART Hasil Kongres Terbaru",
-            description: "Landasan konstitusional organisasi tingkat nasional.",
-            category: "buku",
-            driveId: "1B0ci-oiR9-izbp-sn0Zhy_sQJ8hRuoqC",
-            coverImage: "/assets/images/logo-bersama.png"
-          },
-          {
-            id: "template-1",
-            title: "Template Surat Permohonan SP Rekomendasi",
-            description: "Format resmi pengajuan rekomendasi Surat Pengesahan (SP).",
-            category: "surat",
-            driveId: "1JHAH_eeS2504wE6GClRElK_XsaQiDwll",
-            coverImage: "/assets/images/logo-ipnu.png"
-          }
-        ]);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadDocs();
-  }, []);
+  const docs = (appData.repository && appData.repository.length > 0) ? appData.repository : DEFAULT_DOCS;
 
   const categories = [
     { key: "all", label: "Semua" },
@@ -69,7 +59,6 @@ export default function RepositoryPage() {
   });
 
   const openPreview = (doc: RepoItem) => {
-    // Standard Google Drive PDF preview URL pattern
     const url = `https://drive.google.com/file/d/${doc.driveId}/preview`;
     setPreviewUrl(url);
     setPreviewTitle(doc.title);
@@ -78,15 +67,6 @@ export default function RepositoryPage() {
 
   return (
     <div className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      <div className="space-y-2 border-b border-slate-100 pb-5">
-        <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-          Pusat Repositori & Knowledge Center
-        </h2>
-        <p className="text-xs text-slate-500">
-          Akses digital terintegrasi untuk mengunduh buku pedoman resmi, AD/ART terbaru, serta template persuratan administrasi se-Kecamatan Tahunan.
-        </p>
-      </div>
-
       {/* Filter and Search Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Categories Tab */}
@@ -120,7 +100,7 @@ export default function RepositoryPage() {
       </div>
 
       {/* Repository Cards Grid */}
-      {loading ? (
+      {dataLoading ? (
         <p className="text-xs text-slate-400 text-center py-12 font-medium">Memuat pusat dokumen...</p>
       ) : filteredDocs.length === 0 ? (
         <p className="text-xs text-slate-400 text-center py-12 font-medium">Dokumen tidak ditemukan.</p>

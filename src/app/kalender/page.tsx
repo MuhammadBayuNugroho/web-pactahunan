@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { getSpData, MakestaItem } from "@/lib/api/client";
+import { useApp } from "@/lib/context/AppContext";
+import { MakestaItem } from "@/lib/api/client";
 
 interface Agenda {
   id: string;
@@ -18,77 +19,132 @@ interface Agenda {
 }
 
 export default function KalenderPage() {
-  const [loading, setLoading] = useState(true);
-  const [agendas, setAgendas] = useState<Agenda[]>([]);
+  const { appData, dataLoading } = useApp();
   const [filterType, setFilterType] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
-  useEffect(() => {
-    async function loadAgendas() {
-      try {
-        const data = await getSpData();
-        
-        // Build agendas from static events + completed Makesta activities
-        const staticAgendas: Agenda[] = [
-          {
-            id: "rakor-1",
-            title: "Rapat Koordinasi PAC & Ranting",
-            organizer: "PAC Tahunan",
-            organizerType: "PAC",
-            date: "2026-08-05",
-            time: "19:30 WIB",
-            location: "Gedung MWC NU Tahunan",
-            pic: "Rekan Wafa",
-            status: "Mendatang"
-          },
-          {
-            id: "lakmud-1",
-            title: "LAKMUD I (Latihan Kader Muda)",
-            organizer: "PAC Tahunan",
-            organizerType: "PAC",
-            date: "2026-08-14",
-            time: "08:00 WIB",
-            location: "Madrasah Hasyim Asy'ari",
-            pic: "Rekanita Sofia",
-            status: "Mendatang"
-          }
-        ];
-
-        // Convert completed Makesta database to agendas
-        const makestaAgendas: Agenda[] = data.makesta.map((m: MakestaItem, idx: number) => {
-          // Convert date "14-15/03/2026" to standard ISO format start date e.g. "2026-03-14"
-          let isoDate = "2026-03-14";
-          try {
-            const parts = m.tanggal.split("/");
-            const days = parts[0].split("-");
-            isoDate = `${parts[2]}-${parts[1]}-${days[0].padStart(2, "0")}`;
-          } catch(e) {}
-
-          const slug = `makesta-${m.penyelenggara.toLowerCase().replace(/ /g, "-").replace(/[^a-z0-9-]/g, "")}`;
-          
-          return {
-            id: `makesta-${idx}`,
-            title: `MAKESTA ${m.penyelenggara}`,
-            organizer: m.penyelenggara,
-            organizerType: m.penyelenggara.includes("PR") || m.penyelenggara.includes("Desa") ? "PR" : "PK",
-            date: isoDate,
-            time: "07:30 WIB",
-            location: m.tempat,
-            pic: "Ketua Pimpinan",
-            status: "Selesai",
-            slug: slug
-          };
-        });
-
-        setAgendas([...staticAgendas, ...makestaAgendas]);
-      } catch (err) {
-        console.error("Gagal load kalender", err);
-      } finally {
-        setLoading(false);
+  const agendas = useMemo<Agenda[]>(() => {
+    // Static PAC agenda for 2025–2027 period
+    const staticAgendas: Agenda[] = [
+      {
+        id: "rakor-2025-09",
+        title: "Rapat Koordinasi PAC & Ranting",
+        organizer: "PAC Tahunan",
+        organizerType: "PAC",
+        date: "2025-09-05",
+        time: "19:30 WIB",
+        location: "Gedung MWC NU Tahunan",
+        pic: "Rekan Wafa",
+        status: "Selesai"
+      },
+      {
+        id: "pelantikan-pac-2025",
+        title: "Pelantikan Pengurus PAC Periode 2025–2027",
+        organizer: "PAC Tahunan",
+        organizerType: "PAC",
+        date: "2025-10-12",
+        time: "08:00 WIB",
+        location: "Aula MWC NU Tahunan",
+        pic: "Ketua PAC",
+        status: "Selesai"
+      },
+      {
+        id: "rakor-2026-02",
+        title: "Rapat Koordinasi PAC & Ranting",
+        organizer: "PAC Tahunan",
+        organizerType: "PAC",
+        date: "2026-02-07",
+        time: "19:30 WIB",
+        location: "Gedung MWC NU Tahunan",
+        pic: "Rekan Wafa",
+        status: "Selesai"
+      },
+      {
+        id: "rakor-2026-08",
+        title: "Rapat Koordinasi PAC & Ranting",
+        organizer: "PAC Tahunan",
+        organizerType: "PAC",
+        date: "2026-08-05",
+        time: "19:30 WIB",
+        location: "Gedung MWC NU Tahunan",
+        pic: "Rekan Wafa",
+        status: "Mendatang"
+      },
+      {
+        id: "lakmud-1",
+        title: "LAKMUD I (Latihan Kader Muda)",
+        organizer: "PAC Tahunan",
+        organizerType: "PAC",
+        date: "2026-08-14",
+        time: "08:00 WIB",
+        location: "Madrasah Hasyim Asy'ari",
+        pic: "Rekanita Sofia",
+        status: "Mendatang"
+      },
+      {
+        id: "lakmad-2026",
+        title: "LAKMAD PAC IPNU IPPNU Tahunan",
+        organizer: "PAC Tahunan",
+        organizerType: "PAC",
+        date: "2026-11-20",
+        time: "08:00 WIB",
+        location: "Madrasah Hasyim Asy'ari",
+        pic: "Dept. Kaderisasi PAC",
+        status: "Mendatang"
+      },
+      {
+        id: "rakor-2027-02",
+        title: "Rapat Koordinasi PAC & Ranting",
+        organizer: "PAC Tahunan",
+        organizerType: "PAC",
+        date: "2027-02-05",
+        time: "19:30 WIB",
+        location: "Gedung MWC NU Tahunan",
+        pic: "Rekan Wafa",
+        status: "Mendatang"
+      },
+      {
+        id: "konferancab-2027",
+        title: "Konferensi Anak Cabang IPNU IPPNU Tahunan",
+        organizer: "PAC Tahunan",
+        organizerType: "PAC",
+        date: "2027-09-15",
+        time: "08:00 WIB",
+        location: "Gedung MWC NU Tahunan",
+        pic: "Ketua PAC",
+        status: "Mendatang"
       }
-    }
-    loadAgendas();
-  }, []);
+    ];
+
+    // Convert completed Makesta database to agendas
+    const makestaAgendas: Agenda[] = (appData.makesta || []).map((m: MakestaItem, idx: number) => {
+      let isoDate = "2026-03-14";
+      try {
+        const parts = m.tanggal.split("/");
+        const days = parts[0].split("-");
+        isoDate = `${parts[2]}-${parts[1]}-${days[0].padStart(2, "0")}`;
+      } catch {}
+
+      const slug = `makesta-${m.penyelenggara.toLowerCase().replace(/ /g, "-").replace(/[^a-z0-9-]/g, "")}`;
+
+      return {
+        id: `makesta-${idx}`,
+        title: `MAKESTA ${m.penyelenggara}`,
+        organizer: m.penyelenggara,
+        organizerType: (m.penyelenggara.includes("PR") || m.penyelenggara.includes("Desa") ? "PR" : "PK") as "PR" | "PK",
+        date: isoDate,
+        time: "07:30 WIB",
+        location: m.tempat,
+        pic: "Ketua Pimpinan",
+        status: "Selesai" as const,
+        slug: slug
+      };
+    });
+
+    return [...staticAgendas, ...makestaAgendas].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+  }, [appData.makesta]);
 
   const filteredAgendas = agendas.filter((item) => {
     const matchesType = filterType === "all" || item.organizerType === filterType;
@@ -98,21 +154,21 @@ export default function KalenderPage() {
 
   return (
     <div className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      <div className="space-y-2 border-b border-slate-100 pb-5">
-        <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-          Kalender & Jadwal Kegiatan Organisasi
-        </h2>
-        <p className="text-xs text-slate-500">
-          Jadwal program kerja, kegiatan kaderisasi (MAKESTA/LAKMUD), dan rapat koordinasi tingkat Ranting, Komisariat, dan PAC se-Tahunan.
-        </p>
-      </div>
-
-      {/* Filter Options */}
+      {/* Header controls & Period Indicator */}
       <div className="flex flex-wrap gap-4 items-center justify-between">
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 items-center">
+          {/* Period Badge */}
+          <div className="space-y-1">
+            <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Masa Khidmat</span>
+            <div className="bg-violet-50 text-brand-purple border border-violet-100 px-3 py-1.5 rounded-xl text-xs font-black tracking-wide flex items-center gap-1.5">
+              <i className="fas fa-history text-[10px]"></i>
+              <span>Periode 2025 – 2027</span>
+            </div>
+          </div>
+
           {/* Organizer Filter */}
           <div className="space-y-1">
-            <span className="block text-[9px] font-extrabold text-slate-450 uppercase tracking-wider">Penyelenggara</span>
+            <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Penyelenggara</span>
             <div className="bg-slate-100 p-1 rounded-xl flex border border-slate-200">
               {["all", "PAC", "PR", "PK"].map((t) => (
                 <button
@@ -132,7 +188,7 @@ export default function KalenderPage() {
 
           {/* Status Filter */}
           <div className="space-y-1">
-            <span className="block text-[9px] font-extrabold text-slate-450 uppercase tracking-wider">Status Agenda</span>
+            <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Status Agenda</span>
             <div className="bg-slate-100 p-1 rounded-xl flex border border-slate-200">
               {["all", "Mendatang", "Selesai"].map((s) => (
                 <button
@@ -153,8 +209,11 @@ export default function KalenderPage() {
       </div>
 
       {/* Agenda Timeline List */}
-      {loading ? (
-        <p className="text-xs text-slate-400 text-center py-12 font-medium">Memuat agenda organisasi...</p>
+      {dataLoading ? (
+        <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center shadow-sm">
+          <i className="fas fa-spinner fa-spin text-brand-purple text-xl mb-3 block"></i>
+          <p className="text-xs text-slate-400 font-medium">Memuat agenda organisasi...</p>
+        </div>
       ) : filteredAgendas.length === 0 ? (
         <p className="text-xs text-slate-400 text-center py-12 font-medium">Tidak ada agenda kegiatan yang cocok.</p>
       ) : (

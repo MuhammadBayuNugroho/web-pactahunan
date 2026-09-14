@@ -1,27 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { getSpData, MakestaItem } from "@/lib/api/client";
+import { useApp } from "@/lib/context/AppContext";
+import KaderisasiCalendar from "@/components/KaderisasiCalendar";
 
 export default function KaderisasiPage() {
-  const [loading, setLoading] = useState(true);
-  const [makestaList, setMakestaList] = useState<MakestaItem[]>([]);
+  const { appData, dataLoading } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
-
-  useEffect(() => {
-    async function loadMakesta() {
-      try {
-        const data = await getSpData();
-        setMakestaList(data.makesta || []);
-      } catch (err) {
-        console.error("Gagal load data kaderisasi", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadMakesta();
-  }, []);
 
   const flowSteps = [
     { num: "01", title: "Pemberitahuan PAC", desc: "Mengajukan pemberitahuan ke Departemen Kaderisasi PAC minimal H-14 acara." },
@@ -53,9 +39,11 @@ export default function KaderisasiPage() {
       icon: "fa-paper-plane",
       color: "from-white to-indigo-50/20 hover:border-indigo-500/40",
       btnColor: "bg-indigo-600 hover:bg-indigo-700",
-      link: "/administrasi" // Redirect directly to our administrasi digital portal
+      link: "/administrasi"
     }
   ];
+
+  const makestaList = appData.makesta;
 
   const filteredMakesta = makestaList.filter((m) =>
     m.penyelenggara.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -64,14 +52,6 @@ export default function KaderisasiPage() {
 
   return (
     <div className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      <div className="space-y-2 border-b border-slate-100 pb-5">
-        <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-          Sistem Informasi & Rekapitulasi Kaderisasi
-        </h2>
-        <p className="text-xs text-slate-500">
-          Memantau penyelenggaraan Masa Kesetiaan Anggota (MAKESTA), database log pelantikan, serta akses instrumen pendampingan instruktur se-Kecamatan Tahunan.
-        </p>
-      </div>
 
       {/* Flow Steps */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
@@ -134,6 +114,23 @@ export default function KaderisasiPage() {
         ))}
       </div>
 
+      {/* Kaderisasi Calendar */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <i className="fas fa-calendar-alt text-brand-purple"></i>
+          <h3 className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Kalender Kaderisasi Se-Kecamatan Tahunan</h3>
+          <span className="px-2 py-0.5 rounded bg-violet-50 text-brand-purple text-[9px] font-extrabold uppercase tracking-widest border border-violet-100">2025 – 2027</span>
+        </div>
+        {dataLoading ? (
+          <div className="bg-white border border-slate-100 rounded-3xl p-12 text-center shadow-sm">
+            <i className="fas fa-spinner fa-spin text-brand-purple text-xl mb-3 block"></i>
+            <p className="text-xs text-slate-400 font-medium">Memuat kalender kaderisasi...</p>
+          </div>
+        ) : (
+          <KaderisasiCalendar makestaList={makestaList} />
+        )}
+      </div>
+
       {/* Makesta History Table */}
       <div className="bg-white border border-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-50 pb-4">
@@ -173,7 +170,7 @@ export default function KaderisasiPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50 text-slate-650 font-semibold">
-              {loading ? (
+              {dataLoading ? (
                 <tr>
                   <td colSpan={5} className="py-4 text-center text-slate-400">Memuat rekapitulasi...</td>
                 </tr>

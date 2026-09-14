@@ -192,15 +192,6 @@ export default function AdministrasiPage() {
 
   return (
     <div className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      <div className="space-y-2 border-b border-slate-100 pb-5">
-        <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-          Pusat Layanan Administrasi & Persuratan Digital
-        </h2>
-        <p className="text-xs text-slate-500">
-          Kirim pengajuan rekomendasi Surat Pengesahan (SP) Ranting/Komisariat, laporkan undangan kegiatan, dan pantau workflow status pengesahan berkas Anda secara real-time.
-        </p>
-      </div>
-
       {/* Tab Switcher */}
       <div className="flex gap-2 border-b border-slate-100 pb-2">
         <button

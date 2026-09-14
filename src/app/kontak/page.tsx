@@ -1,25 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { getSpData, SettingsObj } from "@/lib/api/client";
+import React from "react";
+import { useApp } from "@/lib/context/AppContext";
 
 export default function KontakPage() {
-  const [loading, setLoading] = useState(true);
-  const [settings, setSettings] = useState<SettingsObj>({});
-
-  useEffect(() => {
-    async function loadSettings() {
-      try {
-        const data = await getSpData();
-        setSettings(data.settings || {});
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadSettings();
-  }, []);
+  const { appData } = useApp();
+  const settings = appData.settings || {};
 
   const contactList = [
     { name: "Muhammad Bayu Nugroho", role: "Ketua PAC IPNU Tahunan", num: "6282330449041", roleType: "IPNU" },
@@ -28,14 +14,6 @@ export default function KontakPage() {
 
   return (
     <div className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      <div className="space-y-2 border-b border-slate-100 pb-5">
-        <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-          Hubungi Kami & Kesekretariatan
-        </h2>
-        <p className="text-xs text-slate-500">
-          Informasi kontak pengurus harian PAC IPNU IPPNU Kecamatan Tahunan beserta koordinasi alamat sekretariat resmi.
-        </p>
-      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         

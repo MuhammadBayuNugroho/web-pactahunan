@@ -5,13 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useApp } from "@/lib/context/AppContext";
-import {
-  getSpData,
-  SpItem,
-  MakestaItem,
-  BeritaItem,
-  analyzeSpLegality
-} from "@/lib/api/client";
+import { analyzeSpLegality } from "@/lib/api/client";
 import {
   MemberGrowthChart,
   SpStatusChart,
@@ -19,13 +13,7 @@ import {
 } from "@/components/DashboardCharts";
 
 export default function Home() {
-  const { stats, setStats, showToast } = useApp();
-  const [loading, setLoading] = useState(true);
-  const [spIpnu, setSpIpnu] = useState<SpItem[]>([]);
-  const [spIppnu, setSpIppnu] = useState<SpItem[]>([]);
-  const [berita, setBerita] = useState<BeritaItem[]>([]);
-  const [makesta, setMakesta] = useState<MakestaItem[]>([]);
-  
+  const { stats, setStats, appData, dataLoading } = useApp();
   const [selectedBanom, setSelectedBanom] = useState<"ipnu" | "ippnu">("ipnu");
   const [spSearchQuery, setSpSearchQuery] = useState("");
 
@@ -43,40 +31,25 @@ export default function Home() {
     { title: "LAKMUD I (Latihan Kader Muda)", date: "14-16 Agustus 2026", time: "08:00 WIB", location: "Madrasah Hasyim Asy'ari", pic: "Rekanita Sofia" }
   ];
 
+  // Compute stats whenever appData changes
   useEffect(() => {
-    async function loadData() {
-      try {
-        const data = await getSpData();
-        setSpIpnu(data.ipnu);
-        setSpIppnu(data.ippnu);
-        setBerita(data.berita);
-        setMakesta(data.makesta);
-
-        // Sum participants of MAKESTA
-        let totalPeserta = 0;
-        data.makesta.forEach((m) => {
-          totalPeserta += m.peserta || 0;
-        });
-
-        // Set stats
-        setStats({
-          totalKader: totalPeserta > 0 ? totalPeserta : 1250,
-          totalRanting: 15,
-          totalKomisariat: 9,
-          totalMakesta: data.makesta.length || 4,
-          kaderIpnu: Math.round((totalPeserta > 0 ? totalPeserta : 1250) * 0.46),
-          kaderIppnu: (totalPeserta > 0 ? totalPeserta : 1250) - Math.round((totalPeserta > 0 ? totalPeserta : 1250) * 0.46),
-        });
-      } catch (err) {
-        console.error("Gagal sinkronisasi data.", err);
-      } finally {
-        setLoading(false);
-      }
+    if (!dataLoading && appData.makesta.length > 0) {
+      let totalPeserta = 0;
+      appData.makesta.forEach((m) => {
+        totalPeserta += m.peserta || 0;
+      });
+      setStats({
+        totalKader: totalPeserta > 0 ? totalPeserta : 1250,
+        totalRanting: 15,
+        totalKomisariat: 9,
+        totalMakesta: appData.makesta.length || 4,
+        kaderIpnu: Math.round((totalPeserta > 0 ? totalPeserta : 1250) * 0.46),
+        kaderIppnu: (totalPeserta > 0 ? totalPeserta : 1250) - Math.round((totalPeserta > 0 ? totalPeserta : 1250) * 0.46),
+      });
     }
-    loadData();
-  }, [setStats]);
+  }, [appData, dataLoading, setStats]);
 
-  const activeSpList = selectedBanom === "ipnu" ? spIpnu : spIppnu;
+  const activeSpList = selectedBanom === "ipnu" ? appData.ipnu : appData.ippnu;
 
   const filteredSpList = activeSpList
     .map(item => ({ ...item, analysis: analyzeSpLegality(item.expiryDate) }))
@@ -270,7 +243,7 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {loading ? (
+                {dataLoading ? (
                   <tr>
                     <td colSpan={5} className="p-8 text-center text-xs text-slate-400 font-medium">
                       <i className="fas fa-spinner fa-spin mr-2"></i> Memuat status legalitas SP...
@@ -379,12 +352,12 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {loading ? (
+          {dataLoading ? (
             <p className="text-xs text-slate-400 col-span-3 text-center py-6 font-medium">Memuat berita...</p>
-          ) : berita.length === 0 ? (
+          ) : appData.berita.length === 0 ? (
             <p className="text-xs text-slate-400 col-span-3 text-center py-6 font-medium">Belum ada berita terpublikasi.</p>
           ) : (
-            berita.slice(0, 3).map((item) => (
+            appData.berita.slice(0, 3).map((item) => (
               <Link href={`/berita/${item.id}`} key={item.id} className="group flex flex-col bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover-card-glow">
                 <div className="w-full aspect-video bg-slate-50 relative overflow-hidden">
                   <Image src={item.coverImage} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />

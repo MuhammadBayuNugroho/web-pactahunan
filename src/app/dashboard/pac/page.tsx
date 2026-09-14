@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/lib/context/AppContext";
 import {
-  getSpData,
   SpItem,
   MakestaItem,
   BeritaItem,
@@ -27,8 +26,7 @@ import {
 
 export default function PacDashboard() {
   const router = useRouter();
-  const { user, showToast, stats, setStats } = useApp();
-  const [loading, setLoading] = useState(true);
+  const { user, showToast, stats, setStats, appData, dataLoading, refreshData } = useApp();
   
   // Tab control
   const [activeTab, setActiveTab] = useState<"sp" | "makesta" | "repo" | "berita" | "settings">("sp");
@@ -69,31 +67,21 @@ export default function PacDashboard() {
       return;
     }
 
-    async function loadData() {
-      try {
-        const data = await getSpData();
-        setSpIpnu(data.ipnu || []);
-        setSpIppnu(data.ippnu || []);
-        setMakestaList(data.makesta || []);
-        setBeritaList(data.berita || []);
-        
-        // Static Repository mockup
-        setRepoList([
-          { id: "1", title: "Buku Pedoman Kaderisasi IPNU IPPNU", description: "Buku panduan kurikulum kaderisasi formal Makesta & Lakmud.", category: "buku", driveId: "1AQ00D1srOr53Jjf5w377NkFgLD5V-8e2", coverImage: "/assets/images/cover-modul.png" }
-        ]);
+    if (dataLoading) return;
 
-        if (data.settings) {
-          if (data.settings.pdfIpnuUrl) setPdfIpnuUrl(data.settings.pdfIpnuUrl);
-          if (data.settings.pdfIppnuUrl) setPdfIppnuUrl(data.settings.pdfIppnuUrl);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+    setSpIpnu(appData.ipnu || []);
+    setSpIppnu(appData.ippnu || []);
+    setMakestaList(appData.makesta || []);
+    setBeritaList(appData.berita || []);
+    setRepoList(appData.repository && appData.repository.length > 0 ? appData.repository : [
+      { id: "1", title: "Buku Pedoman Kaderisasi IPNU IPPNU", description: "Buku panduan kurikulum kaderisasi formal Makesta & Lakmud.", category: "buku", driveId: "1AQ00D1srOr53Jjf5w377NkFgLD5V-8e2", coverImage: "/assets/images/cover-modul.png" }
+    ]);
+
+    if (appData.settings) {
+      if (appData.settings.pdfIpnuUrl) setPdfIpnuUrl(appData.settings.pdfIpnuUrl);
+      if (appData.settings.pdfIppnuUrl) setPdfIppnuUrl(appData.settings.pdfIppnuUrl);
     }
-    loadData();
-  }, [user, router]);
+  }, [user, router, appData, dataLoading]);
 
   const handleSpSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,7 +157,7 @@ export default function PacDashboard() {
   };
 
   if (!user) return null;
-  if (loading) {
+  if (dataLoading) {
     return (
       <div className="py-12 text-center text-xs text-slate-400 font-medium">
         <i className="fas fa-spinner fa-spin mr-2"></i> Membuka Dasbor PAC...

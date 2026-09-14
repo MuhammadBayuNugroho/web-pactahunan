@@ -3,12 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/lib/context/AppContext";
-import { getSpData, SpItem, analyzeSpLegality } from "@/lib/api/client";
+import { SpItem, analyzeSpLegality } from "@/lib/api/client";
 
 export default function RantingDashboard() {
   const router = useRouter();
-  const { user, showToast } = useApp();
-  const [loading, setLoading] = useState(true);
+  const { user, showToast, appData, dataLoading } = useApp();
   
   // Scoped data
   const [mySp, setMySp] = useState<SpItem | null>(null);
@@ -41,36 +40,27 @@ export default function RantingDashboard() {
       return;
     }
 
-    async function loadScopedSp() {
-      if (!user) return;
-      try {
-        const data = await getSpData();
-        const activeList = user.role === "admin_ranting" ? data.ipnu : data.ippnu;
-        
-        // Find matching SP for my pimpinan name
-        const match = activeList.find(
-          (sp) => sp.name.toLowerCase().includes(user.pimpinan?.toLowerCase() || "")
-        );
-        
-        if (match) {
-          setMySp(match);
-        } else {
-          // Fallback static item matching user pimpinan
-          setMySp({
-            name: `PR IPNU ${user.pimpinan}`,
-            type: "ranting",
-            spNumber: "099/IPNU/SP/A/X/2025",
-            expiryDate: "2026-12-31"
-          });
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+    if (dataLoading) return;
+
+    const activeList = user.role === "admin_ranting" ? appData.ipnu : appData.ippnu;
+    
+    // Find matching SP for my pimpinan name
+    const match = (activeList || []).find(
+      (sp) => sp.name.toLowerCase().includes(user.pimpinan?.toLowerCase() || "")
+    );
+    
+    if (match) {
+      setMySp(match);
+    } else {
+      // Fallback static item matching user pimpinan
+      setMySp({
+        name: `PR IPNU ${user.pimpinan}`,
+        type: "ranting",
+        spNumber: "099/IPNU/SP/A/X/2025",
+        expiryDate: "2026-12-31"
+      });
     }
-    loadScopedSp();
-  }, [user, router]);
+  }, [user, router, appData.ipnu, appData.ippnu, dataLoading]);
 
   const handleReportUploadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,7 +88,7 @@ export default function RantingDashboard() {
   };
 
   if (!user) return null;
-  if (loading) {
+  if (dataLoading) {
     return (
       <div className="py-12 text-center text-xs text-slate-400 font-medium">
         <i className="fas fa-spinner fa-spin mr-2"></i> Membuka Dasbor Ranting...

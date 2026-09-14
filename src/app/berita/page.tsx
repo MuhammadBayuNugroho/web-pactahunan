@@ -1,29 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { getSpData, BeritaItem } from "@/lib/api/client";
+import { useApp } from "@/lib/context/AppContext";
 
 export default function BeritaPage() {
-  const [loading, setLoading] = useState(true);
-  const [berita, setBerita] = useState<BeritaItem[]>([]);
+  const { appData, dataLoading } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
-
-  useEffect(() => {
-    async function loadNews() {
-      try {
-        const data = await getSpData();
-        setBerita(data.berita || []);
-      } catch (err) {
-        console.error("Gagal memuat berita", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadNews();
-  }, []);
 
   const categories = [
     { key: "all", label: "Semua" },
@@ -32,7 +17,7 @@ export default function BeritaPage() {
     { key: "pengumuman", label: "Pengumuman" }
   ];
 
-  const filteredNews = berita.filter((item) => {
+  const filteredNews = appData.berita.filter((item) => {
     const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
     const matchesSearch =
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -42,14 +27,6 @@ export default function BeritaPage() {
 
   return (
     <div className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      <div className="space-y-2 border-b border-slate-100 pb-5">
-        <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-          Portal Berita & Informasi Kegiatan
-        </h2>
-        <p className="text-xs text-slate-500">
-          Menyajikan informasi kegiatan resmi, pengumuman, dan artikel terupdate seputar PAC IPNU IPPNU Kecamatan Tahunan.
-        </p>
-      </div>
 
       {/* Filter & Search Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -84,7 +61,7 @@ export default function BeritaPage() {
       </div>
 
       {/* News Grid */}
-      {loading ? (
+      {dataLoading ? (
         <p className="text-xs text-slate-400 text-center py-12 font-medium">Memuat portal berita...</p>
       ) : filteredNews.length === 0 ? (
         <div className="py-12 text-center space-y-3 bg-white border border-slate-100 rounded-3xl shadow-sm">

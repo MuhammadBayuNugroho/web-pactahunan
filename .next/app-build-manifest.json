@@ -12,10 +12,11 @@
       "static/chunks/4bd1b696-409494caf8c83275.js",
       "static/chunks/255-fd23c1ca0966ed5f.js",
       "static/chunks/main-app-96f54452a128664d.js",
-      "static/css/b46d575430f047c8.css",
+      "static/css/3c5177d9f62bd857.css",
       "static/chunks/619-f072ac750404f9da.js",
       "static/chunks/239-c511f7dcec0016bd.js",
-      "static/chunks/app/layout-a0378ba2c19b8841.js"
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/layout-56857198ce3325b7.js"
     ],
     "/admin/page": [
       "static/chunks/webpack-525e8c92d913e10e.js",
@@ -23,14 +24,8 @@
       "static/chunks/255-fd23c1ca0966ed5f.js",
       "static/chunks/main-app-96f54452a128664d.js",
       "static/chunks/239-c511f7dcec0016bd.js",
-      "static/chunks/app/admin/page-35ab5ca12dd66790.js"
-    ],
-    "/administrasi/page": [
-      "static/chunks/webpack-525e8c92d913e10e.js",
-      "static/chunks/4bd1b696-409494caf8c83275.js",
-      "static/chunks/255-fd23c1ca0966ed5f.js",
-      "static/chunks/main-app-96f54452a128664d.js",
-      "static/chunks/app/administrasi/page-d2fa06c8c5080d3d.js"
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/admin/page-f96ce2535fe2f052.js"
     ],
     "/berita/[id]/page": [
       "static/chunks/webpack-525e8c92d913e10e.js",
@@ -39,22 +34,16 @@
       "static/chunks/main-app-96f54452a128664d.js",
       "static/chunks/619-f072ac750404f9da.js",
       "static/chunks/239-c511f7dcec0016bd.js",
-      "static/chunks/app/berita/[id]/page-4afbafdd8c3e761f.js"
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/berita/[id]/page-978fee98e736ecaf.js"
     ],
-    "/dashboard/pac/page": [
+    "/administrasi/page": [
       "static/chunks/webpack-525e8c92d913e10e.js",
       "static/chunks/4bd1b696-409494caf8c83275.js",
       "static/chunks/255-fd23c1ca0966ed5f.js",
       "static/chunks/main-app-96f54452a128664d.js",
-      "static/chunks/app/dashboard/pac/page-86f527291550d1bf.js"
-    ],
-    "/kaderisasi/page": [
-      "static/chunks/webpack-525e8c92d913e10e.js",
-      "static/chunks/4bd1b696-409494caf8c83275.js",
-      "static/chunks/255-fd23c1ca0966ed5f.js",
-      "static/chunks/main-app-96f54452a128664d.js",
-      "static/chunks/619-f072ac750404f9da.js",
-      "static/chunks/app/kaderisasi/page-918760675ca62bbc.js"
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/administrasi/page-ba337a47f22076c0.js"
     ],
     "/berita/page": [
       "static/chunks/webpack-525e8c92d913e10e.js",
@@ -63,7 +52,33 @@
       "static/chunks/main-app-96f54452a128664d.js",
       "static/chunks/619-f072ac750404f9da.js",
       "static/chunks/239-c511f7dcec0016bd.js",
-      "static/chunks/app/berita/page-7324871aba11254b.js"
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/berita/page-e1a4f60a582d4730.js"
+    ],
+    "/dashboard/ranting/page": [
+      "static/chunks/webpack-525e8c92d913e10e.js",
+      "static/chunks/4bd1b696-409494caf8c83275.js",
+      "static/chunks/255-fd23c1ca0966ed5f.js",
+      "static/chunks/main-app-96f54452a128664d.js",
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/dashboard/ranting/page-71bb52d8399f0410.js"
+    ],
+    "/dashboard/pac/page": [
+      "static/chunks/webpack-525e8c92d913e10e.js",
+      "static/chunks/4bd1b696-409494caf8c83275.js",
+      "static/chunks/255-fd23c1ca0966ed5f.js",
+      "static/chunks/main-app-96f54452a128664d.js",
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/dashboard/pac/page-e2c53c09dbeacc39.js"
+    ],
+    "/kaderisasi/page": [
+      "static/chunks/webpack-525e8c92d913e10e.js",
+      "static/chunks/4bd1b696-409494caf8c83275.js",
+      "static/chunks/255-fd23c1ca0966ed5f.js",
+      "static/chunks/main-app-96f54452a128664d.js",
+      "static/chunks/619-f072ac750404f9da.js",
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/kaderisasi/page-d201a24b7aabb092.js"
     ],
     "/kalender/page": [
       "static/chunks/webpack-525e8c92d913e10e.js",
@@ -71,14 +86,25 @@
       "static/chunks/255-fd23c1ca0966ed5f.js",
       "static/chunks/main-app-96f54452a128664d.js",
       "static/chunks/619-f072ac750404f9da.js",
-      "static/chunks/app/kalender/page-312976a377e47cc0.js"
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/kalender/page-fabb3479266e9772.js"
     ],
-    "/dashboard/ranting/page": [
+    "/kegiatan/[slug]/page": [
       "static/chunks/webpack-525e8c92d913e10e.js",
       "static/chunks/4bd1b696-409494caf8c83275.js",
       "static/chunks/255-fd23c1ca0966ed5f.js",
       "static/chunks/main-app-96f54452a128664d.js",
-      "static/chunks/app/dashboard/ranting/page-3091e863d6571dd1.js"
+      "static/chunks/619-f072ac750404f9da.js",
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/kegiatan/[slug]/page-a9723f867a430fcf.js"
+    ],
+    "/kontak/page": [
+      "static/chunks/webpack-525e8c92d913e10e.js",
+      "static/chunks/4bd1b696-409494caf8c83275.js",
+      "static/chunks/255-fd23c1ca0966ed5f.js",
+      "static/chunks/main-app-96f54452a128664d.js",
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/kontak/page-a0da0b2d01da4158.js"
     ],
     "/page": [
       "static/chunks/webpack-525e8c92d913e10e.js",
@@ -88,29 +114,16 @@
       "static/chunks/619-f072ac750404f9da.js",
       "static/chunks/239-c511f7dcec0016bd.js",
       "static/chunks/539-dac12b7bb00225e2.js",
-      "static/chunks/app/page-450faf1eb7c0723a.js"
-    ],
-    "/kegiatan/[slug]/page": [
-      "static/chunks/webpack-525e8c92d913e10e.js",
-      "static/chunks/4bd1b696-409494caf8c83275.js",
-      "static/chunks/255-fd23c1ca0966ed5f.js",
-      "static/chunks/main-app-96f54452a128664d.js",
-      "static/chunks/619-f072ac750404f9da.js",
-      "static/chunks/app/kegiatan/[slug]/page-d6a1b47c49e11a0a.js"
-    ],
-    "/kontak/page": [
-      "static/chunks/webpack-525e8c92d913e10e.js",
-      "static/chunks/4bd1b696-409494caf8c83275.js",
-      "static/chunks/255-fd23c1ca0966ed5f.js",
-      "static/chunks/main-app-96f54452a128664d.js",
-      "static/chunks/app/kontak/page-f5876e9745664a41.js"
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/page-6d2ff5d44897c493.js"
     ],
     "/repository/page": [
       "static/chunks/webpack-525e8c92d913e10e.js",
       "static/chunks/4bd1b696-409494caf8c83275.js",
       "static/chunks/255-fd23c1ca0966ed5f.js",
       "static/chunks/main-app-96f54452a128664d.js",
-      "static/chunks/app/repository/page-5dfd4fe73a6cb39f.js"
+      "static/chunks/940-944a4360903989a1.js",
+      "static/chunks/app/repository/page-6a28f65b809aa0ee.js"
     ]
   }
 }
