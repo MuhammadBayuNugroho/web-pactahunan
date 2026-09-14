@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+
+Sitemap: https://web-pac-tahunan.vercel.app/sitemap.xml

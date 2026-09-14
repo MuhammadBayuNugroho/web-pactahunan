@@ -77,7 +77,7 @@ export default function AdminLoginPage() {
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 text-white flex items-center justify-center mx-auto text-xl shadow-md shadow-violet-100">
               <i className="fas fa-shield-alt"></i>
             </div>
-            <h2 className="text-xl font-extrabold tracking-tight text-slate-800">Admin & Portal Portal Login</h2>
+            <h2 className="text-xl font-extrabold tracking-tight text-slate-800">Admin & Portal Login</h2>
             <p className="text-xs text-slate-400">Pilih peran kepengurusan dan masukkan PIN keamanan.</p>
           </div>
 

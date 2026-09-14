@@ -1,0 +1,124 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/berita/[id]",
+      "regex": "^/berita/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/berita/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/kegiatan/[slug]",
+      "regex": "^/kegiatan/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/kegiatan/(?<nxtPslug>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/administrasi",
+      "regex": "^/administrasi(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/administrasi(?:/)?$"
+    },
+    {
+      "page": "/berita",
+      "regex": "^/berita(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/berita(?:/)?$"
+    },
+    {
+      "page": "/dashboard/pac",
+      "regex": "^/dashboard/pac(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/pac(?:/)?$"
+    },
+    {
+      "page": "/dashboard/ranting",
+      "regex": "^/dashboard/ranting(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/ranting(?:/)?$"
+    },
+    {
+      "page": "/kaderisasi",
+      "regex": "^/kaderisasi(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/kaderisasi(?:/)?$"
+    },
+    {
+      "page": "/kalender",
+      "regex": "^/kalender(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/kalender(?:/)?$"
+    },
+    {
+      "page": "/kontak",
+      "regex": "^/kontak(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/kontak(?:/)?$"
+    },
+    {
+      "page": "/repository",
+      "regex": "^/repository(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/repository(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

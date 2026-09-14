@@ -65,21 +65,35 @@ export interface SpLegalityAnalysis {
   badgeClass: string;
 }
 
-// Fallback Mock Data for testing and SSR defaults
+// Fallback Mock Data — matches GAS default data (12 ranting/komisariat)
 export const mockSpData: { ipnu: SpItem[]; ippnu: SpItem[] } = {
   ipnu: [
-    { name: "PR IPNU Mantingan", type: "ranting", spNumber: "089/IPNU/SP/A/X/2024", expiryDate: "2026-10-15", phone: "6282242147243", email: "pr.ipnu.mantingan@gmail.com" },
-    { name: "PR IPNU Senenan", type: "ranting", spNumber: "042/IPNU/SP/A/III/2025", expiryDate: "2027-03-20" },
-    { name: "PR IPNU Tahunan", type: "ranting", spNumber: "102/IPNU/SP/A/I/2024", expiryDate: "2026-01-10" },
-    { name: "PR IPNU Tegalsambi", type: "ranting", spNumber: "067/IPNU/SP/A/VIII/2024", expiryDate: "2026-08-05" },
-    { name: "PR IPNU Demangan", type: "ranting", spNumber: "115/IPNU/SP/A/XI/2024", expiryDate: "2026-11-20" }
+    { name: "PR IPNU Mantingan",       type: "ranting",     spNumber: "089/IPNU/SP/A/X/2024",   expiryDate: "2026-10-15", phone: "6282242147243", email: "pr.ipnu.mantingan@gmail.com" },
+    { name: "PR IPNU Senenan",         type: "ranting",     spNumber: "042/IPNU/SP/A/III/2025",  expiryDate: "2027-03-20" },
+    { name: "PR IPNU Tahunan",         type: "ranting",     spNumber: "102/IPNU/SP/A/I/2024",   expiryDate: "2026-01-10" },
+    { name: "PR IPNU Tegalsambi",      type: "ranting",     spNumber: "067/IPNU/SP/A/VIII/2024", expiryDate: "2026-08-05" },
+    { name: "PR IPNU Demangan",        type: "ranting",     spNumber: "115/IPNU/SP/A/XI/2024",  expiryDate: "2026-11-20" },
+    { name: "PR IPNU Ngabul",          type: "ranting",     spNumber: "015/IPNU/SP/A/I/2025",   expiryDate: "2027-01-15" },
+    { name: "PR IPNU Langon",          type: "ranting",     spNumber: "099/IPNU/SP/A/V/2024",   expiryDate: "2026-05-02" },
+    { name: "PR IPNU Sukodono",        type: "ranting",     spNumber: "054/IPNU/SP/A/IV/2025",  expiryDate: "2027-04-10" },
+    { name: "PR IPNU Kecapi",          type: "ranting",     spNumber: "078/IPNU/SP/A/VII/2024",  expiryDate: "2026-07-28" },
+    { name: "PR IPNU Petekeyan",       type: "ranting",     spNumber: "130/IPNU/SP/A/XII/2024", expiryDate: "2026-12-15" },
+    { name: "PK IPNU MA Hasyim Asy'ari", type: "komisariat", spNumber: "034/IPNU/SP/B/II/2025",  expiryDate: "2026-02-15" },
+    { name: "PK IPNU SMK NU Tahunan",  type: "komisariat", spNumber: "049/IPNU/SP/B/VI/2024",  expiryDate: "2026-07-15" },
   ],
   ippnu: [
-    { name: "PR IPPNU Mantingan", type: "ranting", spNumber: "087/IPPNU/SP/A/X/2024", expiryDate: "2026-10-15", phone: "6282242147243", email: "pr.ippnu.mantingan@gmail.com" },
-    { name: "PR IPPNU Senenan", type: "ranting", spNumber: "041/IPPNU/SP/A/III/2025", expiryDate: "2027-03-20" },
-    { name: "PR IPPNU Tahunan", type: "ranting", spNumber: "101/IPPNU/SP/A/I/2024", expiryDate: "2026-01-10" },
-    { name: "PR IPPNU Tegalsambi", type: "ranting", spNumber: "065/IPPNU/SP/A/VIII/2024", expiryDate: "2026-08-05" },
-    { name: "PR IPPNU Demangan", type: "ranting", spNumber: "112/IPPNU/SP/A/XI/2024", expiryDate: "2026-11-20" }
+    { name: "PR IPPNU Mantingan",       type: "ranting",     spNumber: "087/IPPNU/SP/A/X/2024",   expiryDate: "2026-10-15", phone: "6282242147243", email: "pr.ippnu.mantingan@gmail.com" },
+    { name: "PR IPPNU Senenan",         type: "ranting",     spNumber: "041/IPPNU/SP/A/III/2025",  expiryDate: "2027-03-20" },
+    { name: "PR IPPNU Tahunan",         type: "ranting",     spNumber: "101/IPPNU/SP/A/I/2024",   expiryDate: "2026-01-10" },
+    { name: "PR IPPNU Tegalsambi",      type: "ranting",     spNumber: "065/IPPNU/SP/A/VIII/2024", expiryDate: "2026-08-05" },
+    { name: "PR IPPNU Demangan",        type: "ranting",     spNumber: "112/IPPNU/SP/A/XI/2024",  expiryDate: "2026-11-20" },
+    { name: "PR IPPNU Ngabul",          type: "ranting",     spNumber: "014/IPPNU/SP/A/I/2025",   expiryDate: "2027-01-15" },
+    { name: "PR IPPNU Langon",          type: "ranting",     spNumber: "098/IPPNU/SP/A/V/2024",   expiryDate: "2026-05-02" },
+    { name: "PR IPPNU Sukodono",        type: "ranting",     spNumber: "053/IPPNU/SP/A/IV/2025",  expiryDate: "2027-04-10" },
+    { name: "PR IPPNU Kecapi",          type: "ranting",     spNumber: "077/IPPNU/SP/A/VII/2024",  expiryDate: "2026-07-25" },
+    { name: "PR IPPNU Petekeyan",       type: "ranting",     spNumber: "128/IPPNU/SP/A/XII/2024", expiryDate: "2026-12-15" },
+    { name: "PK IPPNU MA Hasyim Asy'ari", type: "komisariat", spNumber: "033/IPPNU/SP/B/II/2025",  expiryDate: "2026-02-15" },
+    { name: "PK IPPNU SMK NU Tahunan",  type: "komisariat", spNumber: "048/IPPNU/SP/B/VI/2024",  expiryDate: "2026-07-15" },
   ]
 };
 
@@ -96,6 +110,45 @@ export const mockMakestaData: MakestaItem[] = [
       { penyelenggara: "PR IPNU IPPNU Mantingan", tanggal: "11/04/2026", tempat: "Rumah Rekan Ketua", peserta: 30 },
       { penyelenggara: "PR IPNU IPPNU Mantingan", tanggal: "25/04/2026", tempat: "Balai Desa Mantingan", peserta: 28 }
     ]
+  },
+  {
+    penyelenggara: "PK MA Hasyim Asy'ari",
+    tanggal: "18/04/2026",
+    tempat: "Aula Madrasah",
+    peserta: 48,
+    praMakesta: { penyelenggara: "PK IPNU IPPNU MA Hasyim Asy'ari", tanggal: "11/04/2026", tempat: "Kelas X MA", peserta: 48 },
+    makesta: { penyelenggara: "PK IPNU IPPNU MA Hasyim Asy'ari", tanggal: "18/04/2026", tempat: "Aula Madrasah", peserta: 48 },
+    rtl: [
+      { penyelenggara: "PK IPNU IPPNU MA Hasyim Asy'ari", tanggal: "25/04/2026", tempat: "Perpustakaan Madrasah", peserta: 46 },
+      { penyelenggara: "PK IPNU IPPNU MA Hasyim Asy'ari", tanggal: "02/05/2026", tempat: "Laboratorium Komputer", peserta: 45 },
+      { penyelenggara: "PK IPNU IPPNU MA Hasyim Asy'ari", tanggal: "09/05/2026", tempat: "Aula Madrasah", peserta: 45 }
+    ]
+  },
+  {
+    penyelenggara: "PR Desa Senenan",
+    tanggal: "09-10/05/2026",
+    tempat: "Madin Senenan",
+    peserta: 30,
+    praMakesta: { penyelenggara: "PR IPNU IPPNU Senenan", tanggal: "02/05/2026", tempat: "Serambi Masjid Senenan", peserta: 30 },
+    makesta: { penyelenggara: "PR IPNU IPPNU Senenan", tanggal: "09-10/05/2026", tempat: "Madin Senenan", peserta: 30 },
+    rtl: [
+      { penyelenggara: "PR IPNU IPPNU Senenan", tanggal: "23/05/2026", tempat: "Madin Senenan", peserta: 28 },
+      { penyelenggara: "PR IPNU IPPNU Senenan", tanggal: "06/06/2026", tempat: "Rumah Rekan Ketua", peserta: 27 },
+      { penyelenggara: "PR IPNU IPPNU Senenan", tanggal: "20/06/2026", tempat: "Balai Desa Senenan", peserta: 25 }
+    ]
+  },
+  {
+    penyelenggara: "PR Desa Tegalsambi",
+    tanggal: "06-07/06/2026",
+    tempat: "MTS Tegalsambi",
+    peserta: 42,
+    praMakesta: { penyelenggara: "PR IPNU IPPNU Tegalsambi", tanggal: "30/05/2026", tempat: "Serambi Masjid Tegalsambi", peserta: 42 },
+    makesta: { penyelenggara: "PR IPNU IPPNU Tegalsambi", tanggal: "06-07/06/2026", tempat: "MTS Tegalsambi", peserta: 42 },
+    rtl: [
+      { penyelenggara: "PR IPNU IPPNU Tegalsambi", tanggal: "20/06/2026", tempat: "MTS Tegalsambi", peserta: 40 },
+      { penyelenggara: "PR IPNU IPPNU Tegalsambi", tanggal: "04/07/2026", tempat: "Rumah Rekan Ketua", peserta: 38 },
+      { penyelenggara: "PR IPNU IPPNU Tegalsambi", tanggal: "18/07/2026", tempat: "Balai Desa Tegalsambi", peserta: 38 }
+    ]
   }
 ];
 
@@ -109,6 +162,16 @@ export const mockBeritaData: BeritaItem[] = [
     coverImage: "/assets/images/cover-modul.png",
     likes: 12,
     views: 145
+  },
+  {
+    id: "2",
+    timestamp: "2026-06-10T14:30:00.000Z",
+    title: "Silaturahmi Bersama MWC NU Tahunan: Menjaga Sanad Amaliyah",
+    content: "Dalam rangka mempererat ukhuwah nahdliyyah, pengurus PAC berkunjung ke jajaran Syuriah dan Tanfidziyah MWC NU Kecamatan Tahunan. Pertemuan ini menghasilkan beberapa program sinergis bersama.",
+    category: "info",
+    coverImage: "/assets/images/logo-bersama.png",
+    likes: 5,
+    views: 85
   }
 ];
 
@@ -178,26 +241,27 @@ export async function getSpData() {
   const url = getAppsScriptUrl();
   try {
     const res = await fetch(`${url}?action=getSpData`, { cache: "no-store" });
-    if (!res.ok) throw new Error("HTTP error");
+    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
     const data = await res.json();
+    // Ensure all fields are present — GAS may not return repository yet
     return {
-      ipnu: (data.ipnu || []) as SpItem[],
-      ippnu: (data.ippnu || []) as SpItem[],
-      makesta: (data.makesta || []) as MakestaItem[],
-      berita: (data.berita || []) as BeritaItem[],
-      komentar: (data.komentar || []) as KomentarItem[],
-      settings: (data.settings || {}) as SettingsObj,
-      repository: (data.repository || []) as RepoItem[],
+      ipnu:       (data.ipnu       || []) as SpItem[],
+      ippnu:      (data.ippnu      || []) as SpItem[],
+      makesta:    (data.makesta    || []) as MakestaItem[],
+      berita:     (data.berita     || []) as BeritaItem[],
+      komentar:   (data.komentar   || []) as KomentarItem[],
+      settings:   (data.settings   || {}) as SettingsObj,
+      repository: (data.repository || mockRepoData) as RepoItem[],
     };
   } catch (err) {
-    console.error("Gagal memuat data dari Google Sheets. Menggunakan data mock.", err);
+    console.warn("Gagal memuat data dari Google Sheets. Menggunakan data mock.", err);
     return {
-      ipnu: mockSpData.ipnu,
-      ippnu: mockSpData.ippnu,
-      makesta: mockMakestaData,
-      berita: mockBeritaData,
-      komentar: [],
-      settings: {},
+      ipnu:       mockSpData.ipnu,
+      ippnu:      mockSpData.ippnu,
+      makesta:    mockMakestaData,
+      berita:     mockBeritaData,
+      komentar:   [],
+      settings:   {},
       repository: mockRepoData,
     };
   }

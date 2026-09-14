@@ -81,9 +81,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const login = async (pin: string, pimpinan: string, role: Role): Promise<boolean> => {
-    // Simple local validation logic (mapped to configuration) or Apps Script validation
-    // For local fallback:
-    if (pin === "admin1234" || pin === "pac123" || pin === "ranting123") {
+    let isValid = false;
+
+    // Primary: Verify PIN via Google Apps Script endpoint
+    try {
+      const url = localStorage.getItem("appsScriptUrl") ||
+        "https://script.google.com/macros/s/AKfycbwkcijUZyu64TO2Z_aIf3qxr3bnrlj3YNFS2kOHm1yNmU2c6_aTzLhrySrSTwM_3clH/exec";
+      const res = await fetch(`${url}?action=verifyPin&pin=${encodeURIComponent(pin)}`, {
+        cache: "no-store",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        isValid = data.valid === true;
+      }
+    } catch {
+      // Fallback: local PIN check when API is unreachable (offline / CORS error)
+      const localPins = ["admin1234", "pac123", "ranting123"];
+      isValid = localPins.includes(pin);
+    }
+
+    if (isValid) {
       const newUser: User = {
         name: role === "super_admin" || role === "admin_pac" ? "Pimpinan Harian PAC" : `Admin PR/PK ${pimpinan}`,
         role: role,
@@ -94,6 +111,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       showToast("Login Berhasil", `Selamat datang di dashboard, ${newUser.name}`, "success");
       return true;
     }
+
     showToast("Login Gagal", "PIN yang Anda masukkan salah.", "error");
     return false;
   };
