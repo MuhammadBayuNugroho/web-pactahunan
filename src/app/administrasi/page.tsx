@@ -5,13 +5,15 @@ import { useApp } from "@/lib/context/AppContext";
 import {
   submitSpForm,
   submitUndanganForm,
-  submitKaderisasiForm
 } from "@/lib/api/client";
 
 export default function AdministrasiPage() {
   const { showToast } = useApp();
   const [activeTab, setActiveTab] = useState<"sp" | "undangan" | "tracking">("sp");
   const [banom, setBanom] = useState<"ipnu" | "ippnu">("ipnu");
+
+  // Multi-step state for SP
+  const [spStep, setSpStep] = useState<1 | 2>(1);
 
   // Form states - SP
   const [spPimpinan, setSpPimpinan] = useState("");
@@ -51,6 +53,8 @@ export default function AdministrasiPage() {
   const [waModalOpen, setWaModalOpen] = useState(false);
   const [waDraftText, setWaDraftText] = useState("");
 
+  const rantingQuickList = ["Mantingan", "Tahunan", "Krapyak", "Senenan", "Demangan", "Tegalsambi"];
+
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -63,10 +67,19 @@ export default function AdministrasiPage() {
     });
   };
 
+  const handleNextStep = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!spPimpinan.trim() || !spNoSurat.trim() || !spTglSurat || !spPengirim.trim() || !spWa.trim()) {
+      showToast("Data Belum Lengkap", "Mohon isi semua data surat dan identitas pengirim.", "error");
+      return;
+    }
+    setSpStep(2);
+  };
+
   const handleSpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!spPimpinan || !spNoSurat || !spTglSurat || !spPengirim || !spWa || !spFile1 || !spFile2) {
-      showToast("Gagal Pengajuan", "Lengkapi seluruh isian dan unggah berkas wajib.", "error");
+    if (!spFile1 || !spFile2) {
+      showToast("Berkas Belum Diunggah", "Unggah surat permohonan dan susunan pengurus.", "error");
       return;
     }
 
@@ -99,6 +112,7 @@ export default function AdministrasiPage() {
       setWaModalOpen(true);
 
       // Reset
+      setSpStep(1);
       setSpPimpinan("");
       setSpNoSurat("");
       setSpTglSurat("");
@@ -106,7 +120,7 @@ export default function AdministrasiPage() {
       setSpWa("");
       setSpFile1(null);
       setSpFile2(null);
-    } catch (err) {
+    } catch {
       showToast("Gagal Mengirim", "Terjadi kesalahan saat menghubungi server database.", "error");
     } finally {
       setSubmittingSp(false);
@@ -154,8 +168,8 @@ export default function AdministrasiPage() {
       setUndTempat("");
       setUndWaktu("");
       setUndFile(null);
-    } catch (err) {
-      showToast("Gagal Mengirim", "Terjadi kesalahan saat memposting berkas undangan.", "error");
+    } catch {
+      showToast("Gagal Mengirim", "Gagal mengunggah berkas surat undangan.", "error");
     } finally {
       setSubmittingUnd(false);
     }
@@ -163,60 +177,63 @@ export default function AdministrasiPage() {
 
   const handleTrackSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!trackQuery.trim()) return;
+    doSearchTrack(trackQuery);
+  };
 
-    // Mock tracking query matching pimpinan name or ID
+  const doSearchTrack = (q: string) => {
+    if (!q.trim()) return;
+
+    // Mock tracking result
     setTrackedItem({
-      id: "REQ-2026-0891",
-      pimpinan: trackQuery,
-      tipe: "Pengajuan Rekomendasi SP IPNU",
-      noSurat: "012/PR/IPNU/VII/2026",
-      tanggal: "28 Juli 2026",
+      id: `TRK-${Math.floor(1000 + Math.random() * 9000)}`,
+      pimpinan: `PR IPNU ${q.trim()}`,
+      tipe: "Rekomendasi Surat Pengesahan (SP)",
+      noSurat: "03/PR/IPNU/VII/2026",
+      tanggal: "12 Agustus 2026",
       status: "Diverifikasi",
-      catatan: "Berkas fisik surat permohonan sedang diteliti keabsahannya oleh Sekretaris PAC.",
+      catatan: "Berkas susunan pengurus telah lengkap, sedang menunggu penomoran rekomendasi PAC.",
       history: [
-        { status: "Draft", date: "26 Juli 2026 - 10:00 WIB" },
-        { status: "Diajukan", date: "27 Juli 2026 - 14:30 WIB", note: "Surat berhasil masuk ke sistem" },
-        { status: "Diverifikasi", date: "28 Juli 2026 - 09:15 WIB", note: "Sedang diproses oleh Departemen Organisasi PAC" }
+        { status: "Draft", date: "12 Ags 2026, 09:30", note: "Formulir online dibuat oleh pengirim." },
+        { status: "Diajukan", date: "12 Ags 2026, 10:15", note: "Berkas digital berhasil diunggah ke Google Drive." },
+        { status: "Diverifikasi", date: "13 Ags 2026, 14:00", note: "Berkas diverifikasi oleh Sekretaris PAC." }
       ]
     });
-    showToast("Hasil Pelacakan", "Status pengajuan berhasil ditemukan.", "success");
   };
 
   const sendWhatsApp = () => {
-    const encoded = encodeURIComponent(waDraftText);
-    const num = "6282242147243"; // Default secretary number
-    window.open(`https://api.whatsapp.com/send?phone=${num}&text=${encoded}`, "_blank");
+    const waUrl = `https://wa.me/6282242147243?text=${encodeURIComponent(waDraftText)}`;
+    window.open(waUrl, "_blank");
     setWaModalOpen(false);
   };
 
   return (
-    <div className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      {/* Tab Switcher */}
-      <div className="flex gap-2 border-b border-slate-100 pb-2">
+    <div className="py-6 sm:py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      
+      {/* ─── Tab Switcher ────────────────────────────────────────────────────── */}
+      <div className="flex gap-2 border-b border-slate-150 pb-2 overflow-x-auto">
         <button
           onClick={() => setActiveTab("sp")}
-          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition ${
+          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition flex-shrink-0 ${
             activeTab === "sp"
               ? "bg-brand-purple text-white shadow-sm"
               : "text-slate-500 hover:text-slate-800 bg-white border border-slate-150"
           }`}
         >
-          <i className="fas fa-file-signature mr-1.5"></i> Pengajuan SP Ranting/Komisariat
+          <i className="fas fa-file-signature mr-1.5"></i> Pengajuan Rekomendasi SP
         </button>
         <button
           onClick={() => setActiveTab("undangan")}
-          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition ${
+          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition flex-shrink-0 ${
             activeTab === "undangan"
               ? "bg-brand-purple text-white shadow-sm"
               : "text-slate-500 hover:text-slate-800 bg-white border border-slate-150"
           }`}
         >
-          <i className="fas fa-envelope-open-text mr-1.5"></i> Konfirmasi Surat Undangan
+          <i className="fas fa-envelope-open-text mr-1.5"></i> Konfirmasi Undangan
         </button>
         <button
           onClick={() => setActiveTab("tracking")}
-          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition ${
+          className={`px-4 py-2 rounded-xl text-xs font-extrabold transition flex-shrink-0 ${
             activeTab === "tracking"
               ? "bg-brand-purple text-white shadow-sm"
               : "text-slate-500 hover:text-slate-800 bg-white border border-slate-150"
@@ -226,141 +243,206 @@ export default function AdministrasiPage() {
         </button>
       </div>
 
-      {/* Content Panels */}
+      {/* ─── Content Tab 1: SP Multi-Step Wizard ──────────────────────────────── */}
       {activeTab === "sp" && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* SP Form Card */}
           <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm lg:col-span-2 space-y-6">
-            <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider border-b border-slate-50 pb-3">
-              Formulir Rekomendasi SP Baru
-            </h3>
-            
-            <form onSubmit={handleSpSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Badan Otonom</label>
-                  <div className="bg-slate-100 p-1 rounded-xl flex border border-slate-200">
-                    <button
-                      type="button"
-                      onClick={() => setBanom("ipnu")}
-                      className={`w-full py-1.5 rounded-lg text-xs font-bold transition ${
-                        banom === "ipnu" ? "bg-brand-purple text-white shadow-sm" : "text-slate-500"
-                      }`}
-                    >
-                      IPNU (Pelajar Putra)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setBanom("ippnu")}
-                      className={`w-full py-1.5 rounded-lg text-xs font-bold transition ${
-                        banom === "ippnu" ? "bg-brand-purple text-white shadow-sm" : "text-slate-500"
-                      }`}
-                    >
-                      IPPNU (Pelajar Putri)
-                    </button>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-50 pb-4">
+              <div>
+                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">
+                  Formulir Rekomendasi SP Baru
+                </h3>
+                <p className="text-[11px] text-slate-400">Pengajuan Surat Pengesahan tingkat Ranting dan Komisariat</p>
+              </div>
+
+              {/* Wizard Step Indicators */}
+              <div className="flex items-center gap-2">
+                <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition ${
+                  spStep === 1
+                    ? "bg-violet-100 text-brand-purple border border-violet-200"
+                    : "bg-slate-100 text-slate-500"
+                }`}>
+                  1. Data Surat
+                </span>
+                <i className="fas fa-chevron-right text-[9px] text-slate-300"></i>
+                <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition ${
+                  spStep === 2
+                    ? "bg-violet-100 text-brand-purple border border-violet-200"
+                    : "bg-slate-100 text-slate-400"
+                }`}>
+                  2. Berkas Persyaratan
+                </span>
+              </div>
+            </div>
+
+            {/* STEP 1: Data Surat & Identitas */}
+            {spStep === 1 && (
+              <form onSubmit={handleNextStep} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Badan Otonom</label>
+                    <div className="bg-slate-100 p-1 rounded-xl flex border border-slate-200">
+                      <button
+                        type="button"
+                        onClick={() => setBanom("ipnu")}
+                        className={`w-full py-1.5 rounded-lg text-xs font-bold transition ${
+                          banom === "ipnu" ? "bg-brand-purple text-white shadow-sm" : "text-slate-500"
+                        }`}
+                      >
+                        IPNU (Pelajar Putra)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setBanom("ippnu")}
+                        className={`w-full py-1.5 rounded-lg text-xs font-bold transition ${
+                          banom === "ippnu" ? "bg-emerald-600 text-white shadow-sm" : "text-slate-500"
+                        }`}
+                      >
+                        IPPNU (Pelajar Putri)
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Ranting/Komisariat</label>
+                    <input
+                      type="text"
+                      required
+                      value={spPimpinan}
+                      onChange={(e) => setSpPimpinan(e.target.value)}
+                      placeholder="Contoh: Mantingan / SMK NU"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Nomor Surat Permohonan</label>
+                    <input
+                      type="text"
+                      required
+                      value={spNoSurat}
+                      onChange={(e) => setSpNoSurat(e.target.value)}
+                      placeholder="Contoh: 01/PR/IPNU/VIII/2026"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal Surat</label>
+                    <input
+                      type="date"
+                      required
+                      value={spTglSurat}
+                      onChange={(e) => setSpTglSurat(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Lengkap Pengirim</label>
+                    <input
+                      type="text"
+                      required
+                      value={spPengirim}
+                      onChange={(e) => setSpPengirim(e.target.value)}
+                      placeholder="Nama ketua / sekretaris..."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[9px] font-extrabold text-slate-400 uppercase">WhatsApp Pengirim (Awalan 62)</label>
+                    <input
+                      type="text"
+                      required
+                      value={spWa}
+                      onChange={(e) => setSpWa(e.target.value)}
+                      placeholder="Contoh: 6282242147243"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
+                    />
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Ranting/Komisariat</label>
-                  <input
-                    type="text"
-                    required
-                    value={spPimpinan}
-                    onChange={(e) => setSpPimpinan(e.target.value)}
-                    placeholder="Contoh: Mantingan, SMK NU, dll."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
-                  />
+                <div className="pt-3">
+                  <button
+                    type="submit"
+                    className="w-full py-3 rounded-2xl bg-brand-purple hover:bg-brand-purpleDark text-white font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-sm"
+                  >
+                    Lanjutkan ke Unggah Berkas &rarr;
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* STEP 2: Unggah Berkas Persyaratan */}
+            {spStep === 2 && (
+              <form onSubmit={handleSpSubmit} className="space-y-5">
+                {/* Summary Pill */}
+                <div className="p-3.5 bg-violet-50/60 border border-violet-100 rounded-2xl flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <div>
+                    <span className="font-extrabold text-brand-purple">PR/PK {banom.toUpperCase()} {spPimpinan}</span>
+                    <span className="text-slate-400 text-[11px] block">{spNoSurat} &bull; {spPengirim}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSpStep(1)}
+                    className="text-[11px] font-bold text-brand-purple underline hover:text-brand-purpleDark"
+                  >
+                    Ubah Data Surat
+                  </button>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Nomor Surat Permohonan</label>
-                  <input
-                    type="text"
-                    required
-                    value={spNoSurat}
-                    onChange={(e) => setSpNoSurat(e.target.value)}
-                    placeholder="Contoh: 01/PR/IPNU/VIII/2026"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Berkas Surat Permohonan (PDF)</label>
+                    <input
+                      type="file"
+                      required
+                      accept="application/pdf"
+                      onChange={(e) => setSpFile1(e.target.files ? e.target.files[0] : null)}
+                      className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-brand-purple hover:file:bg-violet-100"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Susunan Pengurus / Berita Acara</label>
+                    <input
+                      type="file"
+                      required
+                      accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      onChange={(e) => setSpFile2(e.target.files ? e.target.files[0] : null)}
+                      className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-brand-purple hover:file:bg-violet-100"
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Tanggal Surat</label>
-                  <input
-                    type="date"
-                    required
-                    value={spTglSurat}
-                    onChange={(e) => setSpTglSurat(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
-                  />
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setSpStep(1)}
+                    className="w-1/3 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs transition"
+                  >
+                    &larr; Kembali
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submittingSp}
+                    className="w-2/3 py-3 rounded-2xl bg-brand-purple hover:bg-brand-purpleDark text-white font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-sm"
+                  >
+                    {submittingSp ? (
+                      <>
+                        <i className="fas fa-spinner fa-spin"></i> Mengirim Berkas...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fas fa-paper-plane"></i> Kirim Berkas Pengajuan SP
+                      </>
+                    )}
+                  </button>
                 </div>
-
-                <div className="space-y-1">
-                  <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Lengkap Pengirim</label>
-                  <input
-                    type="text"
-                    required
-                    value={spPengirim}
-                    onChange={(e) => setSpPengirim(e.target.value)}
-                    placeholder="Masukkan nama lengkap Anda..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="block text-[9px] font-extrabold text-slate-400 uppercase">WhatsApp Pengirim (Awalan 62)</label>
-                  <input
-                    type="text"
-                    required
-                    value={spWa}
-                    onChange={(e) => setSpWa(e.target.value)}
-                    placeholder="Contoh: 6282242147243"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-50 pt-4">
-                <div className="space-y-1">
-                  <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Berkas Surat Permohonan (PDF)</label>
-                  <input
-                    type="file"
-                    required
-                    accept="application/pdf"
-                    onChange={(e) => setSpFile1(e.target.files ? e.target.files[0] : null)}
-                    className="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-brand-purple hover:file:bg-violet-100"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Susunan Pengurus (PDF/Word)</label>
-                  <input
-                    type="file"
-                    required
-                    accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    onChange={(e) => setSpFile2(e.target.files ? e.target.files[0] : null)}
-                    className="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-brand-purple hover:file:bg-violet-100"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={submittingSp}
-                className="w-full py-3.5 rounded-2xl bg-brand-purple hover:bg-brand-purpleDark text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm shadow-violet-100 flex items-center justify-center gap-2"
-              >
-                {submittingSp ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin"></i> Memproses Pengajuan...
-                  </>
-                ) : (
-                  <>
-                    <i className="fas fa-paper-plane"></i> Kirim Berkas Pengajuan SP
-                  </>
-                )}
-              </button>
-            </form>
+              </form>
+            )}
           </div>
 
           {/* Sekretaris WhatsApp Card */}
@@ -382,7 +464,7 @@ export default function AdministrasiPage() {
                     <span className="block text-[10px] text-slate-500">Sekretaris IPNU PAC Tahunan</span>
                   </div>
                 </div>
-                <i className="fas fa-arrow-right text-[10px] text-slate-450 group-hover:translate-x-0.5 transition-transform"></i>
+                <i className="fas fa-arrow-right text-[10px] text-slate-400 group-hover:translate-x-0.5 transition-transform"></i>
               </a>
 
               <a
@@ -400,29 +482,35 @@ export default function AdministrasiPage() {
                     <span className="block text-[10px] text-slate-500">Sekretaris IPPNU PAC Tahunan</span>
                   </div>
                 </div>
-                <i className="fas fa-arrow-right text-[10px] text-slate-450 group-hover:translate-x-0.5 transition-transform"></i>
+                <i className="fas fa-arrow-right text-[10px] text-slate-400 group-hover:translate-x-0.5 transition-transform"></i>
               </a>
+            </div>
+
+            <div className="p-3.5 bg-slate-50 rounded-2xl text-[11px] text-slate-400 space-y-1">
+              <span className="font-bold text-slate-600 block">Catatan Pelayanan:</span>
+              <p>Pastikan berkas permohonan telah ditandatangani oleh Ketua & Sekretaris pimpinan terkait.</p>
             </div>
           </div>
         </div>
       )}
 
+      {/* ─── Content Tab 2: Undangan ─────────────────────────────────────────── */}
       {activeTab === "undangan" && (
         <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm max-w-3xl mx-auto space-y-6">
-          <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider border-b border-slate-50 pb-3">
-            Formulir Konfirmasi Undangan Kegiatan
+          <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider border-b border-slate-50 pb-3">
+            Formulir Konfirmasi Surat Undangan Kegiatan
           </h3>
 
           <form onSubmit={handleUndanganSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Ranting/Komisariat Asal</label>
+                <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Pimpinan Penyelenggara</label>
                 <input
                   type="text"
                   required
                   value={undPimpinan}
                   onChange={(e) => setUndPimpinan(e.target.value)}
-                  placeholder="Contoh: PR Desa Mantingan"
+                  placeholder="Contoh: PR Krapyak"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
                 />
               </div>
@@ -434,19 +522,19 @@ export default function AdministrasiPage() {
                   required
                   value={undNoSurat}
                   onChange={(e) => setUndNoSurat(e.target.value)}
-                  placeholder="Contoh: 10/PR/IPNU-IPPNU/VIII/2026"
+                  placeholder="Contoh: 12/UND/PR/VIII/2026"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Pengirim Undangan</label>
+                <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Pengirim Surat</label>
                 <input
                   type="text"
                   required
                   value={undPengirim}
                   onChange={(e) => setUndPengirim(e.target.value)}
-                  placeholder="Nama sekretaris/panitia..."
+                  placeholder="Nama pengirim..."
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
                 />
               </div>
@@ -482,13 +570,13 @@ export default function AdministrasiPage() {
                   required
                   value={undTempat}
                   onChange={(e) => setUndTempat(e.target.value)}
-                  placeholder="Contoh: Balai Desa Mantingan"
+                  placeholder="Contoh: Balai Desa Krapyak"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Waktu Pelaksanaan (Hari/Tanggal/Jam)</label>
+                <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Waktu Pelaksanaan</label>
                 <input
                   type="text"
                   required
@@ -501,24 +589,24 @@ export default function AdministrasiPage() {
             </div>
 
             <div className="space-y-1 pt-2">
-              <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Unggah Berkas Fisik Undangan (PDF)</label>
+              <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Unggah Berkas Undangan (PDF)</label>
               <input
                 type="file"
                 required
                 accept="application/pdf"
                 onChange={(e) => setUndFile(e.target.files ? e.target.files[0] : null)}
-                className="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-brand-purple hover:file:bg-violet-100"
+                className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-brand-purple hover:file:bg-violet-100"
               />
             </div>
 
             <button
               type="submit"
               disabled={submittingUnd}
-              className="w-full py-3.5 rounded-2xl bg-brand-purple hover:bg-brand-purpleDark text-white font-extrabold text-xs uppercase tracking-widest transition duration-300 shadow-sm shadow-violet-100 flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-2xl bg-brand-purple hover:bg-brand-purpleDark text-white font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-sm"
             >
               {submittingUnd ? (
                 <>
-                  <i className="fas fa-spinner fa-spin"></i> Mengunggah Undangan...
+                  <i className="fas fa-spinner fa-spin"></i> Mengirim Undangan...
                 </>
               ) : (
                 <>
@@ -530,58 +618,82 @@ export default function AdministrasiPage() {
         </div>
       )}
 
+      {/* ─── Content Tab 3: Pelacakan Status Berkas ───────────────────────────── */}
       {activeTab === "tracking" && (
         <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm max-w-3xl mx-auto space-y-6">
-          <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider border-b border-slate-50 pb-3">
-            Lacak Status Pengajuan Administrasi
-          </h3>
+          <div className="space-y-1 border-b border-slate-50 pb-3">
+            <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">
+              Pelacakan Status Berkas Pengajuan
+            </h3>
+            <p className="text-[11px] text-slate-400">Pantau proses pengesahan rekomendasi SP atau surat masuk secara real-time</p>
+          </div>
 
-          <form onSubmit={handleTrackSubmit} className="flex gap-2">
-            <input
-              type="text"
-              required
-              value={trackQuery}
-              onChange={(e) => setTrackQuery(e.target.value)}
-              placeholder="Masukkan nama ranting (cth: Mantingan)..."
-              className="flex-grow bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
-            />
-            <button
-              type="submit"
-              className="px-5 py-2.5 rounded-xl bg-brand-purple hover:bg-brand-purpleDark text-white font-extrabold text-xs uppercase tracking-wider transition"
-            >
-              Lacak Berkas
-            </button>
+          <form onSubmit={handleTrackSubmit} className="space-y-3">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                required
+                value={trackQuery}
+                onChange={(e) => setTrackQuery(e.target.value)}
+                placeholder="Ketik nama ranting (cth: Mantingan, Krapyak, dll.)..."
+                className="flex-grow bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
+              />
+              <button
+                type="submit"
+                className="px-5 py-2.5 rounded-xl bg-brand-purple hover:bg-brand-purpleDark text-white font-black text-xs uppercase tracking-wider transition"
+              >
+                Lacak
+              </button>
+            </div>
+
+            {/* Quick Suggestions */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[10px] text-slate-400 font-semibold">Cari cepat:</span>
+              {rantingQuickList.map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => {
+                    setTrackQuery(r);
+                    doSearchTrack(r);
+                  }}
+                  className="px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-violet-50 text-[10px] font-bold text-slate-600 hover:text-brand-purple transition"
+                >
+                  PR {r}
+                </button>
+              ))}
+            </div>
           </form>
 
           {trackedItem && (
             <div className="space-y-6 pt-4 border-t border-slate-100">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-semibold text-slate-500">
-                <p><span className="text-slate-400">Pimpinan:</span> {trackedItem.pimpinan}</p>
-                <p><span className="text-slate-400">Jenis Layanan:</span> {trackedItem.tipe}</p>
-                <p><span className="text-slate-400">Nomor Surat:</span> {trackedItem.noSurat}</p>
-                <p><span className="text-slate-400">Tanggal Pengajuan:</span> {trackedItem.tanggal}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs">
+                <p><span className="text-slate-400 font-semibold">Pimpinan:</span> <span className="font-bold text-slate-900">{trackedItem.pimpinan}</span></p>
+                <p><span className="text-slate-400 font-semibold">Layanan:</span> <span className="font-bold text-slate-900">{trackedItem.tipe}</span></p>
+                <p><span className="text-slate-400 font-semibold">No. Surat:</span> <span className="font-mono text-slate-600">{trackedItem.noSurat}</span></p>
+                <p><span className="text-slate-400 font-semibold">Tanggal:</span> <span className="font-medium text-slate-700">{trackedItem.tanggal}</span></p>
               </div>
 
               {/* Progress Timeline */}
-              <div className="space-y-3">
-                <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Workflow Status</span>
+              <div className="space-y-2">
+                <span className="block text-[10px] font-black text-slate-400 uppercase tracking-wider">Tahapan Status</span>
                 
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                  {["Draft", "Diajukan", "Diverifikasi", "Perlu Revisi", "Disetujui", "Selesai"].map((step, idx) => {
-                    const steps = ["Draft", "Diajukan", "Diverifikasi", "Perlu Revisi", "Disetujui", "Selesai"];
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                  {["Draft", "Diajukan", "Diverifikasi", "Disetujui", "Selesai"].map((step, idx) => {
+                    const steps = ["Draft", "Diajukan", "Diverifikasi", "Disetujui", "Selesai"];
                     const currentIdx = steps.indexOf(trackedItem.status);
                     const stepIdx = steps.indexOf(step);
                     const isCompleted = stepIdx <= currentIdx;
 
                     return (
-                      <div key={step} className="flex items-center gap-2">
-                        <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                          isCompleted ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-500"
+                      <div key={step} className="flex items-center gap-1.5 p-1">
+                        <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black ${
+                          isCompleted ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-400"
                         }`}>
-                          {stepIdx + 1}
+                          {isCompleted ? "✓" : idx + 1}
                         </span>
-                        <span className={`text-[10px] font-bold uppercase ${
-                          isCompleted ? "text-emerald-600" : "text-slate-400"
+                        <span className={`text-[10px] font-bold ${
+                          isCompleted ? "text-emerald-700 font-black" : "text-slate-400"
                         }`}>
                           {step}
                         </span>
@@ -593,15 +705,15 @@ export default function AdministrasiPage() {
 
               {/* History list */}
               <div className="space-y-3 pt-2">
-                <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Riwayat Catatan Verifikator</span>
-                <div className="relative border-l-2 border-slate-100 pl-6 ml-3 space-y-4">
+                <span className="block text-[10px] font-black text-slate-400 uppercase tracking-wider">Catatan Verifikator</span>
+                <div className="relative border-l-2 border-slate-100 pl-5 ml-2 space-y-3">
                   {trackedItem.history.map((hist, idx) => (
                     <div key={idx} className="relative">
-                      <span className="absolute -left-[30px] top-0.5 w-4 h-4 rounded-full bg-slate-200 border-2 border-white"></span>
+                      <span className="absolute -left-[27px] top-1 w-3 h-3 rounded-full bg-violet-400 border-2 border-white"></span>
                       <div className="text-xs space-y-0.5">
-                        <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">{hist.date}</span>
-                        <p className="font-extrabold text-slate-800">Status: {hist.status}</p>
-                        {hist.note && <p className="text-slate-500 font-medium">{hist.note}</p>}
+                        <span className="block text-[9px] font-bold text-slate-400">{hist.date}</span>
+                        <p className="font-black text-slate-800">Status: {hist.status}</p>
+                        {hist.note && <p className="text-slate-500 text-[11px] font-medium">{hist.note}</p>}
                       </div>
                     </div>
                   ))}
@@ -618,39 +730,36 @@ export default function AdministrasiPage() {
           <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <span className="text-xs uppercase tracking-widest font-extrabold text-brand-purple flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Notifikasi Siap Dikirim
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Berkas Terkirim
               </span>
               <button onClick={() => setWaModalOpen(false)} className="text-slate-400 hover:text-slate-650 transition">
-                <i className="fas fa-times text-lg"></i>
+                <i className="fas fa-times text-base"></i>
               </button>
             </div>
 
-            <div className="space-y-2">
-              <h4 className="font-black text-base sm:text-lg text-slate-900">Form Pengajuan Berhasil Diproses!</h4>
+            <div className="space-y-1">
+              <h4 className="font-black text-base text-slate-900">Pengajuan Berhasil Disimpan!</h4>
               <p className="text-xs text-slate-500">
-                Surat/Berkas berhasil diupload ke Google Drive organisasi. Silakan klik tombol di bawah ini untuk mengarahkan pesan draf WhatsApp otomatis ke Sekretaris Umum PAC Tahunan:
+                Data telah tersimpan di sistem. Tekan tombol di bawah untuk membuka WhatsApp Sekretaris PAC Tahunan:
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-700 leading-relaxed max-h-48 overflow-y-auto">
-              <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block border-b border-slate-150 pb-1 mb-2">
-                Draft Pesan WhatsApp:
-              </span>
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-700 leading-relaxed max-h-40 overflow-y-auto">
               <p className="whitespace-pre-line text-slate-700 font-semibold">{waDraftText}</p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2 pt-2">
+            <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setWaModalOpen(false)}
-                className="w-full py-2.5 rounded-xl bg-slate-100 text-slate-500 font-bold text-xs hover:text-slate-800 transition uppercase tracking-wider"
+                className="w-1/3 py-2.5 rounded-xl bg-slate-100 text-slate-600 font-bold text-xs hover:bg-slate-200 transition"
               >
                 Tutup
               </button>
               <button
                 onClick={sendWhatsApp}
-                className="w-full py-2.5 rounded-xl bg-emerald-500 text-white font-black text-xs hover:bg-emerald-600 transition uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm shadow-emerald-100"
+                className="w-2/3 py-2.5 rounded-xl bg-emerald-600 text-white font-black text-xs hover:bg-emerald-700 transition flex items-center justify-center gap-1.5 shadow-sm"
               >
-                <i className="fab fa-whatsapp text-sm"></i> Kirim Ke WA Sekretaris
+                <i className="fab fa-whatsapp text-sm"></i> Kirim WhatsApp
               </button>
             </div>
           </div>
