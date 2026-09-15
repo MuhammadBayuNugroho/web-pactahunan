@@ -1,11 +1,11 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
+  "/admin/page": "app/admin/page.js",
   "/administrasi/page": "app/administrasi/page.js",
   "/berita/[id]/page": "app/berita/[id]/page.js",
-  "/admin/page": "app/admin/page.js",
   "/berita/page": "app/berita/page.js",
-  "/dashboard/pac/page": "app/dashboard/pac/page.js",
   "/dashboard/ranting/page": "app/dashboard/ranting/page.js",
+  "/dashboard/pac/page": "app/dashboard/pac/page.js",
   "/kaderisasi/page": "app/kaderisasi/page.js",
   "/kalender/page": "app/kalender/page.js",
   "/kegiatan/[slug]/page": "app/kegiatan/[slug]/page.js",

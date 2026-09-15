@@ -89,8 +89,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [toast, setToast] = useState<AppContextType["toast"]>(null);
   const [stats, setStats] = useState<AppContextType["stats"]>({
     totalKader: 1250,
-    totalRanting: 15,
-    totalKomisariat: 9,
+    totalRanting: 17,
+    totalKomisariat: 15,
     totalMakesta: 4,
     kaderIpnu: 580,
     kaderIppnu: 670,
@@ -139,8 +139,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       setStats({
         totalKader: totalPeserta > 0 ? totalPeserta : 1250,
-        totalRanting: 15,
-        totalKomisariat: 9,
+        totalRanting: 17,
+        totalKomisariat: 15,
         totalMakesta: data.makesta.length || 4,
         kaderIpnu: Math.round((totalPeserta > 0 ? totalPeserta : 1250) * 0.46),
         kaderIppnu: (totalPeserta > 0 ? totalPeserta : 1250) - Math.round((totalPeserta > 0 ? totalPeserta : 1250) * 0.46),

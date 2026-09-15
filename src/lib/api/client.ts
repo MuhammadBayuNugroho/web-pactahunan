@@ -267,18 +267,45 @@ export async function getSpData() {
     const res = await fetch(`${url}?action=getSpData`, { cache: "no-store" });
     if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
     const data = await res.json();
-    // Ensure all fields are present — GAS may not return repository yet
+    const rawIpnu = (data.ipnu || []) as SpItem[];
+    const rawIppnu = (data.ippnu || []) as SpItem[];
+
+    // Reconcile with 32 units: live sheet edits take precedence; missing units fall back to standard list
+    const reconciledIpnu: SpItem[] = mockSpData.ipnu.map((mockItem) => {
+      const match = rawIpnu.find((item) => 
+        item.name.toLowerCase().trim() === mockItem.name.toLowerCase().trim()
+      );
+      return match || mockItem;
+    });
+    rawIpnu.forEach((item) => {
+      if (!reconciledIpnu.some((r) => r.name.toLowerCase().trim() === item.name.toLowerCase().trim())) {
+        reconciledIpnu.push(item);
+      }
+    });
+
+    const reconciledIppnu: SpItem[] = mockSpData.ippnu.map((mockItem) => {
+      const match = rawIppnu.find((item) => 
+        item.name.toLowerCase().trim() === mockItem.name.toLowerCase().trim()
+      );
+      return match || mockItem;
+    });
+    rawIppnu.forEach((item) => {
+      if (!reconciledIppnu.some((r) => r.name.toLowerCase().trim() === item.name.toLowerCase().trim())) {
+        reconciledIppnu.push(item);
+      }
+    });
+
     return {
-      ipnu:       (data.ipnu       || []) as SpItem[],
-      ippnu:      (data.ippnu      || []) as SpItem[],
-      makesta:    (data.makesta    || []) as MakestaItem[],
-      berita:     (data.berita     || []) as BeritaItem[],
+      ipnu:       reconciledIpnu,
+      ippnu:      reconciledIppnu,
+      makesta:    (data.makesta && data.makesta.length > 0 ? data.makesta : mockMakestaData) as MakestaItem[],
+      berita:     (data.berita && data.berita.length > 0 ? data.berita : mockBeritaData) as BeritaItem[],
       komentar:   (data.komentar   || []) as KomentarItem[],
       settings:   (data.settings   || {}) as SettingsObj,
-      repository: (data.repository || mockRepoData) as RepoItem[],
+      repository: (data.repository && data.repository.length > 0 ? data.repository : mockRepoData) as RepoItem[],
     };
   } catch (err) {
-    console.warn("Gagal memuat data dari Google Sheets. Menggunakan data mock.", err);
+    console.warn("Gagal memuat data dari Google Sheets. Menggunakan data fallback lokal.", err);
     return {
       ipnu:       mockSpData.ipnu,
       ippnu:      mockSpData.ippnu,
