@@ -14,14 +14,17 @@ export default function BeritaPage() {
     { key: "all", label: "Semua" },
     { key: "kegiatan", label: "Kegiatan" },
     { key: "info", label: "Informasi" },
-    { key: "pengumuman", label: "Pengumuman" }
+    { key: "pengumuman", label: "Pengumuman" },
+    { key: "opini", label: "Opini" }
   ];
 
   const filteredNews = appData.berita.filter((item) => {
     const matchesCategory = selectedCategory === "all" || item.category === selectedCategory;
     const matchesSearch =
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.content.toLowerCase().includes(searchQuery.toLowerCase());
+      item.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.excerpt && item.excerpt.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.tags && item.tags.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
 
@@ -52,7 +55,7 @@ export default function BeritaPage() {
           <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
           <input
             type="text"
-            placeholder="Cari berita..."
+            placeholder="Cari berita atau topik..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 pl-9 pr-4 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
@@ -91,18 +94,24 @@ export default function BeritaPage() {
               </div>
               <div className="p-5 flex-grow flex flex-col justify-between space-y-4">
                 <div className="space-y-2">
-                  <span className="inline-block text-[9px] font-extrabold text-brand-purple bg-violet-50 px-2 py-0.5 rounded uppercase tracking-widest">
-                    {item.category}
-                  </span>
+                  <div className="flex items-center justify-between">
+                    <span className="inline-block text-[9px] font-extrabold text-brand-purple bg-violet-50 px-2 py-0.5 rounded uppercase tracking-widest">
+                      {item.category}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-medium truncate max-w-[140px]">
+                      <i className="far fa-user mr-1 text-slate-350"></i>
+                      {item.author || "Redaksi PAC"}
+                    </span>
+                  </div>
                   <h3 className="font-extrabold text-sm text-slate-800 leading-snug group-hover:text-brand-purple transition-colors line-clamp-2">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-slate-400 line-clamp-3 leading-relaxed">
-                    {item.content}
+                  <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
+                    {item.excerpt || item.content}
                   </p>
                 </div>
                 <div className="flex items-center justify-between text-[10px] text-slate-400 font-bold pt-2 border-t border-slate-50">
-                  <span>{new Date(item.timestamp).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}</span>
+                  <span>{new Date(item.timestamp).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}</span>
                   <div className="flex items-center gap-2">
                     <span><i className="far fa-eye mr-0.5"></i> {item.views}</span>
                     <span><i className="far fa-thumbs-up mr-0.5"></i> {item.likes}</span>

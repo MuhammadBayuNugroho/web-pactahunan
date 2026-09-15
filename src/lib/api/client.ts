@@ -29,11 +29,15 @@ export interface BeritaItem {
   timestamp: string;
   title: string;
   content: string;
-  category: "kegiatan" | "info" | "pengumuman";
+  category: "kegiatan" | "info" | "pengumuman" | "opini";
   coverImage: string;
   likes: number;
   views: number;
   author?: string;
+  excerpt?: string;
+  caption?: string;
+  tags?: string;
+  status?: "published" | "draft";
 }
 
 export interface KomentarItem {
@@ -181,9 +185,14 @@ export const mockBeritaData: BeritaItem[] = [
     id: "1",
     timestamp: "2026-06-15T10:00:00.000Z",
     title: "Sukses Gelar LAKMUD I, PAC Tahunan Siap Cetak Organisatoris Handal",
+    author: "Tim Media PAC",
+    excerpt: "Latihan Kader Muda perdana PAC Tahunan sukses mencetak puluhan kader militan dan siap memimpin organisasi.",
     content: "Latihan Kader Muda (LAKMUD) perdana yang diselenggarakan oleh PAC Tahunan sukses menjaring puluhan peserta terbaik se-Tahunan. Acara ini berlangsung dengan khidmat dan diisi oleh pemateri-pemateri handal.",
     category: "kegiatan",
     coverImage: "/assets/images/cover-modul.png",
+    caption: "Suasana pembukaan forum LAKMUD I PAC Tahunan bersama jajaran MWC NU.",
+    tags: "Kaderisasi, Lakmud, PAC Tahunan",
+    status: "published",
     likes: 12,
     views: 145
   },
@@ -191,9 +200,14 @@ export const mockBeritaData: BeritaItem[] = [
     id: "2",
     timestamp: "2026-06-10T14:30:00.000Z",
     title: "Silaturahmi Bersama MWC NU Tahunan: Menjaga Sanad Amaliyah",
+    author: "Lembaga Pers PAC",
+    excerpt: "Mempererat ukhuwah nahdliyyah, jajaran pengurus PAC sowan ke jajaran Syuriah dan Tanfidziyah MWC NU Tahunan.",
     content: "Dalam rangka mempererat ukhuwah nahdliyyah, pengurus PAC berkunjung ke jajaran Syuriah dan Tanfidziyah MWC NU Kecamatan Tahunan. Pertemuan ini menghasilkan beberapa program sinergis bersama.",
     category: "info",
     coverImage: "/assets/images/logo-bersama.png",
+    caption: "Pertemuan hangat antara pengurus harian PAC dan MWC NU Tahunan.",
+    tags: "Silaturahmi, MWC NU, Ukhuwah",
+    status: "published",
     likes: 5,
     views: 85
   }

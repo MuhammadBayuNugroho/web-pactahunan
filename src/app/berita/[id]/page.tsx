@@ -126,25 +126,65 @@ export default function BeritaDetailPage({ params }: PageProps) {
           <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
             {news.title}
           </h1>
-          <div className="flex items-center gap-4 pt-1 text-slate-500 text-xs font-semibold">
+          <div className="flex flex-wrap items-center gap-3 pt-1 text-slate-500 text-xs font-semibold">
+            <span className="flex items-center gap-1.5 text-slate-700 font-bold">
+              <i className="far fa-user text-brand-purple"></i> {news.author || "Redaksi PAC IPNU IPPNU Tahunan"}
+            </span>
+            <span className="text-slate-300">|</span>
             <span className="flex items-center gap-1.5">
               <i className="far fa-eye text-slate-400"></i> {news.views} Kali Dilihat
             </span>
+            <span className="text-slate-300">|</span>
             <span className="flex items-center gap-1.5">
               <i className="far fa-thumbs-up text-slate-400"></i> {news.likes} Menyukai
             </span>
           </div>
         </div>
 
-        {/* Cover Image */}
-        <div className="w-full h-[240px] sm:h-[400px] bg-slate-50 rounded-2xl overflow-hidden border border-slate-100/50 relative">
-          <Image src={news.coverImage} alt={news.title} fill className="object-cover" />
+        {/* Cover Image & Caption */}
+        <div>
+          <div className="w-full h-[240px] sm:h-[400px] bg-slate-50 rounded-2xl overflow-hidden border border-slate-100/50 relative">
+            <Image src={news.coverImage} alt={news.title} fill className="object-cover" />
+          </div>
+          {news.caption && (
+            <p className="text-[11px] text-slate-400 italic text-center mt-2.5 font-medium">
+              <i className="fas fa-camera mr-1 text-slate-400"></i> {news.caption}
+            </p>
+          )}
         </div>
 
+        {/* Lead / Excerpt Highlight */}
+        {news.excerpt && (
+          <div className="p-4 sm:p-5 rounded-2xl bg-violet-50/50 border-l-4 border-brand-purple text-slate-700 text-sm sm:text-base font-semibold italic leading-relaxed">
+            &ldquo;{news.excerpt}&rdquo;
+          </div>
+        )}
+
         {/* Content */}
-        <div className="text-slate-700 text-sm sm:text-base leading-relaxed space-y-4 whitespace-pre-line font-medium">
+        <div className="text-slate-700 text-sm sm:text-base leading-relaxed space-y-4 whitespace-pre-line font-normal">
           {news.content}
         </div>
+
+        {/* Tags */}
+        {news.tags && (
+          <div className="pt-2 flex flex-wrap items-center gap-2 border-t border-slate-50">
+            <span className="text-xs font-bold text-slate-400 mr-1 flex items-center gap-1">
+              <i className="fas fa-tags text-[10px]"></i> Tag Terkait:
+            </span>
+            {news.tags.split(",").map((t, idx) => {
+              const trimmed = t.trim();
+              if (!trimmed) return null;
+              return (
+                <span
+                  key={idx}
+                  className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-[11px] font-semibold"
+                >
+                  #{trimmed}
+                </span>
+              );
+            })}
+          </div>
+        )}
 
         {/* Like Action */}
         <div className="pt-6 border-t border-slate-100 flex justify-center">
