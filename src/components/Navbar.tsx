@@ -45,16 +45,17 @@ const Navbar: React.FC = () => {
               <Image
                 src="/assets/images/logo-bersama.png"
                 alt="Logo Bersama PAC Tahunan"
-                width={44}
-                height={44}
-                className="object-contain group-hover:scale-105 transition duration-300"
+                width={70}
+                height={40}
+                className="h-9 sm:h-10 w-auto object-contain group-hover:scale-105 transition duration-300"
+                priority
               />
             </div>
-            <div className="leading-tight">
-              <h1 className="font-extrabold text-sm sm:text-base tracking-tight text-slate-900 uppercase leading-none">
+            <div className="flex flex-col justify-center">
+              <h1 className="font-extrabold text-sm sm:text-base tracking-tight text-slate-900 uppercase leading-tight">
                 PAC IPNU IPPNU
               </h1>
-              <span className="text-xs text-brand-purple font-bold uppercase tracking-normal">
+              <span className="text-[11px] sm:text-xs text-brand-purple font-bold uppercase tracking-normal leading-tight">
                 Kecamatan Tahunan
               </span>
             </div>
