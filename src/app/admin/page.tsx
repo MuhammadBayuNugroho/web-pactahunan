@@ -2,8 +2,47 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp, Role } from "@/lib/context/AppContext";
+
+const LIST_RANTING = [
+  "Kecapi I",
+  "Kecapi II",
+  "Kecapi III",
+  "Tahunan",
+  "Mantingan",
+  "Langon",
+  "Sukodono",
+  "Tegalsambi",
+  "Petekeyan",
+  "Mangunan",
+  "Semat",
+  "Teluk Awur",
+  "Senenan",
+  "Krapyak",
+  "Platar",
+  "Ngabul",
+  "Demangan"
+];
+
+const LIST_KOMISARIAT = [
+  "MTs Al Hidayah",
+  "MTs Mada Nusantara",
+  "MA Mada Nusantara",
+  "MTs NU Nahdlatul Fata",
+  "MA NU Nahdlatul Fata",
+  "MA Masalikil Huda",
+  "MA Al Anwar",
+  "MTs Al Anwar",
+  "MTs Al Ikhlas",
+  "MTs Zumratul Wildan",
+  "SMK Al Hidayah",
+  "MA Zumratul Wildan",
+  "MTs Masalikil Huda",
+  "MA Mafatihul Akhlaq",
+  "MTs Mafatihul Akhlaq"
+];
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -14,20 +53,14 @@ export default function AdminLoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const listPimpinan = [
-    "Mantingan",
-    "Senenan",
-    "Tahunan",
-    "Tegalsambi",
-    "Demangan",
-    "Ngabul",
-    "Langon",
-    "Sukodono",
-    "Kecapi",
-    "Petekeyan",
-    "MA Hasyim Asy'ari",
-    "SMK NU Tahunan"
-  ];
+  // Update default selected pimpinan when role changes
+  useEffect(() => {
+    if (selectedRole === "admin_ranting") {
+      setSelectedPimpinan(LIST_RANTING[0]);
+    } else if (selectedRole === "admin_komisariat") {
+      setSelectedPimpinan(LIST_KOMISARIAT[0]);
+    }
+  }, [selectedRole]);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -61,57 +94,74 @@ export default function AdminLoginPage() {
     }
   };
 
+  const activePimpinanList = selectedRole === "admin_ranting" ? LIST_RANTING : LIST_KOMISARIAT;
+
   return (
-    <div className="flex items-center justify-center min-h-[75vh] px-4">
-      <div className="w-full max-w-md">
+    <div className="flex items-center justify-center min-h-[80vh] px-4 py-8">
+      <div className="w-full max-w-md space-y-4">
+        {/* Back Link */}
+        <div className="flex items-center justify-between px-2">
+          <Link
+            href="/"
+            className="text-xs font-bold text-slate-500 hover:text-brand-purple flex items-center gap-1.5 transition"
+          >
+            <i className="fas fa-arrow-left text-[10px]"></i> Kembali ke Beranda
+          </Link>
+          <span className="text-[11px] font-bold text-slate-400">Portal Keamanan</span>
+        </div>
+
         <form
           onSubmit={handleSubmit}
-          className="bg-white border border-slate-150 rounded-3xl p-8 sm:p-10 shadow-xl shadow-slate-100 space-y-6 relative overflow-hidden"
+          className="bg-white border border-slate-150 rounded-3xl p-7 sm:p-9 shadow-xl shadow-slate-900/5 space-y-6 relative overflow-hidden"
         >
           {/* Overlay watermark */}
-          <div className="absolute -right-10 -bottom-10 w-44 h-44 opacity-[0.03] pointer-events-none">
+          <div className="absolute -right-8 -bottom-8 w-40 h-40 opacity-[0.03] pointer-events-none">
             <Image src="/assets/images/logo-bersama.png" alt="Logo watermark" fill className="object-contain" />
           </div>
 
-          <div className="text-center space-y-2 relative z-10">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 text-white flex items-center justify-center mx-auto text-xl shadow-md shadow-violet-100">
+          <div className="text-center space-y-1.5 relative z-10">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 text-white flex items-center justify-center mx-auto text-lg shadow-md shadow-violet-200">
               <i className="fas fa-shield-alt"></i>
             </div>
-            <h2 className="text-xl font-extrabold tracking-tight text-slate-800">Admin & Portal Login</h2>
-            <p className="text-xs text-slate-400">Pilih peran kepengurusan dan masukkan PIN keamanan.</p>
+            <h2 className="text-xl font-black tracking-tight text-slate-900">Admin & Portal Login</h2>
+            <p className="text-xs text-slate-500 font-medium">Konsol autentikasi pimpinan IPNU IPPNU se-Kecamatan Tahunan</p>
           </div>
 
           <div className="space-y-4 relative z-10">
             {/* Role Select */}
             <div className="space-y-1">
-              <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Peran / Level Otoritas</label>
+              <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
+                Peran / Level Otoritas
+              </label>
               <select
                 value={selectedRole}
                 onChange={(e) => {
                   const role = e.target.value as Role;
                   setSelectedRole(role);
                 }}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 font-semibold focus:outline-none focus:border-brand-purple transition"
               >
-                <option value="admin_ranting">Admin Ranting (Desa)</option>
-                <option value="admin_komisariat">Admin Komisariat (Sekolah)</option>
-                <option value="admin_pac">Admin PAC Harian</option>
-                <option value="super_admin">Super Admin (IT)</option>
+                <option value="admin_ranting">Pimpinan Ranting Desa (17 Ranting)</option>
+                <option value="admin_komisariat">Pimpinan Komisariat Sekolah (15 PK)</option>
+                <option value="admin_pac">Pengurus Harian PAC Tahunan</option>
+                <option value="super_admin">Super Admin / Departemen IT</option>
               </select>
             </div>
 
             {/* Entity Select (PR/PK specific) */}
             {(selectedRole === "admin_ranting" || selectedRole === "admin_komisariat") && (
               <div className="space-y-1">
-                <label className="block text-[9px] font-extrabold text-slate-400 uppercase">Nama Pimpinan PR/PK</label>
+                <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
+                  {selectedRole === "admin_ranting" ? "Nama Pimpinan Ranting (Desa)" : "Nama Pimpinan Komisariat (Sekolah)"}
+                </label>
                 <select
                   value={selectedPimpinan}
                   onChange={(e) => setSelectedPimpinan(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-brand-purple transition"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 font-semibold focus:outline-none focus:border-brand-purple transition"
                 >
-                  {listPimpinan.map((p) => (
+                  {activePimpinanList.map((p) => (
                     <option key={p} value={p}>
-                      {p}
+                      {selectedRole === "admin_ranting" ? `PR IPNU IPPNU ${p}` : `PK IPNU IPPNU ${p}`}
                     </option>
                   ))}
                 </select>
@@ -120,7 +170,9 @@ export default function AdminLoginPage() {
 
             {/* PIN Input */}
             <div className="space-y-1">
-              <label className="block text-[9px] font-extrabold text-slate-400 uppercase">PIN Keamanan</label>
+              <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
+                PIN Keamanan
+              </label>
               <div className="relative">
                 <i className="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                 <input
@@ -129,11 +181,11 @@ export default function AdminLoginPage() {
                   placeholder="••••••••"
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-11 pr-5 text-sm text-slate-900 tracking-widest font-bold focus:outline-none focus:border-brand-purple transition placeholder-slate-300"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-10 pr-4 text-sm text-slate-900 tracking-widest font-mono font-bold focus:outline-none focus:border-brand-purple transition placeholder-slate-300"
                 />
               </div>
               {errorMsg && (
-                <p className="text-[10px] font-extrabold text-red-500 flex items-center gap-1.5 pt-1">
+                <p className="text-[11px] font-extrabold text-red-500 flex items-center gap-1.5 pt-1">
                   <i className="fas fa-exclamation-circle"></i> {errorMsg}
                 </p>
               )}
@@ -143,7 +195,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-extrabold text-sm uppercase tracking-widest transition duration-300 shadow-md shadow-violet-100 flex items-center justify-center gap-2 relative z-10"
+            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-black text-xs uppercase tracking-wider transition duration-300 shadow-md shadow-violet-200 flex items-center justify-center gap-2 relative z-10"
           >
             {submitting ? (
               <>
@@ -156,9 +208,9 @@ export default function AdminLoginPage() {
             )}
           </button>
 
-          <p className="text-center text-[9px] text-slate-400 leading-normal">
-            PIN didistribusikan secara internal oleh PAC. Hubungi Sekretariat PAC Tahunan jika PIN ranting Anda hilang/belum diaktifkan.
-          </p>
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-[10px] text-slate-400 leading-normal text-center">
+            <span className="font-bold text-slate-500">Bantuan Akses:</span> Hubungi Sekretariat PAC Tahunan jika PIN kepengurusan Anda belum aktif atau lupa PIN.
+          </div>
         </form>
       </div>
     </div>

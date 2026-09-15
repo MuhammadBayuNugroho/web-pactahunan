@@ -42,8 +42,8 @@ export default function Home() {
       });
       setStats({
         totalKader: totalPeserta > 0 ? totalPeserta : 1250,
-        totalRanting: 15,
-        totalKomisariat: 9,
+        totalRanting: 17,
+        totalKomisariat: 15,
         totalMakesta: appData.makesta.length || 4,
         kaderIpnu: Math.round((totalPeserta > 0 ? totalPeserta : 1250) * 0.46),
         kaderIppnu: (totalPeserta > 0 ? totalPeserta : 1250) - Math.round((totalPeserta > 0 ? totalPeserta : 1250) * 0.46),
@@ -165,10 +165,10 @@ export default function Home() {
             </div>
           </div>
           <p className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            24 <span className="text-xs font-bold text-slate-400">Unit</span>
+            32 <span className="text-xs font-bold text-slate-400">Unit</span>
           </p>
           <p className="text-[10px] text-slate-400 mt-1 font-semibold">
-            15 Ranting &bull; 9 Komisariat
+            17 Ranting &bull; 15 Komisariat
           </p>
         </div>
 

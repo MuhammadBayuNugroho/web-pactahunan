@@ -33,6 +33,7 @@ export interface BeritaItem {
   coverImage: string;
   likes: number;
   views: number;
+  author?: string;
 }
 
 export interface KomentarItem {
@@ -65,35 +66,58 @@ export interface SpLegalityAnalysis {
   badgeClass: string;
 }
 
-// Fallback Mock Data — matches GAS default data (12 ranting/komisariat)
+// Full Units: 17 Ranting + 15 Komisariat = 32 Pimpinan
+const ALL_RANTINGS = [
+  "Kecapi I", "Kecapi II", "Kecapi III", "Tahunan", "Mantingan", 
+  "Langon", "Sukodono", "Tegalsambi", "Petekeyan", "Mangunan", 
+  "Semat", "Teluk Awur", "Senenan", "Krapyak", "Platar", "Ngabul", "Demangan"
+];
+
+const ALL_KOMISARIATS = [
+  "MTs Al Hidayah", "MTs Mada Nusantara", "MA Mada Nusantara",
+  "MTs NU Nahdlatul Fata", "MA NU Nahdlatul Fata", "MA Masalikil Huda",
+  "MA Al Anwar", "MTs Al Anwar", "MTs Al Ikhlas", "MTs Zumratul Wildan",
+  "SMK Al Hidayah", "MA Zumratul Wildan", "MTs Masalikil Huda",
+  "MA Mafatihul Akhlaq", "MTs Mafatihul Akhlaq"
+];
+
+// Fallback Mock Data with full 32 Units
 export const mockSpData: { ipnu: SpItem[]; ippnu: SpItem[] } = {
   ipnu: [
-    { name: "PR IPNU Mantingan",       type: "ranting",     spNumber: "089/IPNU/SP/A/X/2024",   expiryDate: "2026-10-15", phone: "6282242147243", email: "pr.ipnu.mantingan@gmail.com" },
-    { name: "PR IPNU Senenan",         type: "ranting",     spNumber: "042/IPNU/SP/A/III/2025",  expiryDate: "2027-03-20" },
-    { name: "PR IPNU Tahunan",         type: "ranting",     spNumber: "102/IPNU/SP/A/I/2024",   expiryDate: "2026-01-10" },
-    { name: "PR IPNU Tegalsambi",      type: "ranting",     spNumber: "067/IPNU/SP/A/VIII/2024", expiryDate: "2026-08-05" },
-    { name: "PR IPNU Demangan",        type: "ranting",     spNumber: "115/IPNU/SP/A/XI/2024",  expiryDate: "2026-11-20" },
-    { name: "PR IPNU Ngabul",          type: "ranting",     spNumber: "015/IPNU/SP/A/I/2025",   expiryDate: "2027-01-15" },
-    { name: "PR IPNU Langon",          type: "ranting",     spNumber: "099/IPNU/SP/A/V/2024",   expiryDate: "2026-05-02" },
-    { name: "PR IPNU Sukodono",        type: "ranting",     spNumber: "054/IPNU/SP/A/IV/2025",  expiryDate: "2027-04-10" },
-    { name: "PR IPNU Kecapi",          type: "ranting",     spNumber: "078/IPNU/SP/A/VII/2024",  expiryDate: "2026-07-28" },
-    { name: "PR IPNU Petekeyan",       type: "ranting",     spNumber: "130/IPNU/SP/A/XII/2024", expiryDate: "2026-12-15" },
-    { name: "PK IPNU MA Hasyim Asy'ari", type: "komisariat", spNumber: "034/IPNU/SP/B/II/2025",  expiryDate: "2026-02-15" },
-    { name: "PK IPNU SMK NU Tahunan",  type: "komisariat", spNumber: "049/IPNU/SP/B/VI/2024",  expiryDate: "2026-07-15" },
+    ...ALL_RANTINGS.map((r, idx) => ({
+      name: `PR IPNU ${r}`,
+      type: "ranting" as const,
+      spNumber: `${String(idx + 10).padStart(3, "0")}/IPNU/SP/A/${["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][idx % 12]}/2025`,
+      expiryDate: idx % 4 === 0 ? "2026-04-15" : idx % 3 === 0 ? "2026-08-20" : "2027-02-10",
+      phone: "6282242147243",
+      email: `pr.ipnu.${r.toLowerCase().replace(/\s+/g, "")}@gmail.com`
+    })),
+    ...ALL_KOMISARIATS.map((k, idx) => ({
+      name: `PK IPNU ${k}`,
+      type: "komisariat" as const,
+      spNumber: `${String(idx + 50).padStart(3, "0")}/IPNU/SP/B/${["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][idx % 12]}/2025`,
+      expiryDate: idx % 3 === 0 ? "2026-05-10" : "2027-03-15",
+      phone: "6282242147243",
+      email: `pk.ipnu.${k.toLowerCase().replace(/[^a-z0-9]/g, "")}@gmail.com`
+    }))
   ],
   ippnu: [
-    { name: "PR IPPNU Mantingan",       type: "ranting",     spNumber: "087/IPPNU/SP/A/X/2024",   expiryDate: "2026-10-15", phone: "6282242147243", email: "pr.ippnu.mantingan@gmail.com" },
-    { name: "PR IPPNU Senenan",         type: "ranting",     spNumber: "041/IPPNU/SP/A/III/2025",  expiryDate: "2027-03-20" },
-    { name: "PR IPPNU Tahunan",         type: "ranting",     spNumber: "101/IPPNU/SP/A/I/2024",   expiryDate: "2026-01-10" },
-    { name: "PR IPPNU Tegalsambi",      type: "ranting",     spNumber: "065/IPPNU/SP/A/VIII/2024", expiryDate: "2026-08-05" },
-    { name: "PR IPPNU Demangan",        type: "ranting",     spNumber: "112/IPPNU/SP/A/XI/2024",  expiryDate: "2026-11-20" },
-    { name: "PR IPPNU Ngabul",          type: "ranting",     spNumber: "014/IPPNU/SP/A/I/2025",   expiryDate: "2027-01-15" },
-    { name: "PR IPPNU Langon",          type: "ranting",     spNumber: "098/IPPNU/SP/A/V/2024",   expiryDate: "2026-05-02" },
-    { name: "PR IPPNU Sukodono",        type: "ranting",     spNumber: "053/IPPNU/SP/A/IV/2025",  expiryDate: "2027-04-10" },
-    { name: "PR IPPNU Kecapi",          type: "ranting",     spNumber: "077/IPPNU/SP/A/VII/2024",  expiryDate: "2026-07-25" },
-    { name: "PR IPPNU Petekeyan",       type: "ranting",     spNumber: "128/IPPNU/SP/A/XII/2024", expiryDate: "2026-12-15" },
-    { name: "PK IPPNU MA Hasyim Asy'ari", type: "komisariat", spNumber: "033/IPPNU/SP/B/II/2025",  expiryDate: "2026-02-15" },
-    { name: "PK IPPNU SMK NU Tahunan",  type: "komisariat", spNumber: "048/IPPNU/SP/B/VI/2024",  expiryDate: "2026-07-15" },
+    ...ALL_RANTINGS.map((r, idx) => ({
+      name: `PR IPPNU ${r}`,
+      type: "ranting" as const,
+      spNumber: `${String(idx + 10).padStart(3, "0")}/IPPNU/SP/A/${["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][idx % 12]}/2025`,
+      expiryDate: idx % 4 === 0 ? "2026-04-15" : idx % 3 === 0 ? "2026-08-20" : "2027-02-10",
+      phone: "6282242147243",
+      email: `pr.ippnu.${r.toLowerCase().replace(/\s+/g, "")}@gmail.com`
+    })),
+    ...ALL_KOMISARIATS.map((k, idx) => ({
+      name: `PK IPPNU ${k}`,
+      type: "komisariat" as const,
+      spNumber: `${String(idx + 50).padStart(3, "0")}/IPPNU/SP/B/${["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][idx % 12]}/2025`,
+      expiryDate: idx % 3 === 0 ? "2026-05-10" : "2027-03-15",
+      phone: "6282242147243",
+      email: `pk.ippnu.${k.toLowerCase().replace(/[^a-z0-9]/g, "")}@gmail.com`
+    }))
   ]
 };
 

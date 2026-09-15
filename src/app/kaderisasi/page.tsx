@@ -45,11 +45,12 @@ export default function KaderisasiPage() {
 
   const makestaList = appData.makesta || [];
 
-  // All 15 Ranting in Kecamatan Tahunan
+  // All 17 Ranting in Kecamatan Tahunan
   const allRantingList = [
-    "Mantingan", "Krapyak", "Sukodono", "Senenan", "Tahunan",
-    "Tegalsambi", "Demangan", "Platar", "Mangunan", "Langon",
-    "Petekeyan", "Semat", "Kecapi", "Ngabul", "Karangkebagusan"
+    "Kecapi I", "Kecapi II", "Kecapi III", "Tahunan", "Mantingan",
+    "Langon", "Sukodono", "Tegalsambi", "Petekeyan", "Mangunan",
+    "Semat", "Teluk Awur", "Senenan", "Krapyak", "Platar",
+    "Ngabul", "Demangan"
   ];
 
   // Build matrix status
@@ -118,7 +119,7 @@ export default function KaderisasiPage() {
               Matriks Capaian MAKESTA Se-Kecamatan (2025–2027)
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              Progres kaderisasi 15 Pimpinan Ranting se-Kecamatan Tahunan pada masa khidmat ini
+              Progres kaderisasi 17 Pimpinan Ranting se-Kecamatan Tahunan pada masa khidmat ini
             </p>
           </div>
 
@@ -126,7 +127,7 @@ export default function KaderisasiPage() {
             {/* Progress Bar */}
             <div className="text-right">
               <span className="text-xs font-black text-slate-800">
-                {completedCount} dari 15 Ranting
+                {completedCount} dari 17 Ranting
               </span>
               <div className="w-32 bg-slate-100 h-2 rounded-full overflow-hidden mt-1">
                 <div
